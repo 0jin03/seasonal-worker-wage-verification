@@ -1,0 +1,3644 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "R00-R11 최종 JSON Schema v3.2",
+  "description": "R00-R11_통합_표준피처정의서_v3.2.xlsx를 유일한 Source of Truth로 생성한 표준 Schema. CASE JSON의 구버전 field/logic은 표준피처 정의 또는 판정 기준으로 사용하지 않음. OCR 원시값이 아니라 사용자 확인·수정 후 확정된 canonical 값을 documents 원본피처로 검증하는 구조.",
+  "x-source-of-truth": "R00-R11_통합_표준피처정의서_v3.2.xlsx",
+  "x-standard-feature-count": 194,
+  "x-open-issues": [
+    {
+      "category": "상태값 통일",
+      "status": "미확정",
+      "content": "R02의 NOT_EVALUABLE과 다른 룰의 NOT_CHECKABLE이 혼재",
+      "direction": "이번 파일은 변수명만 통일. 상태값 체계는 팀 합의 후 별도 확정"
+    },
+    {
+      "category": "R05 null 처리",
+      "status": "미확정",
+      "content": "R05 문서에는 null→0 전처리 문구가 있으나 R06은 OCR 실패(null)와 실제 0을 구분",
+      "direction": "모든 금액항목에 공통 null/0 정책 필요"
+    },
+    {
+      "category": "허용오차",
+      "status": "미확정",
+      "content": "R01/R02/R03/R05/R10 허용오차 값 미정",
+      "direction": "팀 공통 기준값 확정 필요"
+    },
+    {
+      "category": "R08 급여 후보",
+      "status": "구조 확정 / 추천기준 미확정",
+      "content": "시스템은 후보만 추천하고 사용자가 실제 급여 거래를 복수 선택",
+      "direction": "cond_salary_candidate는 추천, usr_salary_transaction_selected는 최종 선택. 추천 알고리즘 세부 기준은 추후 확정"
+    },
+    {
+      "category": "R09 공휴일",
+      "status": "미확정",
+      "content": "공휴일 예외 판단을 위한 외부 데이터 필요",
+      "direction": "외부 공휴일 데이터 연동 전에는 REVIEW 처리 여부 합의"
+    },
+    {
+      "category": "R00 생년월일",
+      "status": "정리",
+      "content": "계약서에만 존재하여 문서 간 직접 비교 불가",
+      "direction": "R00 필수 비교에서 제외, 보조 식별정보로 보관"
+    },
+    {
+      "category": "R10 기간 vs 월",
+      "status": "정리",
+      "content": "R02 ts_period_actual_hours와 R10 월 총시간을 동일시하면 기간이 월과 다를 때 오류",
+      "direction": "ts_period_actual_hours와 ts_monthly_actual_hours를 분리"
+    },
+    {
+      "category": "원본 vs 재계산 총액",
+      "status": "정리",
+      "content": "gross_pay/total_deduction/net_pay가 원본값과 파생값으로 중복 사용됨",
+      "direction": "ps_gross_pay/ps_total_deduction/ps_net_pay vs calc_*로 분리"
+    },
+    {
+      "category": "OCR 사용자 확인",
+      "status": "확정",
+      "content": "OCR → 자동 입력/추천 → 사용자 확인·수정 → 확정값 → 규칙 검증",
+      "direction": "모든 규칙은 사용자 확정 canonical 값을 사용"
+    }
+  ],
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "documents": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contract": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ct_bonus_amount": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "상여금 약정액",
+              "x-standard-field-name": "ct_bonus_amount",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R03",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "정액형 비교 기준"
+            },
+            "ct_bonus_extra_pay_paid": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "상여·수당 지급 여부",
+              "x-standard-field-name": "ct_bonus_extra_pay_paid",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R03",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "상위 스위치"
+            },
+            "ct_break_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "1일 총 휴게시간(시간)",
+              "x-standard-field-name": "ct_break_hours",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01, R02, R11",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_break_minutes": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "1일 총 휴게시간(분)",
+              "x-standard-field-name": "ct_break_minutes",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01, R02, R11",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_employee_name": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "계약서 근로자명",
+              "x-standard-field-name": "ct_employee_name",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_employer_name": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "계약서 사업장명",
+              "x-standard-field-name": "ct_employer_name",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R00",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_extra_pay_amount": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "수당 약정액",
+              "x-standard-field-name": "ct_extra_pay_amount",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R03",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "정액형 비교 기준"
+            },
+            "ct_holiday_type": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "휴일 부여 방식",
+              "x-standard-field-name": "ct_holiday_type",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R02",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": "휴일근로 판정"
+            },
+            "ct_housing_cost": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "월 숙박비 근로자 부담액",
+              "x-standard-field-name": "ct_housing_cost",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R04",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "공제 가능한 기준금액"
+            },
+            "ct_housing_provided": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "숙박시설 제공 여부",
+              "x-standard-field-name": "ct_housing_provided",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R04",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "미제공인데 공제했는지 확인"
+            },
+            "ct_max_daily_work_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "1일 변경 상한시간",
+              "x-standard-field-name": "ct_max_daily_work_hours",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R10",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "계절·기상 요인 상한"
+            },
+            "ct_meal_cost": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "월 식비 근로자 부담액",
+              "x-standard-field-name": "ct_meal_cost",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R04",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "공제 가능한 기준금액"
+            },
+            "ct_meal_provided": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "식사 제공 여부",
+              "x-standard-field-name": "ct_meal_provided",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R04",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "미제공인데 공제했는지 확인"
+            },
+            "ct_monthly_work_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "월 소정근로시간",
+              "x-standard-field-name": "ct_monthly_work_hours",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01, R02, R03, R10, R11",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "월급 → 시급 환산 분모"
+            },
+            "ct_new_or_reentry_end_date": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "신규·재입국 계약 종료일",
+              "x-standard-field-name": "ct_new_or_reentry_end_date",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_new_or_reentry_selected": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "신규·재입국자 계약 선택",
+              "x-standard-field-name": "ct_new_or_reentry_selected",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_new_or_reentry_start_date": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "신규·재입국 계약 시작일",
+              "x-standard-field-name": "ct_new_or_reentry_start_date",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_overtime_hourly_pay": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "연장 시간당 임금",
+              "x-standard-field-name": "ct_overtime_hourly_pay",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R03",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "단가형 비교 기준"
+            },
+            "ct_pay_cycle": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "지급주기(월·주)",
+              "x-standard-field-name": "ct_pay_cycle",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R09",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_pay_day": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "월 지급일",
+              "x-standard-field-name": "ct_pay_day",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R09",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "월 지급인 경우"
+            },
+            "ct_pay_period_end": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "계약상 임금 계산기간 종료",
+              "x-standard-field-name": "ct_pay_period_end",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_pay_period_start": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "계약상 임금 계산기간 시작",
+              "x-standard-field-name": "ct_pay_period_start",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_pay_timing": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "지급시점(당월·익월·당주·익주)",
+              "x-standard-field-name": "ct_pay_timing",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R09",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_pay_weekday": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "주 지급요일",
+              "x-standard-field-name": "ct_pay_weekday",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R09",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "주 지급인 경우"
+            },
+            "ct_wage_amount": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "임금액",
+              "x-standard-field-name": "ct_wage_amount",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01, R03, R11",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_wage_type": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "임금 형태",
+              "x-standard-field-name": "ct_wage_type",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01, R03, R11",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "시급·일급·월급·주급 정규화 기준"
+            },
+            "ct_weekly_allowance_included": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "주휴수당 포함 여부",
+              "x-standard-field-name": "ct_weekly_allowance_included",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01, R03, R11",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_work_day_end": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "소정근로요일 종료",
+              "x-standard-field-name": "ct_work_day_end",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R02",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": "휴일근로 판정"
+            },
+            "ct_work_day_start": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "소정근로요일 시작",
+              "x-standard-field-name": "ct_work_day_start",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R02",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": "휴일근로 판정"
+            },
+            "ct_work_end_time": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^\\d{2}:\\d{2}$",
+              "description": "소정근로 종료시각",
+              "x-standard-field-name": "ct_work_end_time",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01, R02, R11",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": "일급제 환산에 사용"
+            },
+            "ct_work_start_time": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^\\d{2}:\\d{2}$",
+              "description": "소정근로 시작시각",
+              "x-standard-field-name": "ct_work_start_time",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01, R02, R11",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": "일급제 환산에 사용"
+            },
+            "ct_workplace_change_end_date": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "근무처 변경 계약 종료일",
+              "x-standard-field-name": "ct_workplace_change_end_date",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_workplace_change_selected": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "근무처 변경자 계약 선택",
+              "x-standard-field-name": "ct_workplace_change_selected",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ct_workplace_change_start_date": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "근무처 변경 계약 시작일",
+              "x-standard-field-name": "ct_workplace_change_start_date",
+              "x-kind": "원본",
+              "x-source-or-nature": "계절근로계약서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            }
+          },
+          "required": [
+            "ct_bonus_amount",
+            "ct_bonus_extra_pay_paid",
+            "ct_break_hours",
+            "ct_break_minutes",
+            "ct_employee_name",
+            "ct_employer_name",
+            "ct_extra_pay_amount",
+            "ct_holiday_type",
+            "ct_housing_cost",
+            "ct_housing_provided",
+            "ct_max_daily_work_hours",
+            "ct_meal_cost",
+            "ct_meal_provided",
+            "ct_monthly_work_hours",
+            "ct_new_or_reentry_end_date",
+            "ct_new_or_reentry_selected",
+            "ct_new_or_reentry_start_date",
+            "ct_overtime_hourly_pay",
+            "ct_pay_cycle",
+            "ct_pay_day",
+            "ct_pay_period_end",
+            "ct_pay_period_start",
+            "ct_pay_timing",
+            "ct_pay_weekday",
+            "ct_wage_amount",
+            "ct_wage_type",
+            "ct_weekly_allowance_included",
+            "ct_work_day_end",
+            "ct_work_day_start",
+            "ct_work_end_time",
+            "ct_work_start_time",
+            "ct_workplace_change_end_date",
+            "ct_workplace_change_selected",
+            "ct_workplace_change_start_date"
+          ]
+        },
+        "timesheet": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ts_employee_name": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "근무기록 근로자명",
+              "x-standard-field-name": "ts_employee_name",
+              "x-kind": "원본",
+              "x-source-or-nature": "근무기록",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ts_record_available": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "기록 보유 여부",
+              "x-standard-field-name": "ts_record_available",
+              "x-kind": "원본",
+              "x-source-or-nature": "근무기록",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R02",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "false면 NOT_EVALUABLE"
+            },
+            "ts_worker_confirmed": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "근로자 확인 여부",
+              "x-standard-field-name": "ts_worker_confirmed",
+              "x-kind": "원본",
+              "x-source-or-nature": "근무기록",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R10",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": null
+            },
+            "lines": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "ts_break_minutes": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "description": "실제 휴게시간(분)",
+                    "x-standard-field-name": "ts_break_minutes",
+                    "x-kind": "원본",
+                    "x-source-or-nature": "근무기록",
+                    "x-first-created": "문서 추출/입력",
+                    "x-rules": "R02",
+                    "x-grade": "판정 필수",
+                    "x-method": "-",
+                    "x-note": "결측 시 계약값 대체"
+                  },
+                  "ts_holiday_worked": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ],
+                    "description": "휴일근무 여부",
+                    "x-standard-field-name": "ts_holiday_worked",
+                    "x-kind": "원본",
+                    "x-source-or-nature": "근무기록",
+                    "x-first-created": "문서 추출/입력",
+                    "x-rules": "R02",
+                    "x-grade": "보조",
+                    "x-method": "-",
+                    "x-note": null
+                  },
+                  "ts_work_date": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date",
+                    "description": "근무일",
+                    "x-standard-field-name": "ts_work_date",
+                    "x-kind": "원본",
+                    "x-source-or-nature": "근무기록",
+                    "x-first-created": "문서 추출/입력",
+                    "x-rules": "R00, R02, R10",
+                    "x-grade": "판정 필수",
+                    "x-method": "-",
+                    "x-note": "기간 포함 여부 확인"
+                  },
+                  "ts_work_end_time": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "pattern": "^\\d{2}:\\d{2}$",
+                    "description": "실제 종료시각",
+                    "x-standard-field-name": "ts_work_end_time",
+                    "x-kind": "원본",
+                    "x-source-or-nature": "근무기록",
+                    "x-first-created": "문서 추출/입력",
+                    "x-rules": "R02",
+                    "x-grade": "판정 필수",
+                    "x-method": "-",
+                    "x-note": null
+                  },
+                  "ts_work_note": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "특이사항",
+                    "x-standard-field-name": "ts_work_note",
+                    "x-kind": "원본",
+                    "x-source-or-nature": "근무기록",
+                    "x-first-created": "문서 추출/입력",
+                    "x-rules": "R10",
+                    "x-grade": "보조",
+                    "x-method": "-",
+                    "x-note": "날씨·조기종료·작업변경 사유"
+                  },
+                  "ts_work_start_time": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "pattern": "^\\d{2}:\\d{2}$",
+                    "description": "실제 시작시각",
+                    "x-standard-field-name": "ts_work_start_time",
+                    "x-kind": "원본",
+                    "x-source-or-nature": "근무기록",
+                    "x-first-created": "문서 추출/입력",
+                    "x-rules": "R02",
+                    "x-grade": "판정 필수",
+                    "x-method": "-",
+                    "x-note": null
+                  }
+                },
+                "required": [
+                  "ts_break_minutes",
+                  "ts_holiday_worked",
+                  "ts_work_date",
+                  "ts_work_end_time",
+                  "ts_work_note",
+                  "ts_work_start_time"
+                ]
+              }
+            }
+          },
+          "required": [
+            "ts_employee_name",
+            "ts_record_available",
+            "ts_worker_confirmed",
+            "lines"
+          ]
+        },
+        "payslip": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ps_base_pay": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "기본급",
+              "x-standard-field-name": "ps_base_pay",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01, R05, R11",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "적용시급 보조 계산"
+            },
+            "ps_bonus_amount": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "상여금",
+              "x-standard-field-name": "ps_bonus_amount",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R03, R05",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "정액형 비교 대상"
+            },
+            "ps_calculated_amount": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "산출 결과 금액",
+              "x-standard-field-name": "ps_calculated_amount",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": "기본급 검산"
+            },
+            "ps_calculation_formula": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "산출식·산출방법",
+              "x-standard-field-name": "ps_calculation_formula",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01, R11",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ps_calculation_item": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "계산 대상 항목",
+              "x-standard-field-name": "ps_calculation_item",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01, R11",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": "기본급 계산근거 행 식별"
+            },
+            "ps_employee_name": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "명세서 근로자명",
+              "x-standard-field-name": "ps_employee_name",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R00, R08",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ps_employer_name": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "명세서 사업장명",
+              "x-standard-field-name": "ps_employer_name",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R00, R08",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ps_employment_insurance": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "고용보험",
+              "x-standard-field-name": "ps_employment_insurance",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R06, R07",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ps_gross_pay": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "지급액 계(명세서 인쇄값)",
+              "x-standard-field-name": "ps_gross_pay",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R05, R07",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "비교 대상"
+            },
+            "ps_health_insurance": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "건강보험",
+              "x-standard-field-name": "ps_health_insurance",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R06, R07",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ps_holiday_work_pay": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "휴일근로수당",
+              "x-standard-field-name": "ps_holiday_work_pay",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R03, R05",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": "단가형 비교 대상"
+            },
+            "ps_housing_deduction": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "숙박비 공제",
+              "x-standard-field-name": "ps_housing_deduction",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R04, R06, R07",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "실제 공제액"
+            },
+            "ps_income_tax": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "근로소득세",
+              "x-standard-field-name": "ps_income_tax",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R06, R07",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ps_local_income_tax": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "지방소득세",
+              "x-standard-field-name": "ps_local_income_tax",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R06, R07",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ps_long_term_care_insurance": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "장기요양보험",
+              "x-standard-field-name": "ps_long_term_care_insurance",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R06, R07",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ps_meal_deduction": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "식비 공제",
+              "x-standard-field-name": "ps_meal_deduction",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R04, R06, R07",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "실제 공제액"
+            },
+            "ps_national_pension": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "국민연금",
+              "x-standard-field-name": "ps_national_pension",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R06, R07",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ps_net_pay": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "실지급액·실수령액",
+              "x-standard-field-name": "ps_net_pay",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R07",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "비교 대상. 누락 시 계산값 사용"
+            },
+            "ps_night_work_pay": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "야간근로수당",
+              "x-standard-field-name": "ps_night_work_pay",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R03, R05",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": "단가형 비교 대상"
+            },
+            "ps_ordinary_hourly_wage": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "통상시급·적용 시급",
+              "x-standard-field-name": "ps_ordinary_hourly_wage",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01, R03, R11",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "비교 좌변 주값"
+            },
+            "ps_other_allowance": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "기타 수당",
+              "x-standard-field-name": "ps_other_allowance",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R03, R05",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "정액형 비교 대상"
+            },
+            "ps_other_deduction": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "기타 공제",
+              "x-standard-field-name": "ps_other_deduction",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R06, R07",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ps_overtime_pay": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "연장근로수당",
+              "x-standard-field-name": "ps_overtime_pay",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R03, R05",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "단가형 비교 대상"
+            },
+            "ps_paid_holiday_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "휴일근로시간 수",
+              "x-standard-field-name": "ps_paid_holiday_hours",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R02, R03",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "비교 좌변에 합산"
+            },
+            "ps_paid_night_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "야간근로시간 수",
+              "x-standard-field-name": "ps_paid_night_hours",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R02, R03",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "비교 전 분리. 실근로시간과 이중 계산"
+            },
+            "ps_paid_overtime_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "연장근로시간 수",
+              "x-standard-field-name": "ps_paid_overtime_hours",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R02, R03",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "비교 좌변에 합산"
+            },
+            "ps_paid_regular_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "기본근로시간",
+              "x-standard-field-name": "ps_paid_regular_hours",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01, R02, R11",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "적용시급 보조 계산 분모"
+            },
+            "ps_paid_work_days": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "출근일수",
+              "x-standard-field-name": "ps_paid_work_days",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R02",
+              "x-grade": "보조",
+              "x-method": "-",
+              "x-note": "차이 원인이 결근인지 판별"
+            },
+            "ps_pay_lines": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "지급항목 line object. 세부 내부 key는 v3.2 표준피처정의서에서 별도 규격화하지 않음."
+              },
+              "description": "지급항목 라인",
+              "x-standard-field-name": "ps_pay_lines[]",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R03",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "계약 근거 없는 수당 탐지"
+            },
+            "ps_pay_period_end": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "급여 산정 종료일",
+              "x-standard-field-name": "ps_pay_period_end",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R00, R01, R02, R09, R11",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ps_pay_period_start": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "급여 산정 시작일",
+              "x-standard-field-name": "ps_pay_period_start",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R00, R01, R02, R11",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ps_payment_date": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "명세서 기재 지급일",
+              "x-standard-field-name": "ps_payment_date",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R08, R09",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "급여 거래 후보 기간 기준"
+            },
+            "ps_total_deduction": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "공제액 계(명세서 인쇄값)",
+              "x-standard-field-name": "ps_total_deduction",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R06, R07",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "비교 대상"
+            },
+            "ps_wage_type": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "급여제도",
+              "x-standard-field-name": "ps_wage_type",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R01, R11",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "ps_weekly_allowance": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "주휴수당",
+              "x-standard-field-name": "ps_weekly_allowance",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R03, R05",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "주휴 판정 대상"
+            },
+            "ps_weekly_holiday_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "주휴시간",
+              "x-standard-field-name": "ps_weekly_holiday_hours",
+              "x-kind": "원본",
+              "x-source-or-nature": "임금명세서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R02",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "비교 전 분리. 합산 시 상시 MISMATCH"
+            }
+          },
+          "required": [
+            "ps_base_pay",
+            "ps_bonus_amount",
+            "ps_calculated_amount",
+            "ps_calculation_formula",
+            "ps_calculation_item",
+            "ps_employee_name",
+            "ps_employer_name",
+            "ps_employment_insurance",
+            "ps_gross_pay",
+            "ps_health_insurance",
+            "ps_holiday_work_pay",
+            "ps_housing_deduction",
+            "ps_income_tax",
+            "ps_local_income_tax",
+            "ps_long_term_care_insurance",
+            "ps_meal_deduction",
+            "ps_national_pension",
+            "ps_net_pay",
+            "ps_night_work_pay",
+            "ps_ordinary_hourly_wage",
+            "ps_other_allowance",
+            "ps_other_deduction",
+            "ps_overtime_pay",
+            "ps_paid_holiday_hours",
+            "ps_paid_night_hours",
+            "ps_paid_overtime_hours",
+            "ps_paid_regular_hours",
+            "ps_paid_work_days",
+            "ps_pay_lines",
+            "ps_pay_period_end",
+            "ps_pay_period_start",
+            "ps_payment_date",
+            "ps_total_deduction",
+            "ps_wage_type",
+            "ps_weekly_allowance",
+            "ps_weekly_holiday_hours"
+          ]
+        },
+        "bank_statement": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "bk_account_holder": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "예금주명",
+              "x-standard-field-name": "bk_account_holder",
+              "x-kind": "원본",
+              "x-source-or-nature": "입금내역서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R00, R08",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": null
+            },
+            "bk_inquiry_end_date": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "조회 종료일",
+              "x-standard-field-name": "bk_inquiry_end_date",
+              "x-kind": "원본",
+              "x-source-or-nature": "입금내역서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R08",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "조회기간 부족 시 NOT_CHECKABLE"
+            },
+            "bk_inquiry_start_date": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "조회 시작일",
+              "x-standard-field-name": "bk_inquiry_start_date",
+              "x-kind": "원본",
+              "x-source-or-nature": "입금내역서",
+              "x-first-created": "문서 추출/입력",
+              "x-rules": "R08",
+              "x-grade": "판정 필수",
+              "x-method": "-",
+              "x-note": "조회기간 부족 시 NOT_CHECKABLE"
+            },
+            "transactions": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "bk_deposit_amount": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "description": "입금액",
+                    "x-standard-field-name": "bk_deposit_amount",
+                    "x-kind": "원본",
+                    "x-source-or-nature": "입금내역서",
+                    "x-first-created": "문서 추출/입력",
+                    "x-rules": "R08, R09",
+                    "x-grade": "판정 필수",
+                    "x-method": "-",
+                    "x-note": null
+                  },
+                  "bk_transaction_content": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "거래내용",
+                    "x-standard-field-name": "bk_transaction_content",
+                    "x-kind": "원본",
+                    "x-source-or-nature": "입금내역서",
+                    "x-first-created": "문서 추출/입력",
+                    "x-rules": "R08",
+                    "x-grade": "판정 필수",
+                    "x-method": "-",
+                    "x-note": "급여·임금·사업장 문구 확인"
+                  },
+                  "bk_transaction_datetime": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}[ T]\\d{2}:\\d{2}(:\\d{2})?$",
+                    "description": "거래일시",
+                    "x-standard-field-name": "bk_transaction_datetime",
+                    "x-kind": "원본",
+                    "x-source-or-nature": "입금내역서",
+                    "x-first-created": "문서 추출/입력",
+                    "x-rules": "R08, R09",
+                    "x-grade": "판정 필수",
+                    "x-method": "-",
+                    "x-note": null
+                  },
+                  "bk_transaction_record": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "거래기록사항",
+                    "x-standard-field-name": "bk_transaction_record",
+                    "x-kind": "원본",
+                    "x-source-or-nature": "입금내역서",
+                    "x-first-created": "문서 추출/입력",
+                    "x-rules": "R08",
+                    "x-grade": "보조",
+                    "x-method": "-",
+                    "x-note": "입금자명이 고용인·사업장명과 일치하는지 확인"
+                  },
+                  "bk_transfer_memo": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "이체메모",
+                    "x-standard-field-name": "bk_transfer_memo",
+                    "x-kind": "원본",
+                    "x-source-or-nature": "입금내역서",
+                    "x-first-created": "문서 추출/입력",
+                    "x-rules": "R08",
+                    "x-grade": "보조",
+                    "x-method": "-",
+                    "x-note": "입금자명이 고용인·사업장명과 일치하는지 확인"
+                  }
+                },
+                "required": [
+                  "bk_deposit_amount",
+                  "bk_transaction_content",
+                  "bk_transaction_datetime",
+                  "bk_transaction_record",
+                  "bk_transfer_memo"
+                ]
+              }
+            }
+          },
+          "required": [
+            "bk_account_holder",
+            "bk_inquiry_end_date",
+            "bk_inquiry_start_date",
+            "transactions"
+          ]
+        }
+      },
+      "required": [
+        "contract",
+        "timesheet",
+        "payslip",
+        "bank_statement"
+      ]
+    },
+    "derived": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "common": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ct_break_total_minutes": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "1일 소정 휴게(분)",
+              "x-standard-field-name": "ct_break_total_minutes",
+              "x-kind": "파생",
+              "x-source-or-nature": "공통 정규화",
+              "x-first-created": "공통 정규화",
+              "x-rules": "R02",
+              "x-grade": "판정 필수",
+              "x-method": "break_hours×60 + break_minutes",
+              "x-note": "근무기록이 분 단위라 단위 통일. 휴게 결측 시 대체값"
+            }
+          },
+          "required": [
+            "ct_break_total_minutes"
+          ]
+        },
+        "R00": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "bk_account_holder_norm": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "정규화 예금주명",
+              "x-standard-field-name": "bk_account_holder_norm",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "동일 정규화 규칙 적용",
+              "x-note": null
+            },
+            "cmp_account_holder_match": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "예금주 일치 여부",
+              "x-standard-field-name": "cmp_account_holder_match",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "account_holder_norm ↔ 근로자명",
+              "x-note": null
+            },
+            "cmp_contract_period_match": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "계약기간 포함 여부",
+              "x-standard-field-name": "cmp_contract_period_match",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "계약시작 ≤ 산정시작 ≤ 산정종료 ≤ 계약종료",
+              "x-note": null
+            },
+            "cmp_employee_name_match": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "근로자명 일치 여부",
+              "x-standard-field-name": "cmp_employee_name_match",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "ct_employee_name_norm ↔ ts_employee_name_norm ↔ ps_employee_name_norm 3종 비교",
+              "x-note": "번역·순서 변경으로 억지 일치시키지 않음"
+            },
+            "cmp_employer_match": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "사업장명 일치 여부",
+              "x-standard-field-name": "cmp_employer_match",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "보조",
+              "x-method": "계약서 ↔ 명세서 employer_name",
+              "x-note": null
+            },
+            "cmp_period_match": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "기간 일치",
+              "x-standard-field-name": "cmp_period_match",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "최종피처",
+              "x-method": "contract_period_match AND work_period_match",
+              "x-note": null
+            },
+            "cmp_work_period_match": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "근무일 포함 여부",
+              "x-standard-field-name": "cmp_work_period_match",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "산정시작 ≤ work_date ≤ 산정종료",
+              "x-note": null
+            },
+            "cmp_worker_match": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "근로자 일치",
+              "x-standard-field-name": "cmp_worker_match",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "최종피처",
+              "x-method": "name_match AND account_holder_match AND employer_match",
+              "x-note": null
+            },
+            "ct_employee_name_norm": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "정규화 계약서 근로자명",
+              "x-standard-field-name": "ct_employee_name_norm",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "공백·중복공백·특수문자 제거, 대소문자 통일",
+              "x-note": null
+            },
+            "ct_selected_contract_end": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "선택된 계약 종료일",
+              "x-standard-field-name": "ct_selected_contract_end",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "체크된 계약유형의 종료일 선택",
+              "x-note": null
+            },
+            "ct_selected_contract_start": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "선택된 계약 시작일",
+              "x-standard-field-name": "ct_selected_contract_start",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "체크된 계약유형의 시작일 선택",
+              "x-note": null
+            },
+            "ps_employee_name_norm": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "정규화 명세서 근로자명",
+              "x-standard-field-name": "ps_employee_name_norm",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "동일 정규화 규칙 적용",
+              "x-note": null
+            },
+            "sys_case_id": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "사례 ID",
+              "x-standard-field-name": "sys_case_id",
+              "x-kind": "시스템",
+              "x-source-or-nature": "시스템 관리",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "보조",
+              "x-method": "R00 PASS 후 연결된 문서 묶음에 부여",
+              "x-note": "문서에서 추출하는 원본 피처가 아님"
+            },
+            "ts_employee_name_norm": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "정규화 근무기록 근로자명",
+              "x-standard-field-name": "ts_employee_name_norm",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "판정 필수",
+              "x-method": "동일 정규화 규칙 적용",
+              "x-note": null
+            }
+          },
+          "required": [
+            "bk_account_holder_norm",
+            "cmp_account_holder_match",
+            "cmp_contract_period_match",
+            "cmp_employee_name_match",
+            "cmp_employer_match",
+            "cmp_period_match",
+            "cmp_work_period_match",
+            "cmp_worker_match",
+            "ct_employee_name_norm",
+            "ct_selected_contract_end",
+            "ct_selected_contract_start",
+            "ps_employee_name_norm",
+            "sys_case_id",
+            "ts_employee_name_norm"
+          ]
+        },
+        "R01": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "calc_contract_daily_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "계약상 1일 근로시간",
+              "x-standard-field-name": "calc_contract_daily_hours",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R01",
+              "x-rules": "R01",
+              "x-grade": "판정 필수",
+              "x-method": "(work_end_time - work_start_time) - break_hours - break_minutes/60",
+              "x-note": "일급 환산용"
+            },
+            "calc_contract_hourly_wage": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "계약 환산 시급",
+              "x-standard-field-name": "calc_contract_hourly_wage",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R01",
+              "x-rules": "R01, R03, R11",
+              "x-grade": "판정 필수",
+              "x-method": "시급=wage_amount / 월급=wage_amount÷monthly_work_hours / 일급=wage_amount÷calc_contract_daily_hours",
+              "x-note": "주급은 주 근로시간 미확인 시 계산 안 함"
+            },
+            "calc_payslip_hourly_wage": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "명세서 적용 시급",
+              "x-standard-field-name": "calc_payslip_hourly_wage",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R01",
+              "x-rules": "R01, R11",
+              "x-grade": "판정 필수",
+              "x-method": "ordinary_hourly_wage, 누락 시 base_pay÷paid_regular_hours",
+              "x-note": null
+            },
+            "cmp_hourly_wage_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "시급 차이",
+              "x-standard-field-name": "cmp_hourly_wage_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R01",
+              "x-rules": "R01",
+              "x-grade": "최종피처",
+              "x-method": "calc_payslip_hourly_wage - calc_contract_hourly_wage",
+              "x-note": null
+            },
+            "cmp_wage_type_match": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "임금 형태 일치 여부",
+              "x-standard-field-name": "cmp_wage_type_match",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R01",
+              "x-rules": "R01",
+              "x-grade": "판정 필수",
+              "x-method": "계약 wage_type ↔ 명세서 wage_type",
+              "x-note": "한쪽 누락 시 null"
+            },
+            "cond_partial_period": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "월급 일부기간 정산 여부",
+              "x-standard-field-name": "cond_partial_period",
+              "x-kind": "조건",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R01",
+              "x-rules": "R01",
+              "x-grade": "판정 필수",
+              "x-method": "월급제이고 산정기간이 한 달 전체가 아니면 true",
+              "x-note": "true면 REVIEW"
+            },
+            "param_wage_tolerance": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "시급 비교 허용오차(원)",
+              "x-standard-field-name": "param_wage_tolerance",
+              "x-kind": "기준값",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "팀 설정",
+              "x-rules": "R01",
+              "x-grade": "판정 필수",
+              "x-method": "팀 공통 기준 미확정",
+              "x-note": "확정 필요"
+            }
+          },
+          "required": [
+            "calc_contract_daily_hours",
+            "calc_contract_hourly_wage",
+            "calc_payslip_hourly_wage",
+            "cmp_hourly_wage_gap",
+            "cmp_wage_type_match",
+            "cond_partial_period",
+            "param_wage_tolerance"
+          ]
+        },
+        "R02": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "cmp_actual_hours_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "실근로시간 차이",
+              "x-standard-field-name": "cmp_actual_hours_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R02",
+              "x-rules": "R02",
+              "x-grade": "최종피처",
+              "x-method": "ts_period_actual_hours - ps_actual_hours_equiv",
+              "x-note": null
+            },
+            "cmp_overtime_hours_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "연장시간 차이",
+              "x-standard-field-name": "cmp_overtime_hours_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R02",
+              "x-rules": "R02",
+              "x-grade": "판정 필수",
+              "x-method": "ts_period_overtime_hours - ps_paid_overtime_hours",
+              "x-note": "총합만 보면 연장분 혼입이 PASS로 통과"
+            },
+            "cmp_tolerance_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "허용 오차(시간)",
+              "x-standard-field-name": "cmp_tolerance_hours",
+              "x-kind": "기준값",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "팀 설정",
+              "x-rules": "R02",
+              "x-grade": "판정 필수",
+              "x-method": "팀 공통 기준 미확정",
+              "x-note": "확정 필요"
+            },
+            "cmp_work_days_gap": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "근무일수 차이",
+              "x-standard-field-name": "cmp_work_days_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R02",
+              "x-rules": "R02",
+              "x-grade": "보조",
+              "x-method": "ts_period_work_days - ps_paid_work_days",
+              "x-note": null
+            },
+            "ps_actual_hours_equiv": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "명세서 환산 실근로시간",
+              "x-standard-field-name": "ps_actual_hours_equiv",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R02",
+              "x-rules": "R02",
+              "x-grade": "판정 필수",
+              "x-method": "paid_regular + paid_overtime + paid_holiday (주휴·야간 제외)",
+              "x-note": null
+            },
+            "ts_break_source": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "input",
+                "contract",
+                null
+              ],
+              "description": "휴게시간 출처",
+              "x-standard-field-name": "ts_break_source",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R02",
+              "x-rules": "R02",
+              "x-grade": "보조",
+              "x-method": "input / contract",
+              "x-note": "contract면 REVIEW"
+            },
+            "ts_daily_actual_hours": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "number"
+              },
+              "x-alignment": "documents.timesheet.lines 순서와 1:1 대응",
+              "description": "일별 실근로시간",
+              "x-standard-field-name": "ts_daily_actual_hours",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R02",
+              "x-rules": "R02, R10",
+              "x-grade": "판정 필수",
+              "x-method": "(종료시각 - 시작시각) - ts_break_minutes/60",
+              "x-note": "R10의 actual_work_hours와 동일 개념"
+            },
+            "ts_period_actual_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "기간 실근로시간",
+              "x-standard-field-name": "ts_period_actual_hours",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R02",
+              "x-rules": "R02",
+              "x-grade": "판정 필수",
+              "x-method": "기간 내 ts_daily_actual_hours 합계",
+              "x-note": "비교 우변 주값"
+            },
+            "ts_period_coverage": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "기간 커버리지",
+              "x-standard-field-name": "ts_period_coverage",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R02",
+              "x-rules": "R02",
+              "x-grade": "판정 필수",
+              "x-method": "입력 날짜 수 ÷ 계산기간 일수",
+              "x-note": "임계값 미만이면 NOT_EVALUABLE"
+            },
+            "ts_period_holiday_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "기간 휴일시간",
+              "x-standard-field-name": "ts_period_holiday_hours",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R02",
+              "x-rules": "R02",
+              "x-grade": "보조",
+              "x-method": "휴일근무일 실근로시간 합계",
+              "x-note": null
+            },
+            "ts_period_night_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "기간 야간시간",
+              "x-standard-field-name": "ts_period_night_hours",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R02",
+              "x-rules": "R02",
+              "x-grade": "보조",
+              "x-method": "야간 시간대 근로시간 합계",
+              "x-note": null
+            },
+            "ts_period_overtime_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "기간 연장시간",
+              "x-standard-field-name": "ts_period_overtime_hours",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R02",
+              "x-rules": "R02",
+              "x-grade": "판정 필수",
+              "x-method": "소정근로시간 초과분 합계",
+              "x-note": "총량이 같아도 연장분 혼입을 잡음"
+            },
+            "ts_period_work_days": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "기간 근무일수",
+              "x-standard-field-name": "ts_period_work_days",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R02",
+              "x-rules": "R02",
+              "x-grade": "보조",
+              "x-method": "기간 내 근무일 수",
+              "x-note": null
+            }
+          },
+          "required": [
+            "cmp_actual_hours_gap",
+            "cmp_overtime_hours_gap",
+            "cmp_tolerance_hours",
+            "cmp_work_days_gap",
+            "ps_actual_hours_equiv",
+            "ts_break_source",
+            "ts_daily_actual_hours",
+            "ts_period_actual_hours",
+            "ts_period_coverage",
+            "ts_period_holiday_hours",
+            "ts_period_night_hours",
+            "ts_period_overtime_hours",
+            "ts_period_work_days"
+          ]
+        },
+        "R03": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "calc_expected_overtime_pay": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "예상 연장수당",
+              "x-standard-field-name": "calc_expected_overtime_pay",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R03",
+              "x-rules": "R03",
+              "x-grade": "판정 필수",
+              "x-method": "ct_overtime_hourly_pay × ps_paid_overtime_hours",
+              "x-note": null
+            },
+            "cmp_bonus_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "상여금 차이",
+              "x-standard-field-name": "cmp_bonus_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R03",
+              "x-rules": "R03",
+              "x-grade": "최종피처",
+              "x-method": "ps_bonus_amount - ct_bonus_amount",
+              "x-note": "cond_bonus_due=true일 때만 유효"
+            },
+            "cmp_extra_pay_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "수당 차이",
+              "x-standard-field-name": "cmp_extra_pay_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R03",
+              "x-rules": "R03",
+              "x-grade": "최종피처",
+              "x-method": "ps_other_allowance - ct_extra_pay_amount",
+              "x-note": null
+            },
+            "cmp_overtime_pay_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "연장수당 차이",
+              "x-standard-field-name": "cmp_overtime_pay_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R03",
+              "x-rules": "R03",
+              "x-grade": "최종피처",
+              "x-method": "ps_overtime_pay - calc_expected_overtime_pay",
+              "x-note": null
+            },
+            "cmp_tolerance_won": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "허용 오차(원)",
+              "x-standard-field-name": "cmp_tolerance_won",
+              "x-kind": "기준값",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "팀 설정",
+              "x-rules": "R03",
+              "x-grade": "판정 필수",
+              "x-method": "원 단위 절사 차이 흡수. 값 미확정",
+              "x-note": "확정 필요"
+            },
+            "cmp_unmatched_pay_items": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {},
+              "description": "미매칭 지급항목",
+              "x-standard-field-name": "cmp_unmatched_pay_items[]",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R03",
+              "x-rules": "R03",
+              "x-grade": "판정 필수",
+              "x-method": "계약 근거 없는 항목 목록",
+              "x-note": "존재 시 REVIEW"
+            },
+            "cond_allowance_type": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "string",
+                  "enum": [
+                    "fixed",
+                    "rate"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "fixed",
+                      "rate",
+                      null
+                    ]
+                  }
+                }
+              ],
+              "description": "수당 유형",
+              "x-standard-field-name": "cond_allowance_type",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R03",
+              "x-rules": "R03",
+              "x-grade": "판정 필수",
+              "x-method": "fixed(상여·수당) / rate(연장·야간·휴일)",
+              "x-note": "유형별 비교식이 다름"
+            },
+            "cond_bonus_due": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "상여 지급시기 도래",
+              "x-standard-field-name": "cond_bonus_due",
+              "x-kind": "조건",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R03",
+              "x-rules": "R03",
+              "x-grade": "판정 필수",
+              "x-method": "계약상 지급시기 도래 여부",
+              "x-note": "시기 조항 없으면 REVIEW"
+            },
+            "cond_evidence_source": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "payslip",
+                "timesheet",
+                "none",
+                null
+              ],
+              "description": "조건 근거 출처",
+              "x-standard-field-name": "cond_evidence_source",
+              "x-kind": "조건",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R03",
+              "x-rules": "R03",
+              "x-grade": "보조",
+              "x-method": "payslip / timesheet / none",
+              "x-note": null
+            },
+            "cond_holiday_occurred": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "휴일근로 발생 여부",
+              "x-standard-field-name": "cond_holiday_occurred",
+              "x-kind": "조건",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R03",
+              "x-rules": "R03",
+              "x-grade": "보조",
+              "x-method": "ps_paid_holiday_hours > 0",
+              "x-note": null
+            },
+            "cond_night_occurred": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "야간근로 발생 여부",
+              "x-standard-field-name": "cond_night_occurred",
+              "x-kind": "조건",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R03",
+              "x-rules": "R03",
+              "x-grade": "보조",
+              "x-method": "ps_paid_night_hours > 0",
+              "x-note": null
+            },
+            "cond_overtime_occurred": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "연장근로 발생 여부",
+              "x-standard-field-name": "cond_overtime_occurred",
+              "x-kind": "조건",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R03",
+              "x-rules": "R03",
+              "x-grade": "판정 필수",
+              "x-method": "ps_paid_overtime_hours > 0",
+              "x-note": "미발생이면 수당 없음이 정상"
+            },
+            "cond_weekly_allowance_due": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "주휴 발생 여부",
+              "x-standard-field-name": "cond_weekly_allowance_due",
+              "x-kind": "조건",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R03",
+              "x-rules": "R03",
+              "x-grade": "판정 필수",
+              "x-method": "주 소정근로 개근 여부",
+              "x-note": null
+            }
+          },
+          "required": [
+            "calc_expected_overtime_pay",
+            "cmp_bonus_gap",
+            "cmp_extra_pay_gap",
+            "cmp_overtime_pay_gap",
+            "cmp_tolerance_won",
+            "cmp_unmatched_pay_items",
+            "cond_allowance_type",
+            "cond_bonus_due",
+            "cond_evidence_source",
+            "cond_holiday_occurred",
+            "cond_night_occurred",
+            "cond_overtime_occurred",
+            "cond_weekly_allowance_due"
+          ]
+        },
+        "R04": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "calc_expected_housing_deduction": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "예상 숙박비 공제액",
+              "x-standard-field-name": "calc_expected_housing_deduction",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R04",
+              "x-rules": "R04",
+              "x-grade": "판정 필수",
+              "x-method": "housing_provided=true → housing_cost, false → 0",
+              "x-note": "제공 여부와 부담액 결합"
+            },
+            "calc_expected_meal_deduction": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "예상 식비 공제액",
+              "x-standard-field-name": "calc_expected_meal_deduction",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R04",
+              "x-rules": "R04",
+              "x-grade": "판정 필수",
+              "x-method": "meal_provided=true → meal_cost, false → 0",
+              "x-note": null
+            },
+            "cmp_housing_deduction_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "숙박비 공제 차이",
+              "x-standard-field-name": "cmp_housing_deduction_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R04",
+              "x-rules": "R04",
+              "x-grade": "최종피처",
+              "x-method": "housing_deduction - expected_housing_deduction",
+              "x-note": "양수=과다공제, 음수=과소공제"
+            },
+            "cmp_meal_deduction_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "식비 공제 차이",
+              "x-standard-field-name": "cmp_meal_deduction_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R04",
+              "x-rules": "R04",
+              "x-grade": "최종피처",
+              "x-method": "meal_deduction - expected_meal_deduction",
+              "x-note": "양수=과다공제, 음수=과소공제"
+            }
+          },
+          "required": [
+            "calc_expected_housing_deduction",
+            "calc_expected_meal_deduction",
+            "cmp_housing_deduction_gap",
+            "cmp_meal_deduction_gap"
+          ]
+        },
+        "R05": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "calc_gross_pay": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "재계산 총지급액",
+              "x-standard-field-name": "calc_gross_pay",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R05",
+              "x-rules": "R05, R07",
+              "x-grade": "판정 필수",
+              "x-method": "개별 지급항목 7종 합계",
+              "x-note": "null은 0으로 전처리"
+            },
+            "cmp_gross_pay_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "총지급액 차이",
+              "x-standard-field-name": "cmp_gross_pay_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R05",
+              "x-rules": "R05",
+              "x-grade": "최종피처",
+              "x-method": "calculated_gross_pay - gross_pay",
+              "x-note": null
+            },
+            "param_gross_tolerance": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "허용 오차(원)",
+              "x-standard-field-name": "param_gross_tolerance",
+              "x-kind": "기준값",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "팀 설정",
+              "x-rules": "R05",
+              "x-grade": "판정 필수",
+              "x-method": "원단위 절사 흡수용. 안 1: 10원",
+              "x-note": "Option1(오차 PASS) / Option2(REVIEW) 중 택일 필요"
+            }
+          },
+          "required": [
+            "calc_gross_pay",
+            "cmp_gross_pay_gap",
+            "param_gross_tolerance"
+          ]
+        },
+        "R06": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "calc_total_deduction": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "재계산 총공제액",
+              "x-standard-field-name": "calc_total_deduction",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R06",
+              "x-rules": "R06, R07",
+              "x-grade": "판정 필수",
+              "x-method": "개별 공제항목 9종 합계",
+              "x-note": null
+            },
+            "cmp_total_deduction_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "총공제액 차이",
+              "x-standard-field-name": "cmp_total_deduction_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R06",
+              "x-rules": "R06",
+              "x-grade": "최종피처",
+              "x-method": "total_deduction - calculated_total_deduction",
+              "x-note": null
+            },
+            "cond_deduction_components_complete": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "공제항목 추출 완전성",
+              "x-standard-field-name": "cond_deduction_components_complete",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R06",
+              "x-rules": "R06",
+              "x-grade": "판정 필수",
+              "x-method": "모든 항목이 숫자 또는 명확한 0이면 true",
+              "x-note": "OCR 실패를 0원으로 계산하지 않기 위함"
+            }
+          },
+          "required": [
+            "calc_total_deduction",
+            "cmp_total_deduction_gap",
+            "cond_deduction_components_complete"
+          ]
+        },
+        "R07": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "calc_net_pay": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "재계산 실수령액",
+              "x-standard-field-name": "calc_net_pay",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R07",
+              "x-rules": "R07, R08, R09",
+              "x-grade": "최종피처",
+              "x-method": "gross_pay - total_deduction",
+              "x-note": "net_pay 누락 시 표준값으로 R08에 전달"
+            },
+            "cmp_net_pay_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "명세서 실수령액과 재계산 실수령액 차이",
+              "x-standard-field-name": "cmp_net_pay_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R07",
+              "x-rules": "R07",
+              "x-grade": "최종피처",
+              "x-method": "ps_net_pay - calc_net_pay",
+              "x-note": null
+            },
+            "cond_net_pay_nonpositive": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "재계산 실수령액 0 이하 여부",
+              "x-standard-field-name": "cond_net_pay_nonpositive",
+              "x-kind": "조건",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R07",
+              "x-rules": "R07",
+              "x-grade": "보조",
+              "x-method": "calc_net_pay <= 0",
+              "x-note": "기존 REVIEW_HIGH 예외조건을 명시적 조건 피처로 표현"
+            }
+          },
+          "required": [
+            "calc_net_pay",
+            "cmp_net_pay_gap",
+            "cond_net_pay_nonpositive"
+          ]
+        },
+        "R08": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "calc_salary_deposit_count": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "사용자 확정 급여 입금 건수",
+              "x-standard-field-name": "calc_salary_deposit_count",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R08",
+              "x-rules": "R08",
+              "x-grade": "보조",
+              "x-method": "usr_salary_transaction_selected=true인 거래 건수",
+              "x-note": null
+            },
+            "calc_salary_deposit_total": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "급여 입금 합계",
+              "x-standard-field-name": "calc_salary_deposit_total",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R08",
+              "x-rules": "R08",
+              "x-grade": "최종피처",
+              "x-method": "usr_salary_transaction_selected=true인 거래의 bk_deposit_amount 합계",
+              "x-note": "분할입금 전체 합산"
+            },
+            "cmp_deposit_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "입금액 차이",
+              "x-standard-field-name": "cmp_deposit_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R08",
+              "x-rules": "R08",
+              "x-grade": "보조",
+              "x-method": "calc_salary_deposit_total - calc_net_pay",
+              "x-note": null
+            },
+            "cond_salary_candidate": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "boolean"
+              },
+              "x-alignment": "documents.bank_statement.transactions 순서와 1:1 대응",
+              "description": "급여 입금 후보 추천 여부",
+              "x-standard-field-name": "cond_salary_candidate",
+              "x-kind": "조건",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R08",
+              "x-rules": "R08, R09",
+              "x-grade": "보조",
+              "x-method": "시스템이 각 입금 거래를 분석해 급여 가능성이 높은 거래를 추천, 예금주·거래일·거래내용·입금자명 등등 확인",
+              "x-note": "최종 확정값 아님. 실제 급여 거래는 사용자가 선택"
+            },
+            "usr_salary_transaction_selected": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "boolean"
+              },
+              "x-alignment": "documents.bank_statement.transactions 순서와 1:1 대응",
+              "description": "사용자 확정 급여 거래 여부",
+              "x-standard-field-name": "usr_salary_transaction_selected",
+              "x-kind": "사용자확정",
+              "x-source-or-nature": "사용자 확인",
+              "x-first-created": "R08",
+              "x-rules": "R08, R09",
+              "x-grade": "판정 필수",
+              "x-method": "각 입금 거래가 이번 급여에 해당하는지 사용자가 true/false로 최종 선택. 복수 선택 가능",
+              "x-note": "cond_salary_candidate는 추천용이며 R08·R09 최종 계산은 이 값 기준"
+            }
+          },
+          "required": [
+            "calc_salary_deposit_count",
+            "calc_salary_deposit_total",
+            "cmp_deposit_gap",
+            "cond_salary_candidate",
+            "usr_salary_transaction_selected"
+          ]
+        },
+        "R09": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "calc_actual_payment_completion_date": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "실제 전액 지급 완료일",
+              "x-standard-field-name": "calc_actual_payment_completion_date",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R09",
+              "x-rules": "R09",
+              "x-grade": "최종피처",
+              "x-method": "사용자 확정 급여 거래의 누적 입금액이 calc_net_pay에 처음 도달한 날짜",
+              "x-note": "최종 거래일이 아니라 전액 완성일"
+            },
+            "calc_cumulative_salary_deposit": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "거래일시순 누적 입금 series item. 내부 key는 v3.2 정의서에서 별도 규격화하지 않음."
+              },
+              "description": "급여 입금 누적합",
+              "x-standard-field-name": "calc_cumulative_salary_deposit",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R09",
+              "x-rules": "R09",
+              "x-grade": "판정 필수",
+              "x-method": "usr_salary_transaction_selected=true인 거래를 거래일시순으로 정렬한 뒤 bk_deposit_amount 누적합",
+              "x-note": null
+            },
+            "calc_scheduled_payment_date": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "description": "계약상 예정 지급일",
+              "x-standard-field-name": "calc_scheduled_payment_date",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R09",
+              "x-rules": "R09",
+              "x-grade": "최종피처",
+              "x-method": "pay_period_end + pay_cycle + pay_timing + pay_day/pay_weekday",
+              "x-note": "예: 7/31 종료 + 익월 + 10일 → 8/10"
+            },
+            "cmp_payment_date_gap_days": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "지급일 차이(일)",
+              "x-standard-field-name": "cmp_payment_date_gap_days",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R09",
+              "x-rules": "R09",
+              "x-grade": "보조",
+              "x-method": "calc_actual_payment_completion_date - calc_scheduled_payment_date",
+              "x-note": null
+            },
+            "ref_public_holiday": {
+              "x-schema-status": "structure_not_finalized",
+              "description": "대한민국 공휴일 데이터",
+              "x-standard-field-name": "ref_public_holiday",
+              "x-kind": "외부기준",
+              "x-source-or-nature": "외부 데이터",
+              "x-first-created": "외부 기준",
+              "x-rules": "R09",
+              "x-grade": "미보유",
+              "x-method": "외부 공휴일 데이터 필요",
+              "x-note": "현재 없음. 지급일 차이 시 REVIEW로 처리"
+            }
+          },
+          "required": [
+            "calc_actual_payment_completion_date",
+            "calc_cumulative_salary_deposit",
+            "calc_scheduled_payment_date",
+            "cmp_payment_date_gap_days",
+            "ref_public_holiday"
+          ]
+        },
+        "R10": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "cmp_contract_actual_hours_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "계약-실제 시간 차이",
+              "x-standard-field-name": "cmp_contract_actual_hours_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R10",
+              "x-rules": "R10",
+              "x-grade": "최종피처",
+              "x-method": "monthly_actual_hours - monthly_work_hours",
+              "x-note": null
+            },
+            "cmp_contract_actual_hours_gap_rate": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "시간 차이율(%)",
+              "x-standard-field-name": "cmp_contract_actual_hours_gap_rate",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R10",
+              "x-rules": "R10",
+              "x-grade": "보조",
+              "x-method": "차이 ÷ monthly_work_hours × 100",
+              "x-note": "분모가 0·결측이면 계산 안 함"
+            },
+            "cond_change_reason_available": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "변경사유 기재 여부",
+              "x-standard-field-name": "cond_change_reason_available",
+              "x-kind": "조건",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R10",
+              "x-rules": "R10",
+              "x-grade": "보조",
+              "x-method": "차이 발생 기간의 work_note 존재 시 true",
+              "x-note": null
+            },
+            "cond_daily_limit_exceeded": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "일일 상한 초과 여부",
+              "x-standard-field-name": "cond_daily_limit_exceeded",
+              "x-kind": "조건",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R10",
+              "x-rules": "R10",
+              "x-grade": "판정 필수",
+              "x-method": "actual_work_hours > max_daily_work_hours인 날 존재 시 true",
+              "x-note": null
+            },
+            "cond_worker_confirmed": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "근로자 확인 여부",
+              "x-standard-field-name": "cond_worker_confirmed",
+              "x-kind": "조건",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R10",
+              "x-rules": "R10",
+              "x-grade": "보조",
+              "x-method": "해당 기간 worker_confirmed 확인",
+              "x-note": null
+            },
+            "param_hours_tolerance": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "월시간 허용오차(시간)",
+              "x-standard-field-name": "param_hours_tolerance",
+              "x-kind": "기준값",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "팀 설정",
+              "x-rules": "R10",
+              "x-grade": "판정 필수",
+              "x-method": "팀 공통 기준 미확정",
+              "x-note": "확정 필요"
+            },
+            "ts_monthly_actual_hours": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "월 총근로시간",
+              "x-standard-field-name": "ts_monthly_actual_hours",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R10",
+              "x-rules": "R10",
+              "x-grade": "판정 필수",
+              "x-method": "해당 월의 ts_daily_actual_hours 합계",
+              "x-note": "R02의 ts_period_actual_hours와 구분. 급여기간=월 전체일 때만 같을 수 있음."
+            }
+          },
+          "required": [
+            "cmp_contract_actual_hours_gap",
+            "cmp_contract_actual_hours_gap_rate",
+            "cond_change_reason_available",
+            "cond_daily_limit_exceeded",
+            "cond_worker_confirmed",
+            "param_hours_tolerance",
+            "ts_monthly_actual_hours"
+          ]
+        },
+        "R11": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "calc_applicable_year": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "최저임금 적용연도",
+              "x-standard-field-name": "calc_applicable_year",
+              "x-kind": "파생",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R11",
+              "x-rules": "R11",
+              "x-grade": "판정 필수",
+              "x-method": "pay_period_start·end에서 결정",
+              "x-note": "연도가 다르면 REVIEW"
+            },
+            "cmp_contract_minimum_wage_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "계약 시급-최저시급 차이",
+              "x-standard-field-name": "cmp_contract_minimum_wage_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R11",
+              "x-rules": "R11",
+              "x-grade": "최종피처",
+              "x-method": "calc_contract_hourly_wage - ref_minimum_hourly_wage",
+              "x-note": null
+            },
+            "cmp_payslip_minimum_wage_gap": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "명세서 시급-최저시급 차이",
+              "x-standard-field-name": "cmp_payslip_minimum_wage_gap",
+              "x-kind": "비교",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R11",
+              "x-rules": "R11",
+              "x-grade": "최종피처",
+              "x-method": "calc_payslip_hourly_wage - ref_minimum_hourly_wage",
+              "x-note": null
+            },
+            "cond_any_below_minimum_wage": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "최저임금 미달 여부",
+              "x-standard-field-name": "cond_any_below_minimum_wage",
+              "x-kind": "조건",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R11",
+              "x-rules": "R11",
+              "x-grade": "판정 필수",
+              "x-method": "두 차이값 중 하나라도 0 미만이면 true",
+              "x-note": null
+            },
+            "ref_minimum_hourly_wage": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "적용연도 최저시급",
+              "x-standard-field-name": "ref_minimum_hourly_wage",
+              "x-kind": "외부기준",
+              "x-source-or-nature": "외부 데이터",
+              "x-first-created": "외부 기준",
+              "x-rules": "R11",
+              "x-grade": "판정 필수",
+              "x-method": "연도별 최저임금 기준표 조회",
+              "x-note": "2026년 10,320원"
+            }
+          },
+          "required": [
+            "calc_applicable_year",
+            "cmp_contract_minimum_wage_gap",
+            "cmp_payslip_minimum_wage_gap",
+            "cond_any_below_minimum_wage",
+            "ref_minimum_hourly_wage"
+          ]
+        }
+      },
+      "required": [
+        "common",
+        "R00",
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11"
+      ]
+    },
+    "rule_results": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "R00": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r00_result": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "PASS",
+                "NOT_CHECKABLE",
+                "REVIEW",
+                null
+              ],
+              "description": "R00 판정 결과",
+              "x-standard-field-name": "r00_result",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "최종피처",
+              "x-method": "PASS / NOT_CHECKABLE / REVIEW",
+              "x-note": "PASS면 동일 case_id 부여"
+            },
+            "r00_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "R00 판정 사유",
+              "x-standard-field-name": "r00_reason",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R00",
+              "x-rules": "R00",
+              "x-grade": "보조",
+              "x-method": "판정 근거 설명",
+              "x-note": null
+            }
+          },
+          "required": [
+            "r00_result",
+            "r00_reason"
+          ]
+        },
+        "R01": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r01_result": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "PASS",
+                "MISMATCH",
+                "REVIEW",
+                "NOT_CHECKABLE",
+                null
+              ],
+              "description": "R01 판정 결과",
+              "x-standard-field-name": "r01_result",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R01",
+              "x-rules": "R01",
+              "x-grade": "최종피처",
+              "x-method": "PASS / MISMATCH / REVIEW / NOT_CHECKABLE",
+              "x-note": null
+            },
+            "r01_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "R01 판정 사유",
+              "x-standard-field-name": "r01_reason",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R01",
+              "x-rules": "R01",
+              "x-grade": "보조",
+              "x-method": "판정 근거 설명",
+              "x-note": null
+            }
+          },
+          "required": [
+            "r01_result",
+            "r01_reason"
+          ]
+        },
+        "R02": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r02_result": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "PASS",
+                "MISMATCH",
+                "REVIEW",
+                "NOT_EVALUABLE",
+                null
+              ],
+              "description": "R02 판정 결과",
+              "x-standard-field-name": "r02_result",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R02",
+              "x-rules": "R02",
+              "x-grade": "최종피처",
+              "x-method": "PASS / MISMATCH / REVIEW / NOT_EVALUABLE",
+              "x-note": null
+            },
+            "r02_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "R02 판정 사유",
+              "x-standard-field-name": "r02_reason",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R02",
+              "x-rules": "R02",
+              "x-grade": "보조",
+              "x-method": "차이 시간·대체 발생 여부 서술",
+              "x-note": null
+            }
+          },
+          "required": [
+            "r02_result",
+            "r02_reason"
+          ]
+        },
+        "R03": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r03_result": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "PASS",
+                "MISMATCH",
+                "REVIEW",
+                "NOT_EVALUABLE",
+                null
+              ],
+              "description": "R03 판정 결과",
+              "x-standard-field-name": "r03_result",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R03",
+              "x-rules": "R03",
+              "x-grade": "최종피처",
+              "x-method": "PASS / MISMATCH / REVIEW / NOT_EVALUABLE",
+              "x-note": null
+            },
+            "r03_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "R03 판정 사유",
+              "x-standard-field-name": "r03_reason",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R03",
+              "x-rules": "R03",
+              "x-grade": "보조",
+              "x-method": "차이 금액·미매칭 항목 서술",
+              "x-note": null
+            }
+          },
+          "required": [
+            "r03_result",
+            "r03_reason"
+          ]
+        },
+        "R04": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r04_result": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "PASS",
+                "MISMATCH",
+                "REVIEW",
+                "NOT_CHECKABLE",
+                null
+              ],
+              "description": "R04 판정 결과",
+              "x-standard-field-name": "r04_result",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R04",
+              "x-rules": "R04",
+              "x-grade": "최종피처",
+              "x-method": "PASS / MISMATCH / REVIEW / NOT_CHECKABLE",
+              "x-note": "위법 여부 최종판정은 하지 않음"
+            },
+            "r04_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "R04 판정 사유",
+              "x-standard-field-name": "r04_reason",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R04",
+              "x-rules": "R04",
+              "x-grade": "보조",
+              "x-method": "차이 금액 서술",
+              "x-note": null
+            }
+          },
+          "required": [
+            "r04_result",
+            "r04_reason"
+          ]
+        },
+        "R05": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r05_result": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "PASS",
+                "MISMATCH",
+                "REVIEW",
+                null
+              ],
+              "description": "R05 판정 결과",
+              "x-standard-field-name": "r05_result",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R05",
+              "x-rules": "R05",
+              "x-grade": "최종피처",
+              "x-method": "PASS / MISMATCH / REVIEW",
+              "x-note": null
+            },
+            "r05_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "R05 판정 사유",
+              "x-standard-field-name": "r05_reason",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R05",
+              "x-rules": "R05",
+              "x-grade": "보조",
+              "x-method": "판정 근거 설명",
+              "x-note": null
+            }
+          },
+          "required": [
+            "r05_result",
+            "r05_reason"
+          ]
+        },
+        "R06": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r06_result": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "PASS",
+                "MISMATCH",
+                "NOT_CHECKABLE",
+                null
+              ],
+              "description": "R06 판정 결과",
+              "x-standard-field-name": "r06_result",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R06",
+              "x-rules": "R06",
+              "x-grade": "최종피처",
+              "x-method": "PASS / MISMATCH / NOT_CHECKABLE",
+              "x-note": null
+            },
+            "r06_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "R06 판정 사유",
+              "x-standard-field-name": "r06_reason",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R06",
+              "x-rules": "R06",
+              "x-grade": "보조",
+              "x-method": "차이 금액 또는 검사 불가 사유",
+              "x-note": null
+            }
+          },
+          "required": [
+            "r06_result",
+            "r06_reason"
+          ]
+        },
+        "R07": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r07_result": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "PASS",
+                "MISMATCH",
+                "REVIEW_HIGH",
+                null
+              ],
+              "description": "R07 판정 결과",
+              "x-standard-field-name": "r07_result",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R07",
+              "x-rules": "R07",
+              "x-grade": "최종피처",
+              "x-method": "PASS / MISMATCH / REVIEW_HIGH",
+              "x-note": "calculated_net_pay ≤ 0이면 REVIEW_HIGH"
+            },
+            "r07_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "R07 판정 사유",
+              "x-standard-field-name": "r07_reason",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R07",
+              "x-rules": "R07",
+              "x-grade": "보조",
+              "x-method": "판정 근거 설명",
+              "x-note": null
+            }
+          },
+          "required": [
+            "r07_result",
+            "r07_reason"
+          ]
+        },
+        "R08": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r08_result": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "PASS",
+                "MISMATCH",
+                "REVIEW",
+                "NOT_CHECKABLE",
+                null
+              ],
+              "description": "R08 판정 결과",
+              "x-standard-field-name": "r08_result",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R08",
+              "x-rules": "R08",
+              "x-grade": "최종피처",
+              "x-method": "PASS / MISMATCH / REVIEW / NOT_CHECKABLE",
+              "x-note": null
+            },
+            "r08_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "R08 판정 사유",
+              "x-standard-field-name": "r08_reason",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R08",
+              "x-rules": "R08",
+              "x-grade": "보조",
+              "x-method": "판정 근거 설명",
+              "x-note": null
+            }
+          },
+          "required": [
+            "r08_result",
+            "r08_reason"
+          ]
+        },
+        "R09": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r09_result": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "PASS",
+                "MISMATCH",
+                "REVIEW",
+                "NOT_CHECKABLE",
+                null
+              ],
+              "description": "R09 판정 결과",
+              "x-standard-field-name": "r09_result",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R09",
+              "x-rules": "R09",
+              "x-grade": "최종피처",
+              "x-method": "PASS / MISMATCH / REVIEW / NOT_CHECKABLE",
+              "x-note": null
+            },
+            "r09_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "R09 판정 사유",
+              "x-standard-field-name": "r09_reason",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R09",
+              "x-rules": "R09",
+              "x-grade": "보조",
+              "x-method": "판정 근거 설명",
+              "x-note": null
+            }
+          },
+          "required": [
+            "r09_result",
+            "r09_reason"
+          ]
+        },
+        "R10": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r10_result": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "PASS",
+                "REVIEW",
+                "NOT_CHECKABLE",
+                null
+              ],
+              "description": "R10 판정 결과",
+              "x-standard-field-name": "r10_result",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R10",
+              "x-rules": "R10",
+              "x-grade": "최종피처",
+              "x-method": "PASS / REVIEW / NOT_CHECKABLE",
+              "x-note": "차이만으로 MISMATCH 확정 안 함"
+            },
+            "r10_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "R10 판정 사유",
+              "x-standard-field-name": "r10_reason",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R10",
+              "x-rules": "R10",
+              "x-grade": "보조",
+              "x-method": "판정 근거 설명",
+              "x-note": null
+            }
+          },
+          "required": [
+            "r10_result",
+            "r10_reason"
+          ]
+        },
+        "R11": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r11_result": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "PASS",
+                "REVIEW",
+                "REVIEW_HIGH",
+                "NOT_CHECKABLE",
+                null
+              ],
+              "description": "R11 판정 결과",
+              "x-standard-field-name": "r11_result",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R11",
+              "x-rules": "R11",
+              "x-grade": "최종피처",
+              "x-method": "PASS / REVIEW / REVIEW_HIGH / NOT_CHECKABLE",
+              "x-note": "법 위반 확정 아님. 위험 신호만 표시"
+            },
+            "r11_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "R11 판정 사유",
+              "x-standard-field-name": "r11_reason",
+              "x-kind": "판정",
+              "x-source-or-nature": "프로그램 계산",
+              "x-first-created": "R11",
+              "x-rules": "R11",
+              "x-grade": "보조",
+              "x-method": "판정 근거 설명",
+              "x-note": null
+            }
+          },
+          "required": [
+            "r11_result",
+            "r11_reason"
+          ]
+        }
+      },
+      "required": [
+        "R00",
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "R10",
+        "R11"
+      ]
+    }
+  },
+  "required": [
+    "documents",
+    "derived",
+    "rule_results"
+  ]
+}

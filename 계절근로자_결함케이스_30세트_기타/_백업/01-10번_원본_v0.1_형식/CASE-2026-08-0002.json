@@ -1,0 +1,552 @@
+{
+  "meta": {
+    "schema_version": "0.1",
+    "generated_at": "2026-08-10",
+    "purpose": "R00~R11 전 규칙 입력·산출 피처를 한 근로자 기준으로 담은 케이스",
+    "case_type": "결함 케이스 — R00, R02 미통과, 그 외 규칙은 PASS",
+    "field_dictionary": "계절근로자_급여검증_R00-R11_피처정의서.xlsx (03_문서별_원본피처 / 02_규칙별_피처)",
+    "documents_covered": [
+      "계절근로계약서",
+      "근무기록",
+      "임금명세서",
+      "입금내역서"
+    ],
+    "value_conventions": {
+      "0": "실제로 미지급·미공제된 항목",
+      "null": "해당 없음 또는 OCR 추출 실패",
+      "주의": "미지급 0과 OCR 실패 null을 절대 같은 값으로 처리하지 말 것",
+      "extraction_status": "본 케이스는 OCR 실패 없음. null은 모두 '해당 없음'"
+    },
+    "open_parameters": [
+      "param_wage_tolerance",
+      "cmp_tolerance_hours",
+      "cmp_tolerance_won",
+      "param_gross_tolerance",
+      "param_hours_tolerance"
+    ],
+    "design_notes": [
+      "주입 결함: 명세서 생년월일이 계약서와 다름(1997-11-02 vs 1997-11-20)",
+      "주입 결함: 예금주명 철자 상이(PHAN VAN DUK)",
+      "주입 결함: 주휴시간을 기본근로시간에 합산해 기재하고 주휴시간란을 0으로 둠",
+      "금액은 전부 정상이라 R00·R02 외 규칙은 영향받지 않음",
+      "판정은 손으로 적지 않고 규칙 엔진으로 산출함. 허용오차는 일반화 규칙 적용 (시간=근무일수x0.083 하한0.5 상한3%, 연장=연장일수x0.083 하한0.5, 금액=정액10원·단가10+3xh)"
+    ]
+  },
+  "case_id": "CASE-2026-08-0002",
+  "worker_ref": {
+    "employee_name": "PHAN VAN DUC",
+    "pay_period": "2026-08"
+  },
+  "documents": {
+    "contract": {
+      "employee_name": "PHAN VAN DUC",
+      "employee_birth_date": "1997-11-02",
+      "employer_name": "초록들영농조합",
+      "new_or_reentry_selected": true,
+      "new_or_reentry_start_date": "2026-05-01",
+      "new_or_reentry_end_date": "2026-10-31",
+      "workplace_change_selected": false,
+      "workplace_change_start_date": null,
+      "workplace_change_end_date": null,
+      "wage_type": "hourly",
+      "wage_amount": 11500,
+      "monthly_work_hours": 168.0,
+      "work_start_time": "08:00",
+      "work_end_time": "17:00",
+      "break_hours": 1,
+      "break_minutes": 0,
+      "weekly_allowance_included": false,
+      "pay_period_start": "2026-08-01",
+      "pay_period_end": "2026-08-31",
+      "work_day_start": "MON",
+      "work_day_end": "FRI",
+      "holiday_type": "weekly_sunday",
+      "bonus_extra_pay_paid": false,
+      "bonus_amount": 0,
+      "extra_pay_amount": 0,
+      "overtime_hourly_pay": 17250,
+      "housing_provided": true,
+      "housing_cost": 130000,
+      "meal_provided": true,
+      "meal_cost": 90000,
+      "pay_cycle": "monthly",
+      "pay_timing": "next_month",
+      "pay_day": 10,
+      "pay_weekday": null,
+      "max_daily_work_hours": 10.0
+    },
+    "timesheet": {
+      "employee_name": "PHAN VAN DUC",
+      "record_available": true,
+      "worker_confirmed": true,
+      "monthly_actual_hours": 172.0,
+      "lines": [
+        {
+          "work_date": "2026-08-03",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-04",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-05",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-06",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-07",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-10",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-11",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-12",
+          "work_start_time": "08:00",
+          "work_end_time": "19:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 10.0,
+          "work_note": "작업물량 증가로 연장근로"
+        },
+        {
+          "work_date": "2026-08-13",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-14",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-17",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-18",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-19",
+          "work_start_time": "08:00",
+          "work_end_time": "19:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 10.0,
+          "work_note": "작업물량 증가로 연장근로"
+        },
+        {
+          "work_date": "2026-08-20",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-21",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-24",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-25",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-26",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-27",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-28",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        },
+        {
+          "work_date": "2026-08-31",
+          "work_start_time": "08:00",
+          "work_end_time": "17:00",
+          "break_minutes": 60,
+          "holiday_worked": false,
+          "actual_work_hours": 8.0,
+          "work_note": null
+        }
+      ]
+    },
+    "payslip": {
+      "employee_name": "PHAN VAN DUC",
+      "employee_identifier": "1997-11-20",
+      "employer_name": "초록들영농조합",
+      "pay_period_start": "2026-08-01",
+      "pay_period_end": "2026-08-31",
+      "payment_date": "2026-09-10",
+      "wage_type": "hourly",
+      "ordinary_hourly_wage": 11500,
+      "paid_regular_hours": 200.0,
+      "paid_overtime_hours": 4.0,
+      "paid_holiday_hours": 0.0,
+      "paid_night_hours": 0.0,
+      "weekly_holiday_hours": 0.0,
+      "paid_work_days": 21,
+      "calculation_item": "기본급",
+      "calculation_formula": "168시간 x 11,500원",
+      "calculated_amount": 1932000,
+      "base_pay": 1932000,
+      "weekly_allowance": 368000,
+      "overtime_pay": 69000,
+      "night_work_pay": 0,
+      "holiday_work_pay": 0,
+      "bonus_amount": 0,
+      "other_allowance": 0,
+      "income_tax": 23690,
+      "local_income_tax": 2370,
+      "national_pension": 106600,
+      "health_insurance": 83980,
+      "employment_insurance": 21320,
+      "long_term_care_insurance": 10880,
+      "housing_deduction": 130000,
+      "meal_deduction": 90000,
+      "other_deduction": 0,
+      "gross_pay": 2369000,
+      "total_deduction": 468840,
+      "net_pay": 1900160,
+      "pay_lines": [
+        {
+          "item_name": "기본급",
+          "amount": 1932000,
+          "mapped_to": "base_pay"
+        },
+        {
+          "item_name": "주휴수당",
+          "amount": 368000,
+          "mapped_to": "weekly_allowance"
+        },
+        {
+          "item_name": "연장근로수당",
+          "amount": 69000,
+          "mapped_to": "overtime_pay"
+        },
+        {
+          "item_name": "야간근로수당",
+          "amount": 0,
+          "mapped_to": "night_work_pay"
+        },
+        {
+          "item_name": "휴일근로수당",
+          "amount": 0,
+          "mapped_to": "holiday_work_pay"
+        },
+        {
+          "item_name": "상여금",
+          "amount": 0,
+          "mapped_to": "bonus_amount"
+        },
+        {
+          "item_name": "기타수당",
+          "amount": 0,
+          "mapped_to": "other_allowance"
+        }
+      ]
+    },
+    "bank_statement": {
+      "account_holder": "PHAN VAN DUK",
+      "inquiry_start_date": "2026-08-01",
+      "inquiry_end_date": "2026-10-15",
+      "transactions": [
+        {
+          "transaction_datetime": "2026-09-06 14:22:10",
+          "deposit_amount": 180000,
+          "transaction_content": "타행이체",
+          "transaction_record": "LE THI B",
+          "transfer_memo": "개인송금"
+        },
+        {
+          "transaction_datetime": "2026-09-10 09:31:05",
+          "deposit_amount": 1900160,
+          "transaction_content": "급여",
+          "transaction_record": "초록들영농조합",
+          "transfer_memo": "초록들영농조합 8월급여"
+        }
+      ]
+    }
+  },
+  "derived": {
+    "R00": {
+      "contract_employee_name_norm": "PHANVANDUC",
+      "work_employee_name_norm": "PHANVANDUC",
+      "payslip_employee_name_norm": "PHANVANDUC",
+      "account_holder_norm": "PHANVANDUK",
+      "selected_contract_start": "2026-05-01",
+      "selected_contract_end": "2026-10-31",
+      "name_match": true,
+      "identifier_match": false,
+      "account_holder_match": false,
+      "employer_match": true,
+      "contract_period_match": true,
+      "work_period_match": true,
+      "worker_match": false,
+      "period_match": true
+    },
+    "R01": {
+      "calc_contract_daily_hours": 8.0,
+      "calc_contract_hourly_wage": 11500.0,
+      "calc_payslip_hourly_wage": 11500.0,
+      "cmp_wage_type_match": true,
+      "cond_partial_period": false,
+      "cmp_hourly_wage_gap": 0.0,
+      "param_wage_tolerance": 10
+    },
+    "R02": {
+      "ct_break_total_minutes": 60,
+      "ts_period_actual_hours": 172.0,
+      "ts_period_overtime_hours": 4.0,
+      "ts_period_holiday_hours": 0,
+      "ts_period_night_hours": 0.0,
+      "ts_period_work_days": 21,
+      "ts_period_coverage_by_scheduled_days": 1.0,
+      "ts_period_coverage_by_calendar_days": 0.677,
+      "ts_break_source": "input",
+      "ps_actual_hours_equiv": 204.0,
+      "cmp_actual_hours_gap": -32.0,
+      "cmp_overtime_hours_gap": 0.0,
+      "cmp_work_days_gap": 0,
+      "cmp_tolerance_hours": 1.75,
+      "cmp_tolerance_overtime_hours": 0.5,
+      "cmp_tolerance_work_days": 0
+    },
+    "R03": {
+      "allowance_type": {
+        "bonus_amount": "fixed",
+        "other_allowance": "fixed",
+        "overtime_pay": "rate",
+        "night_work_pay": "rate",
+        "holiday_work_pay": "rate"
+      },
+      "cond_overtime_occurred": true,
+      "cond_weekly_allowance_due": true,
+      "cond_bonus_due": false,
+      "cond_night_occurred": false,
+      "cond_holiday_occurred": false,
+      "cond_evidence_source": "timesheet",
+      "calc_contract_hourly_wage": 11500.0,
+      "calc_expected_overtime_pay": 69000,
+      "cmp_bonus_gap": 0,
+      "cmp_extra_pay_gap": 0,
+      "cmp_overtime_pay_gap": 0,
+      "unmatched_pay_items": [],
+      "cmp_tolerance_won": 10,
+      "cmp_tolerance_won_rate": 22
+    },
+    "R04": {
+      "expected_housing_deduction": 130000,
+      "expected_meal_deduction": 90000,
+      "housing_deduction_diff": 0,
+      "meal_deduction_diff": 0
+    },
+    "R05": {
+      "calculated_gross_pay": 2369000,
+      "gross_pay_difference": 0,
+      "param_gross_tolerance": 10
+    },
+    "R06": {
+      "deduction_components_complete": true,
+      "calculated_total_deduction": 468840,
+      "deduction_difference": 0
+    },
+    "R07": {
+      "calculated_total_deduction": 468840,
+      "calculated_net_pay": 1900160,
+      "net_pay_difference": 0
+    },
+    "R08": {
+      "gross_pay_recalculated": 2369000,
+      "total_deduction_recalculated": 468840,
+      "net_pay_recalculated": 1900160,
+      "salary_candidate_flag": [
+        false,
+        true
+      ],
+      "salary_deposit_count": 1,
+      "salary_deposit_total": 1900160,
+      "deposit_difference": 0
+    },
+    "R09": {
+      "scheduled_payment_date": "2026-09-10",
+      "cumulative_salary_deposit": [
+        {
+          "date": "2026-09-10",
+          "cumulative": 1900160
+        }
+      ],
+      "actual_payment_completion_date": "2026-09-10",
+      "payment_date_difference": 0,
+      "ref_public_holiday": null
+    },
+    "R10": {
+      "cmp_contract_actual_hours_gap": 4.0,
+      "cmp_contract_actual_hours_gap_rate": 2.38,
+      "cond_daily_limit_exceeded": false,
+      "cond_change_reason_available": true,
+      "cond_worker_confirmed": true,
+      "param_hours_tolerance": 8.0
+    },
+    "R11": {
+      "calc_applicable_year": 2026,
+      "ref_minimum_hourly_wage": 10320,
+      "calc_contract_hourly_wage": 11500.0,
+      "calc_payslip_hourly_wage": 11500.0,
+      "cmp_contract_minimum_wage_gap": 1180.0,
+      "cmp_payslip_minimum_wage_gap": 1180.0,
+      "cond_any_below_minimum_wage": false
+    }
+  },
+  "rule_results": {
+    "R00": {
+      "status": "REVIEW",
+      "reason": "예금주명 불일치, 식별정보(생년월일) 불일치 — 동명이인·표기 차이 가능성으로 사람 확인 필요"
+    },
+    "R01": {
+      "status": "PASS",
+      "reason": "임금형태 동일, 계약 환산시급과 명세서 적용시급 차이가 허용범위 이내"
+    },
+    "R02": {
+      "status": "MISMATCH",
+      "reason": "실근로시간 172.0시간, 명세서 환산 204.0시간 — 차이 -32.0시간 (허용 1.75시간)"
+    },
+    "R03": {
+      "status": "PASS",
+      "reason": "정액형·단가형 차이가 모두 허용범위 이내, 미매칭 지급항목 없음"
+    },
+    "R04": {
+      "status": "PASS",
+      "reason": "계약 부담액과 명세서 공제액이 일치"
+    },
+    "R05": {
+      "status": "PASS",
+      "reason": "지급항목 7종 합계와 총지급액 차이 0원"
+    },
+    "R06": {
+      "status": "PASS",
+      "reason": "공제항목 9종 모두 추출, 재계산 합계와 총공제액 차이 0원"
+    },
+    "R07": {
+      "status": "PASS",
+      "reason": "총지급-총공제 결과가 명세서 실수령액과 일치"
+    },
+    "R08": {
+      "status": "PASS",
+      "reason": "입금자명이 사업장명과 일치하는 급여 입금 1건 합계가 재계산 실수령액과 일치"
+    },
+    "R09": {
+      "status": "PASS",
+      "reason": "약정 지급일 2026-09-10에 누적 입금이 실수령액에 도달"
+    },
+    "R10": {
+      "status": "PASS",
+      "reason": "계약 월 소정근로시간 대비 차이 4.0시간, 일일 변경 상한 이내"
+    },
+    "R11": {
+      "status": "PASS",
+      "reason": "계약·명세서 환산시급 모두 2026년 최저시급 10,320원 이상"
+    }
+  }
+}

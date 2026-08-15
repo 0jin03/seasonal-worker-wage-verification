@@ -1,0 +1,23 @@
+# --- 압축 파일 (원본 폴더가 이미 저장소에 포함되어 있음) ---
+*.zip
+
+# --- macOS ---
+.DS_Store
+._*
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- 파이프라인 실행 산출물 ---
+실행결과/
+
+# --- 에디터 ---
+.vscode/
+.idea/
