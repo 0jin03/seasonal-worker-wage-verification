@@ -1,3 +1,32 @@
-/*
-!/.gitignore
-!/README.md
+# 케이스 데이터 원본 (data 브랜치에서 관리)
+/R00_R11_FINAL/
+/계절근로자_정상케이스_30세트/
+/계절근로자_결함케이스_30세트/
+/계절근로자_정상케이스_30세트_기타/
+/계절근로자_결함케이스_30세트_기타/
+/합성데이터 형식_law/
+/CASE-EY-2026-07-0001.json
+/R00-R11_최종_JSON_Schema_v3.2.json
+/*.pdf
+/*.zip
+
+# 파이프라인 노트북 (data 브랜치에서 관리)
+/vitamin_ocr_rule_pipeline.ipynb
+/rule_test.ipynb
+
+# 실행 산출물
+/실행결과/
+
+# 환경
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+._*
+
+# 에디터
+.vscode/
+.idea/

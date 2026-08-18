@@ -1,0 +1,6 @@
+# 코퍼스 조회·리포트 생성에 필요
+openpyxl>=3.1        # 피처정의서(xlsx) 읽기
+certifi>=2024.2      # 법령 API HTTPS 인증서
+
+# LLM 설명 단계(law/explain.py)에만 필요
+anthropic>=0.70
