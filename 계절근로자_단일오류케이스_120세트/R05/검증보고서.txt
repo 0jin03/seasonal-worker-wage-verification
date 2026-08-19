@@ -1,0 +1,14 @@
+R05 validation report
+======================================================
+CASE-R05-2026-01-0001: schema PASS / isolated R05 MISMATCH / other rules PASS
+CASE-R05-2026-01-0002: schema PASS / isolated R05 MISMATCH / other rules PASS
+CASE-R05-2026-01-0003: schema PASS / isolated R05 MISMATCH / other rules PASS
+CASE-R05-2026-01-0004: schema PASS / isolated R05 MISMATCH / other rules PASS
+CASE-R05-2026-01-0005: schema PASS / isolated R05 MISMATCH / other rules PASS
+CASE-R05-2026-01-0006: schema PASS / isolated R05 MISMATCH / other rules PASS
+CASE-R05-2026-01-0007: schema PASS / isolated R05 MISMATCH / other rules PASS
+CASE-R05-2026-01-0008: schema PASS / isolated R05 MISMATCH / other rules PASS
+CASE-R05-2026-01-0009: schema PASS / isolated R05 MISMATCH / other rules PASS
+CASE-R05-2026-01-0010: schema PASS / isolated R05 MISMATCH / other rules PASS
+------------------------------------------------------
+JSON 10 / PDF 40 / schema errors 0 / isolation errors 0
