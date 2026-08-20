@@ -1,0 +1,3193 @@
+{
+  "documents": {
+    "contract": {
+      "fields": {
+        "ct_employer_name": {
+          "raw_text": "청솔농원",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            277,
+            197,
+            342,
+            217
+          ],
+          "score": 0.997044026851654,
+          "raw_method": "table_res_list[0].table_ocr_pred"
+        },
+        "ct_employee_name": {
+          "raw_text": "LIM CHAMROEUN",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            279,
+            265,
+            402,
+            279
+          ],
+          "score": 0.9710652828216553,
+          "raw_method": "table_res_list[0].table_ocr_pred"
+        },
+        "ct_new_or_reentry_start_date": {
+          "raw_text": "2025년10월18일부터2026년05월 01일까지",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            279,
+            403,
+            577,
+            420
+          ],
+          "score": 0.9846146702766418,
+          "raw_method": "table_res_list[3].table_ocr_pred"
+        },
+        "ct_new_or_reentry_end_date": {
+          "raw_text": "2025년10월18일부터2026년05월 01일까지",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            279,
+            403,
+            577,
+            420
+          ],
+          "score": 0.9846146702766418,
+          "raw_method": "table_res_list[3].table_ocr_pred"
+        },
+        "ct_work_start_time": {
+          "raw_text": "08:00~17:00",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            278,
+            623,
+            368,
+            639
+          ],
+          "score": 0.9988111257553101,
+          "raw_method": "table_res_list[2].table_ocr_pred"
+        },
+        "ct_work_end_time": {
+          "raw_text": "08:00~17:00",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            278,
+            623,
+            368,
+            639
+          ],
+          "score": 0.9988111257553101,
+          "raw_method": "table_res_list[2].table_ocr_pred"
+        },
+        "ct_monthly_work_hours": {
+          "raw_text": "176시간",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            797,
+            621,
+            858,
+            641
+          ],
+          "score": 0.9995015859603882,
+          "raw_method": "table_res_list[2].table_ocr_pred"
+        },
+        "ct_break_hours": {
+          "raw_text": "1시간0분",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            277,
+            658,
+            344,
+            679
+          ],
+          "score": 0.9978429675102234,
+          "raw_method": "table_res_list[2].table_ocr_pred"
+        },
+        "ct_break_minutes": {
+          "raw_text": "1시간0분",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            277,
+            658,
+            344,
+            679
+          ],
+          "score": 0.9978429675102234,
+          "raw_method": "table_res_list[2].table_ocr_pred"
+        },
+        "ct_work_day_start": {
+          "raw_text": "매주월요일~금요일",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            801,
+            659,
+            935,
+            676
+          ],
+          "score": 0.9966350197792053,
+          "raw_method": "table_res_list[2].table_ocr_pred"
+        },
+        "ct_work_day_end": {
+          "raw_text": "매주월요일~금요일",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            801,
+            659,
+            935,
+            676
+          ],
+          "score": 0.9966350197792053,
+          "raw_method": "table_res_list[2].table_ocr_pred"
+        },
+        "ct_holiday_type": {
+          "raw_text": "주휴일 매주일요일",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            279,
+            699,
+            401,
+            716
+          ],
+          "score": 0.9436551332473755,
+          "raw_method": "table_res_list[2].table_ocr_pred"
+        },
+        "ct_max_daily_work_hours": {
+          "raw_text": "10시간",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            797,
+            695,
+            852,
+            717
+          ],
+          "score": 0.9996250867843628,
+          "raw_method": "table_res_list[2].table_ocr_pred"
+        },
+        "ct_wage_amount": {
+          "raw_text": "11,200원",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            788,
+            777,
+            853,
+            798
+          ],
+          "score": 0.9993566274642944,
+          "raw_method": "table_res_list[1].table_ocr_pred"
+        },
+        "ct_bonus_amount": {
+          "raw_text": "상여금0원/수당0원",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            790,
+            814,
+            928,
+            834
+          ],
+          "score": 0.9831995964050293,
+          "raw_method": "table_res_list[1].table_ocr_pred"
+        },
+        "ct_extra_pay_amount": {
+          "raw_text": "상여금0원/수당0원",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            790,
+            814,
+            928,
+            834
+          ],
+          "score": 0.9831995964050293,
+          "raw_method": "table_res_list[1].table_ocr_pred"
+        },
+        "ct_overtime_hourly_pay": {
+          "raw_text": "16,800원",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            787,
+            850,
+            853,
+            871
+          ],
+          "score": 0.9970211386680603,
+          "raw_method": "table_res_list[1].table_ocr_pred"
+        },
+        "ct_pay_period_start": {
+          "raw_text": "매월1일~31일",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            278,
+            886,
+            384,
+            906
+          ],
+          "score": 0.9969087839126587,
+          "raw_method": "table_res_list[1].table_ocr_pred"
+        },
+        "ct_pay_period_end": {
+          "raw_text": "매월1일~31일",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            278,
+            886,
+            384,
+            906
+          ],
+          "score": 0.9969087839126587,
+          "raw_method": "table_res_list[1].table_ocr_pred"
+        },
+        "ct_pay_timing": {
+          "raw_text": "익월 5일/근로자 명의 예금통장 입금",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            791,
+            888,
+            1023,
+            905
+          ],
+          "score": 0.893790602684021,
+          "raw_method": "table_res_list[1].table_ocr_pred"
+        },
+        "ct_pay_cycle": {
+          "raw_text": "익월 5일/근로자 명의 예금통장 입금",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            791,
+            888,
+            1023,
+            905
+          ],
+          "score": 0.893790602684021,
+          "raw_method": "table_res_list[1].table_ocr_pred"
+        },
+        "ct_pay_day": {
+          "raw_text": "익월 5일/근로자 명의 예금통장 입금",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            791,
+            888,
+            1023,
+            905
+          ],
+          "score": 0.893790602684021,
+          "raw_method": "table_res_list[1].table_ocr_pred"
+        },
+        "ct_pay_weekday": {
+          "raw_text": "익월 5일/근로자 명의 예금통장 입금",
+          "method": "table_ocr",
+          "reason": "monthly pay clause has no weekday",
+          "page": 0,
+          "bbox": [
+            791,
+            888,
+            1023,
+            905
+          ],
+          "score": 0.893790602684021,
+          "raw_method": "table_res_list[1].table_ocr_pred"
+        },
+        "ct_housing_cost": {
+          "raw_text": "90,000원",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            876,
+            965,
+            944,
+            987
+          ],
+          "score": 0.9916961789131165,
+          "raw_method": "table_res_list[4].table_ocr_pred"
+        },
+        "ct_meal_cost": {
+          "raw_text": "70,000원",
+          "method": "table_ocr",
+          "page": 0,
+          "bbox": [
+            877,
+            1002,
+            943,
+            1024
+          ],
+          "score": 0.8632559180259705,
+          "raw_method": "table_res_list[4].table_ocr_pred"
+        },
+        "ct_new_or_reentry_selected": {
+          "page": 0,
+          "roi": [
+            284,
+            377,
+            295,
+            388
+          ],
+          "raw_text": "신규·재입국자□근무처변경자",
+          "method": "rendered_pdf_ink_density",
+          "score": null
+        },
+        "ct_workplace_change_selected": {
+          "page": 0,
+          "roi": [
+            284,
+            377,
+            295,
+            388
+          ],
+          "raw_text": "신규·재입국자□근무처변경자",
+          "method": "rendered_pdf_ink_density",
+          "score": null
+        },
+        "ct_workplace_change_start_date": {
+          "raw_text": "해당없음",
+          "method": "table_ocr",
+          "reason": "workplace change is not selected",
+          "page": 0,
+          "bbox": [
+            277,
+            433,
+            347,
+            455
+          ],
+          "score": 0.9833465814590454,
+          "raw_method": "table_res_list[3].table_ocr_pred"
+        },
+        "ct_workplace_change_end_date": {
+          "raw_text": "해당없음",
+          "method": "table_ocr",
+          "reason": "workplace change is not selected",
+          "page": 0,
+          "bbox": [
+            277,
+            433,
+            347,
+            455
+          ],
+          "score": 0.9833465814590454,
+          "raw_method": "table_res_list[3].table_ocr_pred"
+        },
+        "ct_wage_type": {
+          "page": 0,
+          "roi": [
+            284,
+            786,
+            294,
+            796
+          ],
+          "raw_text": "시급 일급주급 월급",
+          "method": "rendered_pdf_ink_density",
+          "score": null
+        },
+        "ct_bonus_extra_pay_paid": {
+          "page": 0,
+          "roi": [
+            339,
+            822,
+            349,
+            832
+          ],
+          "raw_text": "있음 없음",
+          "method": "rendered_pdf_ink_density",
+          "score": null
+        },
+        "ct_weekly_allowance_included": {
+          "page": 0,
+          "roi": [
+            384,
+            858,
+            395,
+            868
+          ],
+          "raw_text": "임금에포함 별도 지급",
+          "method": "rendered_pdf_ink_density",
+          "score": null
+        },
+        "ct_housing_provided": {
+          "page": 0,
+          "roi": [
+            284,
+            974,
+            294,
+            984
+          ],
+          "raw_text": "제공  미제공",
+          "method": "rendered_pdf_ink_density",
+          "score": null
+        },
+        "ct_meal_provided": {
+          "page": 0,
+          "roi": [
+            284,
+            1010,
+            294,
+            1020
+          ],
+          "raw_text": "제공  미제공",
+          "method": "rendered_pdf_ink_density",
+          "score": null
+        }
+      },
+      "warnings": [
+        {
+          "field": "ct_pay_weekday",
+          "code": "not_applicable",
+          "message": "monthly pay clause has no pay weekday",
+          "raw_text": "익월 5일/근로자 명의 예금통장 입금"
+        }
+      ],
+      "checkbox_groups": {
+        "contract_type": {
+          "selected": "신규·재입국자",
+          "method": "rendered_pdf_ink_density",
+          "page": 0,
+          "group_label": "계약구분",
+          "options_ocr_text": "신규·재입국자□근무처변경자",
+          "options_ocr_box": [
+            279,
+            371,
+            512,
+            388
+          ],
+          "selected_component": {
+            "x": 284,
+            "y": 377,
+            "width": 11,
+            "height": 11,
+            "ink_density": 1.0
+          },
+          "relative_x": 0.045,
+          "choice_index": 0
+        },
+        "wage_type": {
+          "selected": "시급",
+          "method": "rendered_pdf_ink_density",
+          "page": 0,
+          "group_label": "임금형태",
+          "options_ocr_text": "시급 일급주급 월급",
+          "options_ocr_box": [
+            277,
+            777,
+            494,
+            798
+          ],
+          "selected_component": {
+            "x": 284,
+            "y": 786,
+            "width": 10,
+            "height": 10,
+            "ink_density": 1.0
+          },
+          "relative_x": 0.055,
+          "choice_index": 0
+        },
+        "bonus_paid": {
+          "selected": "없음",
+          "method": "rendered_pdf_ink_density",
+          "page": 0,
+          "group_label": "상여금·수당지급여부",
+          "options_ocr_text": "있음 없음",
+          "options_ocr_box": [
+            277,
+            814,
+            384,
+            835
+          ],
+          "selected_component": {
+            "x": 339,
+            "y": 822,
+            "width": 10,
+            "height": 10,
+            "ink_density": 1.0
+          },
+          "relative_x": 0.626,
+          "choice_index": 1
+        },
+        "weekly_allowance": {
+          "selected": "별도 지급",
+          "method": "rendered_pdf_ink_density",
+          "page": 0,
+          "group_label": "주휴수당",
+          "options_ocr_text": "임금에포함 별도 지급",
+          "options_ocr_box": [
+            279,
+            852,
+            459,
+            869
+          ],
+          "selected_component": {
+            "x": 384,
+            "y": 858,
+            "width": 11,
+            "height": 10,
+            "ink_density": 1.0
+          },
+          "relative_x": 0.614,
+          "choice_index": 1
+        },
+        "housing": {
+          "selected": "제공",
+          "method": "rendered_pdf_ink_density",
+          "page": 0,
+          "group_label": "숙박시설제공",
+          "options_ocr_text": "제공  미제공",
+          "options_ocr_box": [
+            277,
+            966,
+            398,
+            987
+          ],
+          "selected_component": {
+            "x": 284,
+            "y": 974,
+            "width": 10,
+            "height": 10,
+            "ink_density": 1.0
+          },
+          "relative_x": 0.099,
+          "choice_index": 0
+        },
+        "meal": {
+          "selected": "제공",
+          "method": "rendered_pdf_ink_density",
+          "page": 0,
+          "group_label": "식사제공",
+          "options_ocr_text": "제공  미제공",
+          "options_ocr_box": [
+            277,
+            1002,
+            398,
+            1023
+          ],
+          "selected_component": {
+            "x": 284,
+            "y": 1010,
+            "width": 10,
+            "height": 10,
+            "ink_density": 1.0
+          },
+          "relative_x": 0.099,
+          "choice_index": 0
+        }
+      }
+    },
+    "timesheet": {
+      "fields": {
+        "ts_employee_name": {
+          "page": 0,
+          "bbox": [
+            279,
+            182,
+            389,
+            199
+          ],
+          "raw_text": "LIM CHAMROEUN",
+          "method": "table_label_bbox",
+          "score": 0.9552786946296692,
+          "warning": null
+        },
+        "ts_record_available": {
+          "page": 0,
+          "roi": [
+            711,
+            1026,
+            720,
+            1035
+          ],
+          "raw_text": "보유□미보유",
+          "method": "rendered_pdf_ink_density",
+          "score": null
+        },
+        "ts_worker_confirmed": {
+          "page": 0,
+          "bbox": [
+            688,
+            1061,
+            871,
+            1078
+          ],
+          "raw_text": "근로자LIMCHAMROEUN서명",
+          "method": "overall_ocr_explicit_confirmation",
+          "score": 0.9948814511299133,
+          "warning": null
+        },
+        "lines": {
+          "method": "table_ocr_header_bbox",
+          "rows": [
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  530,
+                  263,
+                  554,
+                  285
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9978129863739014,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  261,
+                  662,
+                  287
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9991043210029602,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  265,
+                  211,
+                  283
+                ],
+                "raw_text": "2026.01.01",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9997739791870117,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  426,
+                  264,
+                  463,
+                  284
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9905108213424683,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  265,
+                  365,
+                  284
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999168872833252,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  530,
+                  296,
+                  554,
+                  318
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9976472854614258,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  617,
+                  293,
+                  662,
+                  320
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.998117983341217,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  298,
+                  211,
+                  315
+                ],
+                "raw_text": "2026.01.02",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9997007250785828,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  426,
+                  297,
+                  463,
+                  316
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9940469861030579,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  297,
+                  365,
+                  316
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999168872833252,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  530,
+                  328,
+                  553,
+                  350
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9976540803909302,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  322,
+                  663,
+                  352
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9989336133003235,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  148,
+                  330,
+                  211,
+                  347
+                ],
+                "raw_text": "2026.01.05",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9997225999832153,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  426,
+                  329,
+                  463,
+                  349
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9953705072402954,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  329,
+                  365,
+                  348
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999168872833252,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  530,
+                  359,
+                  553,
+                  381
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9978475570678711,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  618,
+                  358,
+                  661,
+                  382
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9991941452026367,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  361,
+                  211,
+                  379
+                ],
+                "raw_text": "2026.01.06",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9994317293167114,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  426,
+                  360,
+                  463,
+                  380
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9905108213424683,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  360,
+                  365,
+                  380
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9934664964675903,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  530,
+                  392,
+                  554,
+                  413
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9971948862075806,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  389,
+                  662,
+                  415
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9991043210029602,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  393,
+                  211,
+                  411
+                ],
+                "raw_text": "2026.01.07",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9988157153129578,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  391,
+                  464,
+                  413
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9962794184684753,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  393,
+                  365,
+                  412
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999168872833252,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  530,
+                  424,
+                  554,
+                  446
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9976472854614258,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  421,
+                  662,
+                  447
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9991043210029602,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  426,
+                  211,
+                  443
+                ],
+                "raw_text": "2026.01.08",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9997275471687317,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  423,
+                  422,
+                  465,
+                  447
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9963248372077942,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  425,
+                  365,
+                  444
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999168872833252,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  456,
+                  554,
+                  478
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9965596199035645,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  454,
+                  662,
+                  480
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.998598575592041,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  458,
+                  211,
+                  475
+                ],
+                "raw_text": "2026.01.09",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9997346997261047,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  456,
+                  464,
+                  478
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9958952069282532,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  457,
+                  365,
+                  476
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999168872833252,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  488,
+                  554,
+                  510
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9965596199035645,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  486,
+                  662,
+                  511
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9983961582183838,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  490,
+                  211,
+                  506
+                ],
+                "raw_text": "2026.01.12",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9996055364608765,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  488,
+                  464,
+                  509
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9906812906265259,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  489,
+                  365,
+                  508
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999168872833252,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  519,
+                  554,
+                  542
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9960290193557739,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  517,
+                  662,
+                  543
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9991043210029602,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  146,
+                  520,
+                  211,
+                  540
+                ],
+                "raw_text": "2026.01.13",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9996562004089355,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  519,
+                  464,
+                  541
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9962794184684753,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  326,
+                  519,
+                  365,
+                  542
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9920101165771484,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  551,
+                  554,
+                  574
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9960290193557739,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  550,
+                  662,
+                  576
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.998598575592041,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  554,
+                  211,
+                  571
+                ],
+                "raw_text": "2026.01.14",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9997455477714539,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  552,
+                  464,
+                  574
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9958952069282532,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  553,
+                  365,
+                  572
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999168872833252,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  583,
+                  554,
+                  607
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.997555673122406,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  582,
+                  662,
+                  608
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.998598575592041,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  586,
+                  211,
+                  603
+                ],
+                "raw_text": "2026.01.15",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9997249841690063,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  584,
+                  464,
+                  606
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9958952069282532,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  585,
+                  365,
+                  604
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999168872833252,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  616,
+                  554,
+                  638
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9965596199035645,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  614,
+                  662,
+                  640
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.998598575592041,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  618,
+                  211,
+                  634
+                ],
+                "raw_text": "2026.01.16",
+                "method": "table_ocr_header_bbox",
+                "score": 0.99958336353302,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  616,
+                  464,
+                  638
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9958952069282532,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  617,
+                  365,
+                  636
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999168872833252,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  648,
+                  553,
+                  670
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9970188140869141,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  645,
+                  662,
+                  672
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9980099201202393,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  650,
+                  211,
+                  667
+                ],
+                "raw_text": "2026.01.19",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9996965527534485,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  425,
+                  649,
+                  462,
+                  669
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9923915863037109,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  649,
+                  365,
+                  668
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999168872833252,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  680,
+                  553,
+                  702
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9970188140869141,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  678,
+                  662,
+                  704
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.998598575592041,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  682,
+                  211,
+                  699
+                ],
+                "raw_text": "2026.01.20",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9997020959854126,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  680,
+                  464,
+                  702
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9958952069282532,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  681,
+                  365,
+                  700
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999168872833252,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  712,
+                  554,
+                  734
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9965596199035645,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  710,
+                  662,
+                  736
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.998598575592041,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  714,
+                  210,
+                  731
+                ],
+                "raw_text": "2026.01.21",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999758243560791,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  712,
+                  464,
+                  734
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9958952069282532,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  714,
+                  365,
+                  732
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9988001585006714,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  744,
+                  554,
+                  767
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9961518049240112,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  742,
+                  662,
+                  768
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.998598575592041,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  746,
+                  211,
+                  763
+                ],
+                "raw_text": "2026.01.22",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9996854066848755,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  744,
+                  464,
+                  766
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9958952069282532,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  745,
+                  365,
+                  765
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9876651763916016,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  775,
+                  554,
+                  798
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9960290193557739,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  773,
+                  662,
+                  800
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9980099201202393,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  777,
+                  211,
+                  795
+                ],
+                "raw_text": "2026.01.23",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9505689740180969,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  775,
+                  464,
+                  798
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9986487627029419,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  777,
+                  365,
+                  796
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999168872833252,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  807,
+                  554,
+                  830
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9960290193557739,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  805,
+                  662,
+                  831
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9991043210029602,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  809,
+                  211,
+                  827
+                ],
+                "raw_text": "2026.01.26",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9937876462936401,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  807,
+                  464,
+                  830
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9986487627029419,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  808,
+                  365,
+                  828
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9934664964675903,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  840,
+                  554,
+                  862
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9965596199035645,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  838,
+                  662,
+                  864
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.998598575592041,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  842,
+                  211,
+                  859
+                ],
+                "raw_text": "2026.01.27",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9996265172958374,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  423,
+                  838,
+                  465,
+                  863
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9963248372077942,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  841,
+                  365,
+                  861
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9876651763916016,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  872,
+                  554,
+                  895
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9961518049240112,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  870,
+                  662,
+                  896
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.998598575592041,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  874,
+                  211,
+                  891
+                ],
+                "raw_text": "2026.01.28",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9996311068534851,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  872,
+                  464,
+                  894
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9958952069282532,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  873,
+                  365,
+                  893
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9876651763916016,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  530,
+                  904,
+                  554,
+                  926
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9976472854614258,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  616,
+                  902,
+                  662,
+                  927
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9983961582183838,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  147,
+                  906,
+                  211,
+                  923
+                ],
+                "raw_text": "2026.01.29",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9997214078903198,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  904,
+                  464,
+                  925
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9906812906265259,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  328,
+                  905,
+                  365,
+                  924
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.999168872833252,
+                "warning": null
+              }
+            },
+            {
+              "ts_break_minutes": {
+                "page": 0,
+                "bbox": [
+                  529,
+                  936,
+                  554,
+                  958
+                ],
+                "raw_text": "60",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9965596199035645,
+                "warning": null
+              },
+              "ts_holiday_worked": {
+                "page": 0,
+                "bbox": [
+                  617,
+                  935,
+                  661,
+                  958
+                ],
+                "raw_text": "아니오",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9922716021537781,
+                "warning": null
+              },
+              "ts_work_date": {
+                "page": 0,
+                "bbox": [
+                  146,
+                  936,
+                  211,
+                  956
+                ],
+                "raw_text": "2026.01.30",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9992529153823853,
+                "warning": null
+              },
+              "ts_work_end_time": {
+                "page": 0,
+                "bbox": [
+                  424,
+                  935,
+                  464,
+                  957
+                ],
+                "raw_text": "17:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9962794184684753,
+                "warning": null
+              },
+              "ts_work_start_time": {
+                "page": 0,
+                "bbox": [
+                  327,
+                  937,
+                  365,
+                  956
+                ],
+                "raw_text": "08:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9993265867233276,
+                "warning": null
+              }
+            }
+          ]
+        }
+      },
+      "warnings": [
+        {
+          "field": "lines[0].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[1].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[2].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[3].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[4].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[5].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[6].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[7].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[8].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[9].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[10].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[11].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[12].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[13].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[14].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[15].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[16].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[17].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[18].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[19].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[20].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        },
+        {
+          "field": "lines[21].ts_work_note",
+          "code": "source_blank",
+          "message": "timesheet cell is blank or invalid",
+          "raw_text": null
+        }
+      ],
+      "checkbox_groups": {
+        "record_available": {
+          "method": "rendered_pdf_ink_density",
+          "page": 0,
+          "group_label": "기록보유여부",
+          "options_ocr_text": "보유□미보유",
+          "options_ocr_box": [
+            705,
+            1018,
+            811,
+            1041
+          ],
+          "selected_component": {
+            "x": 711,
+            "y": 1026,
+            "width": 9,
+            "height": 9,
+            "ink_density": 1.0
+          },
+          "relative_x": 0.099,
+          "choice_index": 0
+        }
+      }
+    },
+    "payslip": {
+      "fields": {
+        "ps_employee_name": {
+          "page": 0,
+          "bbox": [
+            553,
+            213,
+            664,
+            230
+          ],
+          "roi": null,
+          "raw_text": "LIM CHAMROEN",
+          "method": "table_semantic_label_bbox",
+          "score": 0.9555856585502625,
+          "warning": null
+        },
+        "ps_employer_name": {
+          "page": 0,
+          "bbox": [
+            576,
+            306,
+            640,
+            330
+          ],
+          "roi": null,
+          "raw_text": "청솔농원",
+          "method": "table_semantic_label_bbox",
+          "score": 0.9972252249717712,
+          "warning": null
+        },
+        "ps_payment_date": {
+          "page": 0,
+          "bbox": [
+            570,
+            242,
+            646,
+            265
+          ],
+          "roi": null,
+          "raw_text": "2026.02.05",
+          "method": "table_semantic_date_bbox",
+          "score": 0.9997040033340454,
+          "warning": null
+        },
+        "ps_pay_period_start": {
+          "page": 0,
+          "bbox": [
+            529,
+            341,
+            685,
+            357
+          ],
+          "roi": null,
+          "raw_text": "2026.01.01 ~ 2026.01.31",
+          "method": "table_semantic_date_bbox",
+          "score": 0.9348666071891785,
+          "warning": null
+        },
+        "ps_pay_period_end": {
+          "page": 0,
+          "bbox": [
+            529,
+            341,
+            685,
+            357
+          ],
+          "roi": null,
+          "raw_text": "2026.01.01 ~ 2026.01.31",
+          "method": "table_semantic_date_bbox",
+          "score": 0.9348666071891785,
+          "warning": null
+        },
+        "ps_wage_type": {
+          "page": 0,
+          "bbox": [
+            584,
+            371,
+            633,
+            393
+          ],
+          "roi": null,
+          "raw_text": "시급제",
+          "method": "table_semantic_enum_bbox",
+          "score": 0.9961175918579102,
+          "warning": null
+        },
+        "ps_paid_regular_hours": {
+          "page": 0,
+          "bbox": [
+            126,
+            488,
+            166,
+            506
+          ],
+          "roi": null,
+          "raw_text": "176.0",
+          "method": "table_semantic_header_bbox",
+          "score": 0.9899979829788208,
+          "warning": null
+        },
+        "ps_paid_overtime_hours": {
+          "page": 0,
+          "bbox": [
+            300,
+            487,
+            327,
+            507
+          ],
+          "roi": null,
+          "raw_text": "0.0",
+          "method": "table_semantic_header_bbox",
+          "score": 0.9745750427246094,
+          "warning": null
+        },
+        "ps_paid_night_hours": {
+          "page": 0,
+          "bbox": [
+            467,
+            487,
+            494,
+            507
+          ],
+          "roi": null,
+          "raw_text": "0.0",
+          "method": "table_semantic_header_bbox",
+          "score": 0.9962248206138611,
+          "warning": null
+        },
+        "ps_paid_holiday_hours": {
+          "page": 0,
+          "bbox": [
+            636,
+            487,
+            662,
+            507
+          ],
+          "roi": null,
+          "raw_text": "0.0",
+          "method": "table_semantic_header_bbox",
+          "score": 0.9274398684501648,
+          "warning": null
+        },
+        "ps_weekly_holiday_hours": {
+          "page": 0,
+          "bbox": [
+            790,
+            487,
+            822,
+            506
+          ],
+          "roi": null,
+          "raw_text": "32.0",
+          "method": "table_semantic_header_bbox",
+          "score": 0.99887615442276,
+          "warning": null
+        },
+        "ps_paid_work_days": {
+          "page": 0,
+          "bbox": [
+            927,
+            487,
+            951,
+            507
+          ],
+          "roi": null,
+          "raw_text": "22",
+          "method": "table_semantic_header_bbox",
+          "score": 0.9995738863945007,
+          "warning": null
+        },
+        "ps_ordinary_hourly_wage": {
+          "page": 0,
+          "bbox": [
+            1030,
+            487,
+            1096,
+            507
+          ],
+          "roi": null,
+          "raw_text": "11,200원",
+          "method": "table_semantic_header_bbox",
+          "score": 0.9977321624755859,
+          "warning": null
+        },
+        "ps_base_pay": {
+          "page": 0,
+          "bbox": [
+            413,
+            604,
+            477,
+            625
+          ],
+          "roi": null,
+          "raw_text": "1,971,200",
+          "method": "table_semantic_pay_row_bbox",
+          "score": 0.9997250437736511,
+          "warning": null
+        },
+        "ps_income_tax": {
+          "page": 0,
+          "bbox": [
+            953,
+            604,
+            1003,
+            626
+          ],
+          "roi": null,
+          "raw_text": "23,300",
+          "method": "table_semantic_amount_bbox",
+          "score": 0.9986963272094727,
+          "warning": null
+        },
+        "ps_weekly_allowance": {
+          "page": 0,
+          "bbox": [
+            417,
+            637,
+            473,
+            659
+          ],
+          "roi": null,
+          "raw_text": "358,400",
+          "method": "table_semantic_pay_row_bbox",
+          "score": 0.9994799494743347,
+          "warning": null
+        },
+        "ps_national_pension": {
+          "page": 0,
+          "bbox": [
+            949,
+            637,
+            1006,
+            659
+          ],
+          "roi": null,
+          "raw_text": "104,830",
+          "method": "table_semantic_amount_bbox",
+          "score": 0.9984203577041626,
+          "warning": null
+        },
+        "ps_overtime_pay": {
+          "page": 0,
+          "bbox": [
+            436,
+            672,
+            453,
+            693
+          ],
+          "roi": null,
+          "raw_text": "0",
+          "method": "table_semantic_pay_row_bbox",
+          "score": 0.9790134429931641,
+          "warning": null
+        },
+        "ps_health_insurance": {
+          "page": 0,
+          "bbox": [
+            952,
+            671,
+            1003,
+            694
+          ],
+          "roi": null,
+          "raw_text": "82,580",
+          "method": "table_semantic_amount_bbox",
+          "score": 0.9993724822998047,
+          "warning": null
+        },
+        "ps_night_work_pay": {
+          "page": 0,
+          "bbox": [
+            436,
+            706,
+            453,
+            727
+          ],
+          "roi": null,
+          "raw_text": "0",
+          "method": "table_semantic_pay_row_bbox",
+          "score": 0.9677671790122986,
+          "warning": null
+        },
+        "ps_employment_insurance": {
+          "page": 0,
+          "bbox": [
+            952,
+            705,
+            1003,
+            728
+          ],
+          "roi": null,
+          "raw_text": "20,970",
+          "method": "table_semantic_amount_bbox",
+          "score": 0.9974973797798157,
+          "warning": null
+        },
+        "ps_holiday_work_pay": {
+          "page": 0,
+          "bbox": [
+            436,
+            740,
+            453,
+            761
+          ],
+          "roi": null,
+          "raw_text": "0",
+          "method": "table_semantic_pay_row_bbox",
+          "score": 0.9790134429931641,
+          "warning": null
+        },
+        "ps_meal_deduction": {
+          "page": 0,
+          "bbox": [
+            951,
+            738,
+            1004,
+            764
+          ],
+          "roi": null,
+          "raw_text": "70,000",
+          "method": "table_semantic_amount_bbox",
+          "score": 0.9954749941825867,
+          "warning": null
+        },
+        "ps_bonus_amount": {
+          "page": 0,
+          "bbox": [
+            436,
+            774,
+            453,
+            794
+          ],
+          "roi": null,
+          "raw_text": "0",
+          "method": "table_semantic_pay_row_bbox",
+          "score": 0.9772751331329346,
+          "warning": null
+        },
+        "ps_long_term_care_insurance": {
+          "page": 0,
+          "bbox": [
+            951,
+            772,
+            1004,
+            797
+          ],
+          "roi": null,
+          "raw_text": "10,690",
+          "method": "table_semantic_amount_bbox",
+          "score": 0.9733168482780457,
+          "warning": null
+        },
+        "ps_other_allowance": {
+          "page": 0,
+          "bbox": [
+            436,
+            808,
+            453,
+            828
+          ],
+          "roi": null,
+          "raw_text": "0",
+          "method": "table_semantic_pay_row_bbox",
+          "score": 0.9818935394287109,
+          "warning": null
+        },
+        "ps_local_income_tax": {
+          "page": 0,
+          "bbox": [
+            955,
+            805,
+            1001,
+            831
+          ],
+          "roi": null,
+          "raw_text": "2,330",
+          "method": "table_semantic_amount_bbox",
+          "score": 0.9983633160591125,
+          "warning": null
+        },
+        "ps_housing_deduction": {
+          "page": 0,
+          "bbox": [
+            952,
+            841,
+            1003,
+            864
+          ],
+          "roi": null,
+          "raw_text": "90,000",
+          "method": "table_semantic_amount_bbox",
+          "score": 0.9739305377006531,
+          "warning": null
+        },
+        "ps_other_deduction": {
+          "page": 0,
+          "bbox": [
+            969,
+            877,
+            986,
+            898
+          ],
+          "roi": null,
+          "raw_text": "0",
+          "method": "table_semantic_amount_bbox",
+          "score": 0.9819867610931396,
+          "warning": null
+        },
+        "ps_gross_pay": {
+          "page": 0,
+          "bbox": [
+            410,
+            911,
+            480,
+            931
+          ],
+          "roi": null,
+          "raw_text": "2,329,600",
+          "method": "table_semantic_total_row_bbox",
+          "score": 0.9994542002677917,
+          "warning": null
+        },
+        "ps_total_deduction": {
+          "page": 0,
+          "bbox": [
+            948,
+            911,
+            1008,
+            932
+          ],
+          "roi": null,
+          "raw_text": "404,700",
+          "method": "table_semantic_total_row_bbox",
+          "score": 0.9997361302375793,
+          "warning": null
+        },
+        "ps_net_pay": {
+          "page": 0,
+          "bbox": [
+            669,
+            949,
+            755,
+            970
+          ],
+          "roi": null,
+          "raw_text": "1,924,900",
+          "method": "table_semantic_total_row_bbox",
+          "score": 0.9997022151947021,
+          "warning": null
+        },
+        "ps_pay_lines": {
+          "page": 0,
+          "bbox": [
+            152,
+            569,
+            205,
+            591
+          ],
+          "roi": null,
+          "raw_text": "임금항목",
+          "method": "table_semantic_pay_rows",
+          "score": 0.9986718893051147,
+          "warning": null,
+          "rows": [
+            {
+              "item_name": {
+                "page": 0,
+                "bbox": [
+                  157,
+                  603,
+                  200,
+                  626
+                ],
+                "roi": null,
+                "raw_text": "기본급",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9997969269752502,
+                "warning": null
+              },
+              "amount": {
+                "page": 0,
+                "bbox": [
+                  413,
+                  604,
+                  477,
+                  625
+                ],
+                "roi": null,
+                "raw_text": "1,971,200",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9997250437736511,
+                "warning": null
+              },
+              "mapped_to": {
+                "page": 0,
+                "bbox": [
+                  157,
+                  603,
+                  200,
+                  626
+                ],
+                "roi": null,
+                "raw_text": "기본급",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9997969269752502,
+                "warning": null
+              }
+            },
+            {
+              "item_name": {
+                "page": 0,
+                "bbox": [
+                  152,
+                  637,
+                  205,
+                  659
+                ],
+                "roi": null,
+                "raw_text": "주휴수당",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9975631833076477,
+                "warning": null
+              },
+              "amount": {
+                "page": 0,
+                "bbox": [
+                  417,
+                  637,
+                  473,
+                  659
+                ],
+                "roi": null,
+                "raw_text": "358,400",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9994799494743347,
+                "warning": null
+              },
+              "mapped_to": {
+                "page": 0,
+                "bbox": [
+                  152,
+                  637,
+                  205,
+                  659
+                ],
+                "roi": null,
+                "raw_text": "주휴수당",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9975631833076477,
+                "warning": null
+              }
+            },
+            {
+              "item_name": {
+                "page": 0,
+                "bbox": [
+                  143,
+                  673,
+                  214,
+                  691
+                ],
+                "roi": null,
+                "raw_text": "연장근로수당",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9912919998168945,
+                "warning": null
+              },
+              "amount": {
+                "page": 0,
+                "bbox": [
+                  436,
+                  672,
+                  453,
+                  693
+                ],
+                "roi": null,
+                "raw_text": "0",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9790134429931641,
+                "warning": null
+              },
+              "mapped_to": {
+                "page": 0,
+                "bbox": [
+                  143,
+                  673,
+                  214,
+                  691
+                ],
+                "roi": null,
+                "raw_text": "연장근로수당",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9912919998168945,
+                "warning": null
+              }
+            },
+            {
+              "item_name": {
+                "page": 0,
+                "bbox": [
+                  141,
+                  704,
+                  215,
+                  725
+                ],
+                "roi": null,
+                "raw_text": "야간근로수당",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9895699620246887,
+                "warning": null
+              },
+              "amount": {
+                "page": 0,
+                "bbox": [
+                  436,
+                  706,
+                  453,
+                  727
+                ],
+                "roi": null,
+                "raw_text": "0",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9677671790122986,
+                "warning": null
+              },
+              "mapped_to": {
+                "page": 0,
+                "bbox": [
+                  141,
+                  704,
+                  215,
+                  725
+                ],
+                "roi": null,
+                "raw_text": "야간근로수당",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9895699620246887,
+                "warning": null
+              }
+            },
+            {
+              "item_name": {
+                "page": 0,
+                "bbox": [
+                  141,
+                  740,
+                  215,
+                  761
+                ],
+                "roi": null,
+                "raw_text": "휴일근로수당",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9876884818077087,
+                "warning": null
+              },
+              "amount": {
+                "page": 0,
+                "bbox": [
+                  436,
+                  740,
+                  453,
+                  761
+                ],
+                "roi": null,
+                "raw_text": "0",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9790134429931641,
+                "warning": null
+              },
+              "mapped_to": {
+                "page": 0,
+                "bbox": [
+                  141,
+                  740,
+                  215,
+                  761
+                ],
+                "roi": null,
+                "raw_text": "휴일근로수당",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9876884818077087,
+                "warning": null
+              }
+            },
+            {
+              "item_name": {
+                "page": 0,
+                "bbox": [
+                  157,
+                  772,
+                  200,
+                  795
+                ],
+                "roi": null,
+                "raw_text": "상여금",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9966986775398254,
+                "warning": null
+              },
+              "amount": {
+                "page": 0,
+                "bbox": [
+                  436,
+                  774,
+                  453,
+                  794
+                ],
+                "roi": null,
+                "raw_text": "0",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9772751331329346,
+                "warning": null
+              },
+              "mapped_to": {
+                "page": 0,
+                "bbox": [
+                  157,
+                  772,
+                  200,
+                  795
+                ],
+                "roi": null,
+                "raw_text": "상여금",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9966986775398254,
+                "warning": null
+              }
+            },
+            {
+              "item_name": {
+                "page": 0,
+                "bbox": [
+                  152,
+                  807,
+                  204,
+                  829
+                ],
+                "roi": null,
+                "raw_text": "기타수당",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9994642734527588,
+                "warning": null
+              },
+              "amount": {
+                "page": 0,
+                "bbox": [
+                  436,
+                  808,
+                  453,
+                  828
+                ],
+                "roi": null,
+                "raw_text": "0",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9818935394287109,
+                "warning": null
+              },
+              "mapped_to": {
+                "page": 0,
+                "bbox": [
+                  152,
+                  807,
+                  204,
+                  829
+                ],
+                "roi": null,
+                "raw_text": "기타수당",
+                "method": "table_semantic_pay_row_bbox",
+                "score": 0.9994642734527588,
+                "warning": null
+              }
+            }
+          ]
+        },
+        "ps_calculation_item": {
+          "page": 0,
+          "bbox": [
+            157,
+            1067,
+            199,
+            1090
+          ],
+          "roi": null,
+          "raw_text": "기본급",
+          "method": "table_semantic_calculation_bbox",
+          "score": 0.9996291995048523,
+          "warning": null
+        },
+        "ps_calculation_formula": {
+          "page": 0,
+          "bbox": [
+            447,
+            1070,
+            655,
+            1087
+          ],
+          "roi": null,
+          "raw_text": "시급 11,200원 × 기본근로176시간",
+          "method": "table_semantic_calculation_bbox",
+          "score": 0.9367675185203552,
+          "warning": null
+        },
+        "ps_calculated_amount": {
+          "page": 0,
+          "bbox": [
+            936,
+            1068,
+            1000,
+            1090
+          ],
+          "roi": null,
+          "raw_text": "1,971,200",
+          "method": "table_semantic_calculation_bbox",
+          "score": 0.9992380142211914,
+          "warning": null
+        }
+      },
+      "warnings": []
+    },
+    "bank_statement": {
+      "fields": {
+        "bk_account_holder": {
+          "page": 0,
+          "bbox": [
+            213,
+            180,
+            330,
+            197
+          ],
+          "raw_text": "LIM CHAMROEUN",
+          "method": "table_label_bbox",
+          "score": 0.9775471091270447
+        },
+        "bk_inquiry_start_date": {
+          "page": 0,
+          "bbox": [
+            213,
+            216,
+            370,
+            233
+          ],
+          "raw_text": "2026.01.01. ~2026.03.07.",
+          "method": "table_label_bbox",
+          "score": 0.9776222705841064
+        },
+        "bk_inquiry_end_date": {
+          "page": 0,
+          "bbox": [
+            213,
+            216,
+            370,
+            233
+          ],
+          "raw_text": "2026.01.01. ~2026.03.07.",
+          "method": "table_label_bbox",
+          "score": 0.9776222705841064
+        },
+        "transactions": {
+          "method": "table_ocr_header_bbox",
+          "rows": [
+            {
+              "bk_deposit_amount": {
+                "page": 0,
+                "bbox": [
+                  639,
+                  310,
+                  706,
+                  331
+                ],
+                "raw_text": "1,924,900",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9684517979621887
+              },
+              "bk_transaction_content": {
+                "page": 0,
+                "bbox": [
+                  453,
+                  308,
+                  489,
+                  331
+                ],
+                "raw_text": "급여",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9924131631851196
+              },
+              "bk_transaction_datetime": {
+                "page": 0,
+                "bbox": [
+                  106,
+                  313,
+                  227,
+                  327
+                ],
+                "raw_text": "2026-02-05 09:00:00",
+                "method": "table_ocr_header_bbox",
+                "score": 0.9860805869102478
+              },
+              "bk_transaction_record": {
+                "page": 0,
+                "bbox": [
+                  850,
+                  310,
+                  972,
+                  330
+                ],
+                "raw_text": "청솔농원/1월급여",
+                "method": "table_ocr_explicit_delimiter",
+                "score": 0.9907504320144653
+              },
+              "bk_transfer_memo": {
+                "page": 0,
+                "bbox": [
+                  850,
+                  310,
+                  972,
+                  330
+                ],
+                "raw_text": "청솔농원/1월급여",
+                "method": "table_ocr_explicit_delimiter",
+                "score": 0.9907504320144653
+              }
+            }
+          ]
+        }
+      },
+      "warnings": []
+    }
+  }
+}
