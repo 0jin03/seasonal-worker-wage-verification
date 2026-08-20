@@ -16,11 +16,14 @@ SHOW: dict[str, tuple[str, ...]] = {
             "bk_account_holder_norm"),
     "R01": ("cmp_wage_type_match", "calc_contract_hourly_wage", "calc_payslip_hourly_wage",
             "cmp_hourly_wage_gap", "param_wage_tolerance"),
+    # 근무일수 차이(근무기록 ↔ 명세서)는 기록이 온전한지 보여주는 값이라 함께 낸다.
+    # 커버리지만 보면 공휴일 때문에 줄어든 것인지 기록이 빠진 것인지 구분되지 않는다.
     "R02": ("ts_period_actual_hours", "ps_actual_hours_equiv", "cmp_actual_hours_gap",
-            "cmp_overtime_hours_gap", "cmp_tolerance_hours", "ts_period_coverage",
-            "ts_period_work_days"),
+            "cmp_overtime_hours_gap", "cmp_tolerance_hours",
+            "ts_period_work_days", "cmp_work_days_gap", "ts_period_coverage"),
     "R03": ("cmp_bonus_gap", "cmp_extra_pay_gap", "cmp_overtime_pay_gap",
-            "cmp_unmatched_pay_items", "cond_overtime_occurred", "cond_night_occurred",
+            "cmp_unmatched_pay_items", "cmp_tolerance_won",
+            "cond_overtime_occurred", "cond_night_occurred",
             "cond_holiday_occurred", "cond_weekly_allowance_due"),
     "R04": ("calc_expected_housing_deduction", "calc_expected_meal_deduction",
             "cmp_housing_deduction_gap", "cmp_meal_deduction_gap"),
@@ -43,6 +46,9 @@ SHOW: dict[str, tuple[str, ...]] = {
 
 # 계약서에서 함께 보여줄 원본값. 비교의 반대편을 드러낸다.
 CONTRACT_CONTEXT: dict[str, tuple[str, ...]] = {
+    # '사업장명 불일치'만으로는 무엇이 어떻게 다른지 알 수 없다.
+    # 두 이름을 나란히 보여야 상호와 법인명의 차이인지 판단할 수 있다.
+    "R00": ("ct_employer_name", "ct_employee_name"),
     "R01": ("ct_wage_type", "ct_wage_amount", "ct_monthly_work_hours"),
     "R02": ("ct_monthly_work_hours", "ct_break_hours", "ct_break_minutes"),
     "R03": ("ct_bonus_amount", "ct_extra_pay_amount", "ct_overtime_hourly_pay",
@@ -56,6 +62,7 @@ CONTRACT_CONTEXT: dict[str, tuple[str, ...]] = {
 
 # 명세서·입금내역에서 함께 보여줄 원본값.
 DOCUMENT_CONTEXT: dict[str, tuple[str, ...]] = {
+    "R00": ("ps_employer_name", "ps_employee_name", "bk_account_holder"),
     "R01": ("ps_ordinary_hourly_wage",),
     "R04": ("ps_housing_deduction", "ps_meal_deduction"),
     "R05": ("ps_gross_pay",),
@@ -77,13 +84,25 @@ BY_NATURE: dict[str, str] = {
                 "법적 판단을 하는 항목이 아닙니다.",
 }
 
+# NOT_CHECKABLE 은 값이 아예 없는 경우와, 값은 있으나 그것만으로 판정을 끝낼 수 없는
+# 경우를 모두 포함한다. 어느 쪽에도 맞도록 범용적으로 쓴다.
 BY_STATUS: dict[str, str] = {
     "MISMATCH": "두 값이 허용 범위를 넘어 다릅니다.",
     "REVIEW": "바로 판단하기 어려워 사람이 확인해야 하는 상태입니다.",
     "REVIEW_HIGH": "우선 확인이 필요한 항목입니다. 법 위반이 확정된 것은 아닙니다.",
-    "NOT_CHECKABLE": "판정에 필요한 값이 없어 확인하지 못했습니다.",
-    "NOT_EVALUABLE": "자료가 부족해 판정할 수 없습니다.",
+    "NOT_CHECKABLE": "현재 확인된 자료만으로는 판정을 완료할 수 없습니다.",
+    "NOT_EVALUABLE": "현재 확인된 자료만으로는 판정할 수 없습니다.",
 }
+
+
+def interpretation(성격: str, status: str) -> list[str]:
+    """판정 성격과 결과에 맞는 해석 문구."""
+    lines = []
+    if status in BY_STATUS:
+        lines.append(BY_STATUS[status])
+    if 성격 in BY_NATURE:
+        lines.append(BY_NATURE[성격])
+    return lines
 
 
 # 규칙별 대응 방안. 근로자가 실제로 할 수 있는 행동만 적는다.
@@ -132,10 +151,16 @@ ACTIONS: dict[str, tuple[str, ...]] = {
             "최저임금보다 낮을 가능성이 있으면 계약서·명세서·통장 내역을 모아 상담을 받으세요."),
 }
 
-# NOT_CHECKABLE / NOT_EVALUABLE 일 때 추가할 행동.
+
+# NOT_CHECKABLE 은 세 가지를 모두 포함한다.
+#   (1) 값 자체가 없는 경우
+#   (2) 문서가 흐리거나 일부만 찍혀 값을 읽지 못한 경우
+#   (3) 값은 있으나 그것만으로 판정을 끝낼 수 없는 경우
+#       (예: R09 — 확인된 입금 누적액이 실수령액에 못 미쳐 전액 지급 완료일을 확정 못 함)
+# 규칙별로 분기하지 않고 세 경우에 모두 맞는 문구 하나로 안내한다.
 MISSING_DATA_ACTIONS = (
-    "판정에 필요한 값이 빠져 있습니다. 해당 문서를 다시 확인하거나 사업주에게 요청하세요.",
-    "문서가 흐릿하거나 일부만 촬영됐다면 다시 촬영해 올려 주세요.",
+    "현재 자료만으로 확인하기 어려운 부분이 있습니다. 관련 정보나 추가 자료가 있는지 확인해 주세요.",
+    "문서에 누락된 내용이 있거나 내용이 잘 보이지 않는 경우에는 다시 확인하거나 촬영해 주세요.",
 )
 
 # REVIEW_HIGH 일 때 추가할 행동.
@@ -143,29 +168,6 @@ HIGH_RISK_ACTIONS = (
     "계약서·임금명세서·근무기록·통장 내역을 모두 사진으로 보관하세요.",
     "가까운 고용노동지청 또는 외국인노동자지원센터에 상담을 요청할 수 있습니다.",
 )
-
-# 규칙별 확인 질문. 스펙의 추가 질문 예시를 기준으로 한다.
-QUESTIONS: dict[str, tuple[str, ...]] = {
-    "R00": ("문서에 적힌 이름이 본인 이름과 같은가요?",),
-    "R01": ("계약서를 작성한 뒤 임금 금액이나 형태를 바꾸기로 합의한 적이 있나요?",),
-    "R02": ("근무기록에 적힌 휴게시간은 실제로 쉬었던 시간인가요?",),
-    "R03": ("계약서를 작성한 뒤 수당 금액을 변경하기로 새로 합의한 적이 있나요?",),
-    "R04": ("실제 숙박비나 식비 부담액에 대해 계약서 외에 별도로 합의한 내용이 있나요?",),
-    "R08": ("표시된 입금 거래 중 이번 급여에 해당하는 거래를 모두 선택해 주세요.",),
-    "R09": ("급여를 받기로 한 날짜가 휴일이었나요?",),
-    "R10": ("계약서와 다르게 근무시간이 변경될 때 변경 내용을 서로 확인하거나 합의했나요?",),
-    "R11": ("임금 외에 매달 정기적으로 받는 다른 돈이 있나요?",),
-}
-
-
-def interpretation(성격: str, status: str) -> list[str]:
-    """판정 성격과 결과에 맞는 해석 문구."""
-    lines = []
-    if status in BY_STATUS:
-        lines.append(BY_STATUS[status])
-    if 성격 in BY_NATURE:
-        lines.append(BY_NATURE[성격])
-    return lines
 
 
 def actions(rule_id: str, status: str) -> list[str]:
@@ -176,6 +178,25 @@ def actions(rule_id: str, status: str) -> list[str]:
     if status == "REVIEW_HIGH":
         items += list(HIGH_RISK_ACTIONS)
     return items
+
+
+# --- 확인 질문 -------------------------------------------------------
+# 규칙마다 고정 문구 하나를 둔다. 어느 항목이 어긋났든 답할 수 있도록 범용으로 쓴다.
+# R08 은 '금액', R09 는 '지급일'을 본다. R08 이 PASS 여도 R09 만 걸릴 수 있으므로
+# R09 질문을 비워 두지 않고, 지급일과 전액 수령일을 함께 묻는 문구를 둔다.
+
+QUESTIONS: dict[str, tuple[str, ...]] = {
+    "R00": ("네 문서가 모두 본인의 자료이고, 같은 근무기간·같은 사업장의 자료가 맞나요?",),
+    "R01": ("계약서를 작성한 뒤 임금 금액이나 형태를 바꾸기로 합의한 적이 있나요?",),
+    "R02": ("근무기록에 적힌 휴게시간은 실제로 쉬었던 시간인가요?",),
+    "R03": ("계약서를 작성한 뒤 수당 금액을 변경하기로 새로 합의한 적이 있나요?",),
+    "R04": ("실제 숙박비나 식비 부담액에 대해 계약서 외에 별도로 합의한 내용이 있나요?",),
+    "R08": ("이번 급여에 해당하는 입금 거래가 모두 선택되었는지 다시 확인해 주세요. "
+            "추가 거래가 있다면 함께 선택해 주세요.",),
+    "R09": ("계약서에 적힌 급여 지급일과 실제로 급여를 전액 받은 날짜를 확인할 수 있나요?",),
+    "R10": ("계약서와 다르게 근무시간이 변경될 때 변경 내용을 서로 확인하거나 합의했나요?",),
+    "R11": ("임금 외에 매달 정기적으로 받는 다른 돈이 있나요?",),
+}
 
 
 def questions(rule_id: str, status: str) -> list[str]:

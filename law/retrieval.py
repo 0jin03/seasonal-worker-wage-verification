@@ -19,7 +19,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
 
-from law import contract
+from law import contract, notice
 from law.mapping import Law, spec
 
 CORPUS_PATH = Path("법령데이터/corpus.jsonl")
@@ -216,11 +216,50 @@ class Corpus:
         ]
 
 
-def evidence(corpus: Corpus, rule_id: str, 서식: str = "합성") -> dict:
+def _reference(ref, 연도: int | str | None) -> dict:
+    """참고자료 한 건. 수집키가 있으면 실제 수집값으로 채운다."""
+    item = {
+        "발행처": ref.발행처,
+        "명칭": ref.명칭,
+        "사유": ref.사유,
+        "역할": ref.역할,
+        **({"식별자": ref.식별자} if ref.식별자 else {}),
+        **({"주의": ref.주의} if ref.주의 else {}),
+    }
+    if ref.수집키 != "최저임금고시":
+        return item
+
+    if 연도 is None:
+        item["주의"] = "적용 연도를 알 수 없어 고시 금액을 확정하지 못했습니다."
+        return item
+
+    고시 = notice.minimum_wage(연도)
+    if 고시 is None:
+        item["주의"] = (
+            f"{연도}년 최저임금 고시를 수집하지 못했습니다. "
+            "python -m law.notice 로 먼저 수집하세요."
+        )
+        return item
+
+    item["명칭"] = 고시["행정규칙명"]
+    item["식별자"] = 고시["고시번호"]
+    item["사유"] = f"{연도}년 시간급 최저임금액 {고시['시간급']:,}원"
+    item["기준값"] = {
+        "시간급": 고시["시간급"],
+        "월환산액": 고시["월환산액"],
+        "월환산기준시간수": 고시["월환산기준시간수"],
+        "적용기간": f"{고시['적용시작']} ~ {고시['적용종료']}",
+    }
+    return item
+
+
+def evidence(corpus: Corpus, rule_id: str, 서식: str = "합성", 연도: int | str | None = None) -> dict:
     """한 규칙의 근거 일체.
 
     LLM 입력(4단계)과 출력 JSON(5단계)에 그대로 실을 수 있는 형태로 만든다.
     법령·표준계약서·참고자료를 역할별로 나누고, 판정 성격과 설명 제약을 함께 싣는다.
+
+    연도는 최저임금 고시처럼 해마다 바뀌는 근거를 확정하는 데 쓴다(R11).
     """
     rule_id = rule_id.upper()
     rule = spec(rule_id)
@@ -244,17 +283,7 @@ def evidence(corpus: Corpus, rule_id: str, 서식: str = "합성") -> dict:
             }
         )
 
-    참고자료 = [
-        {
-            "발행처": r.발행처,
-            "명칭": r.명칭,
-            "사유": r.사유,
-            "역할": r.역할,
-            **({"식별자": r.식별자} if r.식별자 else {}),
-            **({"주의": r.주의} if r.주의 else {}),
-        }
-        for r in rule.참고자료
-    ]
+    참고자료 = [_reference(r, 연도) for r in rule.참고자료]
 
     return {
         "rule_id": rule_id,

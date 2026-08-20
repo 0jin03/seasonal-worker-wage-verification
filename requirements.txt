@@ -1,6 +1,7 @@
 # 코퍼스 조회·리포트 생성에 필요
 openpyxl>=3.1        # 피처정의서(xlsx) 읽기
 certifi>=2024.2      # 법령 API HTTPS 인증서
+pypdf>=4.0           # 최저임금 고시·별지서식 PDF 본문 추출(law/notice.py)
 
 # LLM 설명 단계(law/explain.py)에만 필요
 anthropic>=0.70

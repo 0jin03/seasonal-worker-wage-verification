@@ -50,6 +50,9 @@ class Reference:
     역할: str = "supporting"
     식별자: str | None = None
     주의: str = ""
+    # law/notice.py 가 수집한 자료로 채울 항목의 키. 연도마다 값이 바뀌는 고시용이다.
+    # 여기에 값을 적어 두면 근거를 만들 때 실제 수집값으로 대체된다.
+    수집키: str | None = None
 
 
 @dataclass(frozen=True)
@@ -278,8 +281,10 @@ RULES: dict[str, RuleSpec] = {
             Law("최저임금법", "6", None, "3", None, "supporting", "최저임금 미달 근로계약의 효력"),
         ),
         참고자료=(
-            Reference("고용노동부", "2026년 적용 최저임금 고시", "2026년 시간급 최저임금액 10,320원",
-                      역할="primary", 식별자="고용노동부 고시 제2025-47호"),
+            # 연도마다 고시가 새로 나오므로 금액을 여기 적지 않는다.
+            # law/notice.py 가 수집한 해당 연도 고시로 채운다.
+            Reference("고용노동부", "적용 최저임금 고시", "해당 연도의 시간급 최저임금액",
+                      역할="primary", 수집키="최저임금고시"),
             Reference("고용노동부", "최저임금 모의계산기", "임금 형태별 최저임금 비교방식 참고"),
         ),
     ),
