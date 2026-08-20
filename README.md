@@ -20,47 +20,9 @@ R00~R11 규칙 엔진이 내린 판정에 **법령 근거를 붙여 설명하는
     값이 다르다는 사실 자체가 법 위반은 아닙니다."
 ```
 
-**LLM을 쓰지 않습니다.** 근거 검색·조문 인용·해석 수위·대응 방안이 모두 결정적이라,
-API 키 없이 같은 입력에 항상 같은 결과가 나옵니다.
 
 ---
 
-## 빠른 실행
-
-```bash
-python3.12 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-
-python -m law.casestudy 예시케이스/*.json
-```
-
-법령 API 호출도, LLM API 키도 필요 없습니다. 저장소에 포함된 `법령데이터/corpus.jsonl`만 씁니다.
-
----
-
-## 실행한 방법
-
-### 1. 법령 코퍼스 수집 (1회)
-
-```bash
-export LAW_OC="발급받은OC"        # 국가법령정보 Open API
-python check_law_api.py           # 연결 점검
-python -m law.collect             # 법령 11종 → corpus.jsonl
-```
-
-`법령데이터/`에 세 가지가 생깁니다.
-
-| 산출물 | 내용 |
-|---|---|
-| `raw/<법령명>.json` | API 원본 응답. 파서를 고쳤을 때 재파싱용 |
-| `corpus.jsonl` | 조·항 단위 레코드 1,486건 |
-| `index.json` | 법령별 시행일자·MST |
-
-파서만 고쳤다면 API 없이 다시 만들 수 있습니다.
-
-```bash
-python -m law.collect --rebuild   # raw/ 로만 재파싱, API 호출 없음
 ```
 
 **수집한 법령 11종**
@@ -104,12 +66,7 @@ python -m law.notice --rebuild    # 내려받은 PDF로만 재파싱, API 호출
 **별지 제3호서식**은 `target=licbyl`로 찾습니다. 검색 구간이 별표명이라
 법령명이 아니라 서식 이름(`표준 계절근로계약서`)으로 물어야 나옵니다.
 
-### 2. 케이스 리포트 생성
 
-```bash
-python -m law.casestudy 예시케이스/CASE-2026-06-0004.json
-python -m law.casestudy 예시케이스/*.json > 케이스스터디_결과.txt
-python -m law.casestudy 예시케이스/*.json --json          # 구조화 JSON
 ```
 
 케이스 JSON의 `rule_results`(판정)와 `derived`(비교값)를 읽어 리포트를 만듭니다.
@@ -278,18 +235,6 @@ law/
 check_law_api.py    법령 API 연결 점검
 ```
 
-### `prompt.py` · `explain.py` 는 다음 단계입니다
-
-리포트는 **정보 구조**라 문장이 딱딱합니다. 근로자가 읽을 자연스러운 한국어로
-다듬는 것은 Anthropic API의 몫이며, 그 프롬프트와 연결 코드가 이 두 파일입니다.
-
-```bash
-export ANTHROPIC_API_KEY="..."
-python -m law.explain 예시케이스/CASE-2026-06-0004.json --dry-run   # 전송 내용만 확인
-python -m law.explain 예시케이스/CASE-2026-06-0004.json             # 실제 호출
-```
-
-`--dry-run` 은 키 없이도 됩니다. 아직 실호출로 검수하지 않았습니다.
 
 ---
 
