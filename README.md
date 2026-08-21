@@ -28,40 +28,14 @@
 | R10 | 계약시간 대비 실근무시간 및 일일 상한 |
 | R11 | 최저임금 기준 미달 여부 |
 
-판정 상태: `PASS` / `MISMATCH` / `REVIEW` / `REVIEW_HIGH` / `NOT_CHECKABLE` / `NOT_EVALUABLE`
+판정 상태: `PASS` / `MISMATCH` / `REVIEW` / `REVIEW_HIGH` / `NOT_CHECKABLE` 
 
 R11의 `REVIEW_HIGH`는 우선 확인 대상을 뜻하며 법 위반 확정 판정이 아닙니다.
 
-## 브랜치 구성
 
-| 브랜치 | 내용 |
-|---|---|
-| `main` | 이 README만. 프로젝트 소개용 |
-| `data` | 코드·스펙·생성기 + 합성 케이스 데이터셋 전체 |
 
-실제 파일은 모두 `data` 브랜치에 있습니다:
+## `data` 
 
-```bash
-git switch data
-```
-
-## 구성 (`data` 브랜치)
-
-코드와 스펙:
-
-```
-├── vitamin_ocr_rule_pipeline.ipynb          # 메인 파이프라인 (데이터 모델 → 정규화 → OCR 어댑터 → 룰 엔진 → 확인 게이트 → 판정)
-├── rule_test.ipynb                          # 폴더 단위 일괄 규칙 검증
-├── R00-R11_최종_JSON_Schema_v3.2.json        # 입력 JSON 스키마
-├── R00-R11_통합_표준피처정의서_v3.2.xlsx      # 문서별·규칙별 피처 정의서
-├── 계절근로자_정상케이스_30세트_기타/
-│   ├── _생성기/                              # 정상 케이스 생성 스크립트
-│   └── 정상케이스_30세트_요약.md
-└── 계절근로자_결함케이스_30세트_기타/
-    ├── _생성기/                              # 결함 케이스 생성 스크립트
-    ├── _백업/                                # 케이스 개정 이력
-    └── 결함케이스_30세트_요약.md
-```
 
 데이터셋:
 
@@ -79,23 +53,7 @@ git switch data
 
 케이스 1건 = JSON 1개 + PDF 4종. 전체 180케이스 (120 + 60).
 
-## 실행
 
-**단일 케이스 판정** — `vitamin_ocr_rule_pipeline.ipynb`의 `INPUT_CASE`를 판정할 OCR 추출 JSON 경로로 바꾸고 노트북을 순서대로 실행합니다.
-
-```python
-INPUT_CASE = Path("R00_R11_FINAL/R02/CASE-R02-2026-01-0001/CASE-R02-2026-01-0001.json")
-```
-
-**폴더 일괄 검증** — `rule_test.ipynb`의 `DATA_ROOT`를 케이스 폴더로 지정하면 하위 전체를 탐색해 일괄 판정합니다.
-
-```python
-DATA_ROOT = Path("R00_R11_FINAL")
-```
-
-노트북과 데이터 모두 `data` 브랜치에 있으므로 먼저 `git switch data`가 필요합니다. 결과는 `실행결과/`에 생성되며 버전 관리에서 제외됩니다.
-
-파이프라인은 합성데이터 전용이 아니며, `JsonOcrAdapter` 계약을 따르는 실제 OCR 출력에도 적용됩니다.
 
 ## 데이터 안내
 
