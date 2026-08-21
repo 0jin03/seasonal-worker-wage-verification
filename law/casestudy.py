@@ -16,6 +16,7 @@ API 키 없이도 같은 결과가 나온다.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -203,6 +204,23 @@ def iter_findings(case: dict) -> list[dict]:
     return findings
 
 
+# 판정 사유에 원본 필드명이 그대로 박혀 오는 경우가 있다.
+# 예: "공제항목 추출 실패(ps_other_deduction) — OCR 실패를 0원으로 계산할 수 없어 검산 불가"
+# 근로자가 읽는 문장이므로 한글 항목명으로 바꾼다.
+FIELD_IN_TEXT = re.compile(r"\b[a-z][a-z0-9]*(?:_[a-z0-9]+)+\b")
+
+
+def humanize(text: str) -> str:
+    """문장 속 영문 필드명을 한글 항목명으로 바꾼다. 사전에 없으면 그대로 둔다."""
+
+    def swap(match: re.Match) -> str:
+        field = match.group()
+        name = label(field)
+        return name if name != field else field
+
+    return FIELD_IN_TEXT.sub(swap, text)
+
+
 def wage_check(finding: dict) -> str:
     """케이스가 쓴 최저임금이 공식 고시와 같은지 확인한다.
 
@@ -230,7 +248,7 @@ def rule_section(rule_id: str, finding: dict, case: dict, corpus: Corpus) -> dic
         "검사내용": ev["검사내용"],
         "성격": ev["성격"],
         "판정": finding["status"],
-        "판정사유": finding["reason"],
+        "판정사유": humanize(finding["reason"]),
         "비교값": collect_values(rule_id, finding, case),
         "근거조항": ev["근거조항"],
         "참고조항": ev["참고조항"],
@@ -256,13 +274,20 @@ def build(case_path: Path | str, corpus: Corpus) -> dict:
     case_path = Path(case_path)
     case = json.loads(case_path.read_text(encoding="utf-8"))
     contract = case.get("documents", {}).get("contract", {})
-    findings = [f for f in iter_findings(case) if f["status"] != "PASS"]
+    all_findings = iter_findings(case)
+    findings = [f for f in all_findings if f["status"] != "PASS"]
     return {
         "case_id": case_path.stem,
         "근로자": contract.get("ct_employee_name", ""),
         "사업장": contract.get("ct_employer_name", ""),
         "산정기간": f"{contract.get('ct_pay_period_start', '')} ~ {contract.get('ct_pay_period_end', '')}",
         "불일치": [rule_section(f["rule_id"], f, case, corpus) for f in findings],
+        # 확인 필요 항목이 0건일 때, 무엇을 검사했는지 보여주기 위한 목록.
+        "검사한규칙": [
+            (f["rule_id"], spec(f["rule_id"]).검사내용)
+            for f in all_findings
+            if f["status"] == "PASS"
+        ],
     }
 
 
@@ -282,8 +307,13 @@ def render(report: dict) -> str:
     out.append("━" * WIDTH)
     out.append(f" {report['case_id']}")
     out.append(f" {report['근로자']} · {report['사업장']} · 산정기간 {report['산정기간']}")
-    out.append(f" 불일치 {len(report['불일치'])}건")
+    out.append(f" 확인 필요 항목 {len(report['불일치'])}건")
     out.append("━" * WIDTH)
+
+    # 확인 필요 항목이 0건이면 본문이 통째로 비어 정상 판정의 뜻이 드러나지 않는다.
+    if not report["불일치"]:
+        out.append("")
+        out.append(_wrap(guidance.ALL_PASS, "  "))
 
     for i, s in enumerate(report["불일치"], start=1):
         out.append("")
@@ -343,7 +373,7 @@ def render(report: dict) -> str:
             out.append(_wrap(f"※ {s['기준값확인']}", "     "))
 
         out.append("")
-        out.append("  ▪ 법령에 근거한 설명")
+        out.append("  ▪ 판정에 대한 설명")
         for line in s["해석"]:
             out.append(_wrap(line))
         if s["검토필요"]:
@@ -387,11 +417,11 @@ def render_markdown(report: dict) -> str:
     out.append(f"| 근로자 | {_md_escape(report['근로자'])} |")
     out.append(f"| 사업장 | {_md_escape(report['사업장'])} |")
     out.append(f"| 산정기간 | {report['산정기간']} |")
-    out.append(f"| 불일치 | {len(report['불일치'])}건 |")
+    out.append(f"| 확인 필요 항목 | {len(report['불일치'])}건 |")
     out.append("")
 
     if report["불일치"]:
-        out.append("## 불일치 요약")
+        out.append("## 확인 필요 항목 요약")
         out.append("")
         out.append("| # | 규칙 | 검사 내용 | 판정 | 성격 |")
         out.append("|---:|---|---|---|---|")
@@ -400,6 +430,16 @@ def render_markdown(report: dict) -> str:
                 f"| {i} | `{s['rule_id']}` | {_md_escape(s['검사내용'])} "
                 f"| `{s['판정']}` | {s['성격']} |"
             )
+        out.append("")
+    else:
+        out.append("## 검사 결과")
+        out.append("")
+        out.append(guidance.ALL_PASS)
+        out.append("")
+        out.append("| 규칙 | 검사 내용 | 판정 |")
+        out.append("|---|---|---|")
+        for rule_id, checked in report.get("검사한규칙", []):
+            out.append(f"| `{rule_id}` | {_md_escape(checked)} | `PASS` |")
         out.append("")
 
     for i, s in enumerate(report["불일치"], start=1):
@@ -487,7 +527,7 @@ def render_markdown(report: dict) -> str:
             out.append(f"> {s['기준값확인']}")
             out.append("")
 
-        out.append("### 법령에 근거한 설명")
+        out.append("### 판정에 대한 설명")
         out.append("")
         for line in s["해석"]:
             out.append(line)
