@@ -28,7 +28,7 @@ import time
 import urllib.error
 import urllib.request
 
-from law import casestudy
+from law import casestudy, guidance
 from law.prompt import (
     CHECK_FIELDS,
     FIELDS,
@@ -247,6 +247,11 @@ def explain_section(report: dict, section: dict) -> tuple[bool, str]:
     # 리포트에 싣는 것은 결정적 값이다. 비교된값·관련공식근거는 대조용으로만 보관한다.
     for 리포트항목, 출력항목 in REPORT_MAP.items():
         section[리포트항목] = filled[출력항목]
+
+    # 판정을 끝내지 못한 경우에는 무엇이 부족한지 반드시 알려야 한다.
+    if section["판정"] in ("NOT_CHECKABLE", "NOT_EVALUABLE") and not section["확인사항"]:
+        section["확인사항"] = list(guidance.MISSING_INFO)
+
     section["대조"] = {f: filled[f] for f in CHECK_FIELDS}
     section["생성"] = "llm"
     return True, ""
