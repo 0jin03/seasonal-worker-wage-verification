@@ -64,6 +64,9 @@ CONTRACT_CONTEXT: dict[str, tuple[str, ...]] = {
 DOCUMENT_CONTEXT: dict[str, tuple[str, ...]] = {
     "R00": ("ps_employer_name", "ps_employee_name", "bk_account_holder"),
     "R01": ("ps_ordinary_hourly_wage",),
+    # 차이 금액만 보이면 무엇과 무엇을 비교했는지 표에서 확인할 수 없다.
+    # 계약 약정액(CONTRACT_CONTEXT)과 나란히 놓아야 비교가 성립한다.
+    "R03": ("ps_bonus_amount", "ps_other_allowance", "ps_overtime_pay"),
     "R04": ("ps_housing_deduction", "ps_meal_deduction"),
     "R05": ("ps_gross_pay",),
     "R06": ("ps_total_deduction",),
@@ -161,6 +164,16 @@ ACTIONS: dict[str, tuple[str, ...]] = {
 MISSING_DATA_ACTIONS = (
     "현재 자료만으로 확인하기 어려운 부분이 있습니다. 관련 정보나 추가 자료가 있는지 확인해 주세요.",
     "문서에 누락된 내용이 있거나 내용이 잘 보이지 않는 경우에는 다시 확인하거나 촬영해 주세요.",
+)
+
+# 확인 필요 항목이 하나도 없을 때. 본문이 비어 정상 판정의 뜻이 드러나지 않는 것을 막는다.
+ALL_PASS = "R00~R11 검사 결과 현재 자료에서 확인이 필요한 항목이 발견되지 않았습니다."
+
+# NOT_CHECKABLE·NOT_EVALUABLE 인데 추가 확인사항이 비어 있을 때의 기본 문구.
+# 무엇이 부족한지 LLM 이 밝히지 못한 경우에도 근로자가 다음에 할 일은 알 수 있어야 한다.
+MISSING_INFO = (
+    "현재 제출된 자료만으로는 판정을 마칠 수 없습니다. "
+    "판정에 필요한 항목이 가려지거나 빠지지 않았는지 확인하고 해당 문서를 다시 제출해 주세요.",
 )
 
 # REVIEW_HIGH 일 때 추가할 행동.
