@@ -27,10 +27,15 @@ def build_legal_explanation(
         explain.API_KEY = api_key or ""
         system = explain.SYSTEM
         if language == "km":
-            system += (
-                "\n\n[출력 언어]\n모든 사용자용 문장은 자연스럽고 쉬운 캄보디아어(크메르어)로 작성함. "
-                "Rule ID, 숫자, 날짜, 법령명과 조문 번호는 입력값을 그대로 유지함."
+            # 원본 프롬프트의 '쉬운 한국어' 지시와 충돌하지 않게 언어 지시를
+            # 교체하고, 최우선 제약을 앞뒤에 모두 둔다.
+            system = system.replace("쉬운 한국어", "쉬운 캄보디아어(크메르어)")
+            language_rule = (
+                "[최우선 출력 언어 규칙]\n"
+                "JSON 키를 제외한 모든 사용자용 문장은 반드시 캄보디아어(크메르어)로 작성함. "
+                "한국어 문장을 출력하지 않음. 사람 이름, Rule ID, 숫자, 날짜, 법령명과 조문 번호만 입력값을 유지함.\n\n"
             )
+            system = language_rule + system + "\n\n" + language_rule
         explain.explain_report(report, quiet=True, system=system)
     else:
         for section in report["불일치"]:

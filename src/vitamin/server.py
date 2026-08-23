@@ -93,6 +93,14 @@ class VitaminHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(UI_ROOT), **kwargs)
 
+    def end_headers(self):
+        # 개발 중 변경된 UI가 브라우저의 이전 HTML/JS 캐시에 가려지지 않게 한다.
+        if not self.path.startswith("/api/"):
+            self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
+            self.send_header("Pragma", "no-cache")
+            self.send_header("Expires", "0")
+        super().end_headers()
+
     def _send_json(self, value: Any, status: int = HTTPStatus.OK):
         body = _json_bytes(value)
         self.send_response(status)
