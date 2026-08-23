@@ -11,12 +11,18 @@ __pycache__/
 .venv/
 venv/
 env/
+.uv-cache/
 
 # --- Jupyter ---
 .ipynb_checkpoints/
 
 # --- 파이프라인 실행 산출물 ---
 실행결과/
+rule_report.json
+outputs/
+.env
+.env.*
+!.env.example
 
 # --- 에디터 ---
 .vscode/

@@ -1,0 +1,137 @@
+{
+  "case_id": "CASE-2026-07-DEMO",
+  "derived": {
+    "cmp_worker_match": true,
+    "cmp_period_match": true,
+    "sys_case_id": "CASE-2026-07-DEMO",
+    "calc_contract_hourly_wage": 11000,
+    "calc_payslip_hourly_wage": 11000,
+    "cmp_wage_type_match": true,
+    "cmp_hourly_wage_gap": 0,
+    "ts_daily_actual_hours": [
+      {
+        "date": "2026-07-01",
+        "hours": 8
+      },
+      {
+        "date": "2026-07-02",
+        "hours": 8
+      }
+    ],
+    "ts_period_actual_hours": 16,
+    "ts_monthly_actual_hours": 16,
+    "cmp_actual_hours_gap": 0,
+    "cmp_overtime_hours_gap": 0,
+    "cmp_bonus_gap": 0,
+    "cmp_extra_pay_gap": 0,
+    "cmp_overtime_pay_gap": null,
+    "cmp_housing_deduction_gap": 0,
+    "cmp_meal_deduction_gap": 0,
+    "calc_gross_pay": 176000,
+    "cmp_gross_pay_gap": 0,
+    "calc_total_deduction": 0,
+    "cmp_total_deduction_gap": 0,
+    "calc_net_pay": 176000,
+    "cmp_net_pay_gap": 0,
+    "calc_salary_deposit_total": 176000,
+    "cmp_deposit_gap": 0,
+    "selected_salary_transactions": [
+      {
+        "bk_transaction_datetime": "2026-08-10T09:00:00",
+        "bk_deposit_amount": 176000,
+        "bk_transaction_content": "행복농장 급여",
+        "user_selected_salary_transaction": true
+      }
+    ],
+    "calc_scheduled_payment_date": "2026-08-10",
+    "calc_actual_payment_completion_date": "2026-08-10",
+    "cmp_contract_actual_hours_gap": 0,
+    "cmp_contract_minimum_wage_gap": 680,
+    "cmp_payslip_minimum_wage_gap": 680
+  },
+  "rules": [
+    {
+      "rule_id": "R00",
+      "status": "PASS",
+      "reason": "근로자와 산정기간이 연결됩니다.",
+      "comparisons": {}
+    },
+    {
+      "rule_id": "R01",
+      "status": "PASS",
+      "reason": "계약 임금과 명세서 적용단가가 허용범위 내에서 일치합니다.",
+      "comparisons": {
+        "gap": 0
+      }
+    },
+    {
+      "rule_id": "R02",
+      "status": "PASS",
+      "reason": "근무시간이 허용범위 내에서 일치합니다.",
+      "comparisons": {}
+    },
+    {
+      "rule_id": "R03",
+      "status": "PASS",
+      "reason": "수당·상여금이 허용범위 내에서 일치합니다.",
+      "comparisons": {}
+    },
+    {
+      "rule_id": "R04",
+      "status": "PASS",
+      "reason": "숙박비·식비 공제가 계약과 일치합니다.",
+      "comparisons": {}
+    },
+    {
+      "rule_id": "R05",
+      "status": "PASS",
+      "reason": "지급항목 합계가 일치합니다.",
+      "comparisons": {
+        "gap": 0
+      }
+    },
+    {
+      "rule_id": "R06",
+      "status": "PASS",
+      "reason": "공제항목 합계가 일치합니다.",
+      "comparisons": {
+        "gap": 0
+      }
+    },
+    {
+      "rule_id": "R07",
+      "status": "PASS",
+      "reason": "실수령액이 일치합니다.",
+      "comparisons": {
+        "gap": 0
+      }
+    },
+    {
+      "rule_id": "R08",
+      "status": "PASS",
+      "reason": "선택한 급여 입금합계가 실수령액과 일치합니다.",
+      "comparisons": {
+        "gap": 0
+      }
+    },
+    {
+      "rule_id": "R09",
+      "status": "PASS",
+      "reason": "전액 지급 완료일이 계약상 지급일과 일치합니다.",
+      "comparisons": {}
+    },
+    {
+      "rule_id": "R10",
+      "status": "PASS",
+      "reason": "계약시간과 실제시간이 일치합니다.",
+      "comparisons": {}
+    },
+    {
+      "rule_id": "R11",
+      "status": "PASS",
+      "reason": "계약·명세서 시급이 최저임금 기준 이상입니다.",
+      "comparisons": {}
+    }
+  ],
+  "review_required": []
+}

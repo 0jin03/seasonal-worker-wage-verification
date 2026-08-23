@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>루이 · 계약·급여 확인</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="brand" type="button" data-go="login" aria-label="처음 화면으로">루이</button>
+    <div class="top-actions">
+      <label class="language-picker" aria-label="언어 선택">
+        <select id="language-select">
+          <option value="ko">한국어</option>
+          <option value="km">ភាសាខ្មែរ</option>
+        </select>
+      </label>
+      <button class="quiet hidden auth-only" id="logout" type="button">로그아웃</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="screen auth-screen active" data-screen="login">
+      <div class="auth-copy">
+        <p class="eyebrow">외국인 계절근로자 임금 확인 서비스</p>
+        <h1>내가 받은 임금,<br><em>쉽고 정확하게 확인해요.</em></h1>
+        <p>근로계약서와 근무기록, 임금명세서, 입금내역을 비교해 확인이 필요한 부분을 쉬운 말로 알려드립니다.</p>
+        <ul class="trust-list">
+          <li><b>문서 4종 자동 비교</b><span>서로 다른 금액과 시간을 한 번에 확인</span></li>
+          <li><b>확인 후 분석</b><span>인식한 내용을 직접 고치고 확정</span></li>
+          <li><b>쉬운 결과 안내</b><span>위험도와 다음 행동을 함께 제시</span></li>
+        </ul>
+      </div>
+      <div class="auth-card">
+        <div class="auth-tabs" role="tablist">
+          <button class="active" type="button" role="tab" data-auth-tab="signin">로그인</button>
+          <button type="button" role="tab" data-auth-tab="signup">회원가입</button>
+        </div>
+        <form id="signin-form" class="auth-form active">
+          <div>
+            <label for="signin-email">이메일</label>
+            <input id="signin-email" type="email" placeholder="name@example.com" required>
+          </div>
+          <div>
+            <label for="signin-password">비밀번호</label>
+            <input id="signin-password" type="password" placeholder="8자 이상 입력" minlength="8" required>
+          </div>
+          <div class="form-row">
+            <label class="check"><input type="checkbox"> 로그인 상태 유지</label>
+            <button class="text-button" type="button">비밀번호 찾기</button>
+          </div>
+          <p class="form-error" aria-live="polite"></p>
+          <button class="primary" type="submit">로그인</button>
+          <button class="demo" id="demo-login" type="button">체험 계정으로 시작</button>
+        </form>
+        <form id="signup-form" class="auth-form">
+          <div>
+            <label for="signup-name">이름</label>
+            <input id="signup-name" type="text" placeholder="이름을 입력하세요" required>
+          </div>
+          <div>
+            <label for="signup-email">이메일</label>
+            <input id="signup-email" type="email" placeholder="name@example.com" required>
+          </div>
+          <div>
+            <label for="signup-password">비밀번호</label>
+            <input id="signup-password" type="password" placeholder="영문·숫자 포함 8자 이상" minlength="8" required>
+          </div>
+          <label class="check"><input id="terms" type="checkbox" required> 이용약관 및 개인정보 처리방침에 동의합니다.</label>
+          <p class="form-error" aria-live="polite"></p>
+          <button class="primary" type="submit">회원가입하고 시작</button>
+        </form>
+        <p class="privacy-note">올린 문서는 임금 확인 목적으로만 사용됩니다.</p>
+      </div>
+    </section>
+
+    <div class="app-shell hidden">
+      <nav class="progress-nav" aria-label="검사 진행 단계">
+        <button class="current" type="button" data-step="upload"><b>1</b><span>문서 올리기</span></button>
+        <i></i>
+        <button type="button" data-step="review"><b>2</b><span>내용 확인</span></button>
+        <i></i>
+        <button type="button" data-step="transactions"><b>3</b><span>급여 선택</span></button>
+        <i></i>
+        <button type="button" data-step="confirm"><b>4</b><span>최종 확인</span></button>
+        <i></i>
+        <button type="button" data-step="result"><b>5</b><span>결과 보기</span></button>
+      </nav>
+
+      <section class="screen app-screen" data-screen="upload">
+        <div class="page-heading">
+          <div><p class="eyebrow">1단계</p><h1>확인할 문서를 올려주세요</h1><p>문서 종류를 확인하고 한 종류씩 올려주세요.</p></div>
+          <span class="security">문서는 안전하게 보호됩니다</span>
+        </div>
+        <div class="task-summary"><strong>준비 상태</strong><span><b id="upload-count">0</b>/4개 완료</span></div>
+        <div class="upload-grid">
+          <label class="upload-card" data-role="contract"><input type="file" accept=".pdf"><span class="doc-index">01</span><div><strong>근로계약서</strong><small>계약 임금·근로조건</small></div><button type="button">파일 선택</button><output>업로드 전</output></label>
+          <label class="upload-card" data-role="timesheet"><input type="file" accept=".pdf"><span class="doc-index">02</span><div><strong>근무기록부</strong><small>날짜별 출퇴근·휴게시간</small></div><button type="button">파일 선택</button><output>업로드 전</output></label>
+          <label class="upload-card" data-role="payslip"><input type="file" accept=".pdf"><span class="doc-index">03</span><div><strong>임금명세서</strong><small>지급액·공제액 내역</small></div><button type="button">파일 선택</button><output>업로드 전</output></label>
+          <label class="upload-card" data-role="bank_statement"><input type="file" accept=".pdf"><span class="doc-index">04</span><div><strong>입금내역서</strong><small>급여가 들어온 거래내역</small></div><button type="button">파일 선택</button><output>업로드 전</output></label>
+        </div>
+        <div class="upload-help"><b>사진을 찍을 때</b><span>문서 전체가 보이게 · 빛 반사 없이 · 글자가 선명하게</span></div>
+        <div class="actions"><button class="demo" id="fill-demo" type="button">예시 문서로 체험</button><button class="primary" id="start-analysis" type="button" disabled>문서 분석하기</button></div>
+      </section>
+
+      <section class="screen app-screen" data-screen="processing">
+        <div class="processing-box">
+          <div class="spinner" aria-hidden="true"></div>
+          <p class="eyebrow">문서를 읽고 있습니다</p>
+          <h1>잠시만 기다려주세요</h1>
+          <p>근로자명, 임금, 근무시간, 공제액과 입금내역을 찾고 있습니다.</p>
+          <ul class="processing-list">
+            <li class="done">근로계약서 <b>완료</b></li>
+            <li class="done">근무기록부 <b>완료</b></li>
+            <li class="working">임금명세서 <b>분석 중</b></li>
+            <li>입금내역서 <b>대기</b></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="screen app-screen" data-screen="review">
+        <div class="prototype-note"><b>OCR 확인</b> 아래 값은 업로드한 PDF에서 추출했습니다. 노란색 항목만 원본을 보고 확인해주세요. 조건상 필요 없는 항목은 '해당 없음'으로 안내합니다.</div>
+        <div class="page-heading">
+          <div><p class="eyebrow">2단계</p><h1>인식한 내용을 확인해주세요</h1><p>노란색 항목은 글자가 흐려 꼭 확인해야 합니다.</p></div>
+          <span class="warning-label" id="review-warning">사용자 확인 필요</span>
+        </div>
+        <div class="review-layout">
+          <aside class="document-preview" aria-label="OCR 근거 안내"><div class="paper"><p>OCR 추출 결과</p><span>읽기 쉬운 항목명으로 인식 결과를 보여드립니다.</span><hr><span><b>노란색</b>은 원본 확인이 필요하고, <b>해당 없음</b>은 입력하지 않아도 됩니다.</span></div><small>상세 인식 근거와 원문은 별도로 보관됩니다.</small></aside>
+          <div class="extracted-fields" id="review-fields"></div>
+        </div>
+        <label class="confirm-check"><input id="review-confirmed" type="checkbox"> 원본 문서와 비교했고, 위 내용이 맞습니다.</label>
+        <div class="actions"><button class="demo" type="button" data-back="upload">이전</button><button class="primary" id="review-next" type="button" disabled>확인 완료</button></div>
+      </section>
+
+      <section class="screen app-screen" data-screen="transactions">
+        <div class="prototype-note"><b>사용자 최종 선택</b> 시스템 추천은 참고용이며, 실제 급여에 해당하는 거래를 직접 선택해야 합니다.</div>
+        <div class="page-heading"><div><p class="eyebrow">3단계</p><h1>급여로 받은 거래를 선택해주세요</h1><p>급여가 나누어 들어왔다면 여러 건을 선택할 수 있습니다.</p></div><span class="recommend-label">추천 거래 표시</span></div>
+        <div class="transaction-table" id="transaction-list"></div>
+        <div class="amount-compare"><div><span>선택한 입금 합계</span><strong id="selected-total">0원</strong></div><i>↔</i><div><span>명세서 실수령액</span><strong id="net-pay-total">0원</strong></div><b id="amount-status">거래를 선택해주세요</b></div>
+        <div class="actions"><button class="demo" type="button" data-back="review">이전</button><button class="primary" id="transaction-next" type="button">선택 완료</button></div>
+      </section>
+
+      <section class="screen app-screen" data-screen="confirm">
+        <div class="page-heading"><div><p class="eyebrow">4단계</p><h1>분석 전 최종 확인</h1><p>틀린 내용이 있다면 해당 항목에서 수정할 수 있습니다.</p></div><span class="success-label">모든 문서 확인 완료</span></div>
+        <div id="confirm-summary"></div>
+        <div class="notice"><b>분석 결과 안내</b><p>이 서비스는 문서 간 차이를 찾아주는 참고 도구이며 법률 판단이나 임금체불 확정을 대신하지 않습니다.</p></div>
+        <div class="actions"><button class="demo" type="button" data-back="transactions">이전</button><button class="primary" id="run-rules" type="button">R00~R11 검증 시작</button></div>
+      </section>
+
+      <section class="screen app-screen" data-screen="result">
+        <div class="result-hero" id="result-hero"></div>
+        <div class="result-counts" id="result-counts"></div>
+        <div class="issue-list" id="issue-list"></div>
+        <div class="next-actions"><h2>다음에 할 수 있는 일</h2><div><button id="save-result-pdf" type="button">결과 PDF 저장</button><button id="show-employer-summary" type="button">사업주에게 보여줄 요약</button><button id="show-consultation" type="button">상담기관 안내</button></div></div>
+        <button class="demo full" type="button" data-go="upload">새 문서 확인하기</button>
+      </section>
+    </div>
+  </main>
+  <dialog id="employer-summary-dialog" class="result-dialog"><form method="dialog"><button class="dialog-close" aria-label="닫기">×</button><h2>사업주에게 보여줄 요약</h2><p>확인이 필요한 항목만 정리했습니다.</p><pre id="employer-summary-text"></pre><div class="dialog-actions"><button id="copy-employer-summary" type="button">내용 복사</button><button id="download-employer-summary" type="button">텍스트 파일 저장</button><button value="close">닫기</button></div></form></dialog>
+  <dialog id="consultation-dialog" class="result-dialog"><form method="dialog"><button class="dialog-close" aria-label="닫기">×</button><h2>상담기관 안내</h2><div class="consult-card"><strong>고용노동부 고객상담센터</strong><p>임금과 근로조건 상담</p><a href="tel:1350">전화 1350</a><a href="https://www.moel.go.kr/" target="_blank" rel="noopener">공식 홈페이지 열기</a></div><div class="consult-card"><strong>다누리콜센터</strong><p>외국인 근로자를 위한 다국어 생활·노동 관련 안내</p><a href="tel:15771366">전화 1577-1366</a><a href="https://www.liveinkorea.kr/" target="_blank" rel="noopener">공식 홈페이지 열기</a></div><div class="dialog-actions"><button value="close">닫기</button></div></form></dialog>
+  <footer>루이 프로젝트 · 이 결과는 법률 판단이 아닌 임금 확인을 돕기 위한 안내입니다.</footer>
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

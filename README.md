@@ -1,104 +1,83 @@
-# 계절근로자 급여 검증 파이프라인 (OCR → R00~R11 룰 엔진)
+# Vitamin v6 OCR → R00~R11 → UI 파이프라인
 
-외국인 계절근로자의 급여 관련 4종 문서를 OCR로 추출한 뒤, R00~R11 검증 규칙으로 지급 적정성을 자동 판정하는 파이프라인입니다.
+4종 PDF를 OCR한 뒤 사용자가 값을 확인하고 급여 거래를 선택하면, v6 피처정의서의 재사용 흐름에 따라 R00~R11을 실행합니다.
 
-## 대상 문서
-
-| 문서 | 역할 |
-|---|---|
-| 표준근로계약서 | 계약 임금·근로조건 기준값 |
-| 근무기록부 | 실제 근무일·근무시간 |
-| 임금명세서 | 지급·공제 항목 및 실수령액 |
-| 입금내역서 | 실제 입금 시점과 금액 |
-
-## 검증 규칙 (R00~R11)
-
-| 규칙 | 검증 내용 |
-|---|---|
-| R00 | 근로자명·산정기간 문서 간 연결 정합성 |
-| R01 | 계약 환산시급 vs 명세서 적용시급 |
-| R02 | 근무기록 시간 vs 명세서 계산시간 |
-| R03 | 계약상 수당·상여금 vs 명세서 지급액 |
-| R04 | 계약상 숙식비 부담액 vs 명세서 공제액 |
-| R05 | 지급항목 합계 검산 |
-| R06 | 공제항목 합계 검산 |
-| R07 | 실수령액(총지급액 − 총공제액) 검산 |
-| R08 | 재계산 실수령액 vs 실제 입금액 |
-| R09 | 계약상 지급일 vs 전액 지급 완료일 |
-| R10 | 계약시간 대비 실근무시간 및 일일 상한 |
-| R11 | 최저임금 기준 미달 여부 |
-
-판정 상태: `PASS` / `MISMATCH` / `REVIEW` / `REVIEW_HIGH` / `NOT_CHECKABLE` / `NOT_EVALUABLE`
-
-R11의 `REVIEW_HIGH`는 우선 확인 대상을 뜻하며 법 위반 확정 판정이 아닙니다.
-
-## 브랜치 구성
-
-| 브랜치 | 내용 |
-|---|---|
-| `main` | 이 README만. 프로젝트 소개용 |
-| `data` | 코드·스펙·생성기 + 합성 케이스 데이터셋 전체 |
-
-실제 파일은 모두 `data` 브랜치에 있습니다:
-
-```bash
-git switch data
+```text
+계약서 ─┐
+근무기록 ├─ 문서별 OCR/parser ─ 사용자 확인·수정 ─ 표준 JSON ─ R00~R11 ─ 결과 JSON
+명세서 ─┤
+입금내역 ┘
 ```
 
-## 구성 (`data` 브랜치)
+## UI와 백엔드 실행
 
-코드와 스펙:
+룰 테스트와 예시 UI는 Python 기본 기능만으로 실행됩니다. 실제 PDF OCR까지 사용할 때는 아래의 Python 3.11 가상환경을 사용합니다.
 
-```
-├── vitamin_ocr_rule_pipeline.ipynb          # 메인 파이프라인 (데이터 모델 → 정규화 → OCR 어댑터 → 룰 엔진 → 확인 게이트 → 판정)
-├── rule_test.ipynb                          # 폴더 단위 일괄 규칙 검증
-├── R00-R11_최종_JSON_Schema_v3.2.json        # 입력 JSON 스키마
-├── R00-R11_통합_표준피처정의서_v3.2.xlsx      # 문서별·규칙별 피처 정의서
-├── 계절근로자_정상케이스_30세트_기타/
-│   ├── _생성기/                              # 정상 케이스 생성 스크립트
-│   └── 정상케이스_30세트_요약.md
-└── 계절근로자_결함케이스_30세트_기타/
-    ├── _생성기/                              # 결함 케이스 생성 스크립트
-    ├── _백업/                                # 케이스 개정 이력
-    └── 결함케이스_30세트_요약.md
+```powershell
+cd "seasonal-worker-wage-verification"
+$env:PYTHONPATH = "src"
+.\.venv\Scripts\python.exe -m vitamin.server
 ```
 
-데이터셋:
+브라우저에서 `http://127.0.0.1:8000`을 엽니다. `index.html`을 직접 더블클릭하면 API를 호출할 수 없으므로 반드시 서버 주소로 접속합니다.
 
-```
-├── R00_R11_FINAL/                           # 규칙별 단일오류 데이터셋 (R00~R11 × 10건 = 120케이스)
-│   ├── R00/ ~ R11/                          #   각 규칙 폴더에 케이스 10건 + 사례 요약 + 검증보고서
-│   ├── 노션용_전체_사례_요약.md
-│   └── 전체_검증보고서.txt
-├── 계절근로자_정상케이스_30세트/               # 복합 정상 케이스 30건
-├── 계절근로자_결함케이스_30세트/               # 복합 결함 케이스 30건 (미통과 규칙 2~5개)
-├── CASE-EY-2026-07-0001.json                # 전 규칙 PASS 베이스라인 (월급제)
-└── 표준근로계약서.pdf / 근무기록부.pdf         # 문서 양식 샘플
-    임금명세서.pdf / 입금내역서.pdf
-```
+## 실제 PDF OCR 준비
 
-케이스 1건 = JSON 1개 + PDF 4종. 전체 180케이스 (120 + 60).
+OCR은 GitHub `feature/ocr-v6` 모듈을 `ocr_module/`에 연결했습니다. PaddlePaddle 3.3.0의 공식 Windows wheel은 Python 3.13까지만 제공되므로, 이 프로젝트의 OCR 런타임은 검증된 Python 3.11을 사용합니다. 프로젝트 내부 가상환경을 새로 만드는 경우 다음과 같이 설치합니다.
 
-## 실행
-
-**단일 케이스 판정** — `vitamin_ocr_rule_pipeline.ipynb`의 `INPUT_CASE`를 판정할 OCR 추출 JSON 경로로 바꾸고 노트북을 순서대로 실행합니다.
-
-```python
-INPUT_CASE = Path("R00_R11_FINAL/R02/CASE-R02-2026-01-0001/CASE-R02-2026-01-0001.json")
+```powershell
+uv python install 3.11
+uv venv --python 3.11 .venv
+uv pip install --python .venv\Scripts\python.exe -r ocr_module\requirements-ocr.txt
+$env:VITAMIN_OCR_DEVICE = "cpu"
 ```
 
-**폴더 일괄 검증** — `rule_test.ipynb`의 `DATA_ROOT`를 케이스 폴더로 지정하면 하위 전체를 탐색해 일괄 판정합니다.
+`paddleocr[doc-parser]` extra는 `PPStructureV3`의 레이아웃·표 분석에 필요한 공식 선택 의존성을 함께 설치합니다. 최초 OCR 실행 시 공식 모델 파일을 내려받기 때문에 시간이 걸리며, 이후 실행은 로컬 모델 캐시를 재사용합니다.
 
-```python
-DATA_ROOT = Path("R00_R11_FINAL")
+GPU 설치는 `ocr_module`의 PaddleOCR 안내에 맞춰 별도로 설정합니다. OCR 결과와 provenance는 `outputs/ocr/<sample_id>/`에 저장됩니다.
+
+## CLI 실행
+
+외부 패키지 없이 Python 3.11 이상에서 실행할 수 있습니다.
+
+```powershell
+$env:PYTHONPATH = "src"
+python -m vitamin.cli examples/case_pass.json -o report.json
 ```
 
-노트북과 데이터 모두 `data` 브랜치에 있으므로 먼저 `git switch data`가 필요합니다. 결과는 `실행결과/`에 생성되며 버전 관리에서 제외됩니다.
+CLI 결과의 `result`가 v6의 `documents`, `derived`, `rule_results` 구조입니다.
 
-파이프라인은 합성데이터 전용이 아니며, `JsonOcrAdapter` 계약을 따르는 실제 OCR 출력에도 적용됩니다.
+## OCR 팀과 연결하는 방법
 
-## 데이터 안내
+문서별 parser는 v6 `documents`에 피처정의서의 접두어를 그대로 사용합니다.
 
-저장소의 모든 케이스와 PDF는 **합성 생성 데이터**입니다. 인명·사업장명·여권번호·계좌정보는 실재하지 않으며, 실제 근로자 개인정보는 포함되어 있지 않습니다.
+- 계약서: `ct_*`
+- 근무기록: `ts_*`, 반복 행은 `rows`
+- 임금명세서: `ps_*`
+- 입금내역: `bk_*`, 반복 거래는 `transactions`
 
-기준 최저시급: 2026년 10,320원 / 2027년 10,850원
+`_ocr.confirmed_fields`에는 UI에서 사용자가 확인한 핵심 필드를 넣습니다. 수정된 값은 OCR 원본 대신 `fields`에 최종값을 넣고 `_ocr.corrected_fields`에 필드명을 기록합니다.
+
+UI의 복수 선택 결과는 `derived.R08.usr_salary_transaction_selected[]`에 저장됩니다. R08·R09는 이 사용자 선택값만 사용합니다.
+
+## 구현 범위와 확장 지점
+
+- `ocr.py`: OCR 공급자별 어댑터 추가 위치
+- `normalization.py`: 이름·날짜·금액·임금형태 정규화
+- `pipeline.py`: 사용자 확인 게이트
+- `rules.py`: R00~R11 및 파생피처 재사용
+- `io.py`: 통합 OCR JSON 입출력
+
+RAG는 룰 결과의 `rule_id`, `status`, `reason`, `comparisons`를 입력으로 받도록 후속 계층에서 연결하면 됩니다.
+
+## R09 공휴일 API 설정
+
+공공데이터포털의 한국천문연구원 특일 정보 API에서 **일반 인증키(Decoding)** 를 발급받아 프로젝트 루트의 `.env`에 넣습니다.
+
+```dotenv
+KASI_HOLIDAY_API_KEY=발급받은_일반_인증키_Decoding
+```
+
+약정 지급일이 주말·공휴일이면 **직전 영업일**을 정상 지급일로 사용합니다.
+
+API 키 누락·통신 실패·응답 오류는 파이프라인을 중단하지 않고 R09 `REVIEW`로 반환합니다. 월별 API 응답은 실행 중 메모리에 캐시됩니다.

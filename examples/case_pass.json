@@ -1,0 +1,41 @@
+{
+  "case_id": "CASE-2026-07-DEMO",
+  "documents": {
+    "contract": {
+      "_ocr": {"confirmed_fields": ["ct_employee_name", "ct_new_or_reentry_start_date", "ct_new_or_reentry_end_date", "ct_pay_day"]},
+      "fields": {
+        "ct_employee_name": "SOK DARA", "ct_employer_name": "행복농장",
+        "ct_new_or_reentry_selected": true, "ct_new_or_reentry_start_date": "2026-03-01", "ct_new_or_reentry_end_date": "2026-08-31",
+        "ct_wage_type": "hourly", "ct_wage_amount": 11000, "ct_monthly_work_hours": 16,
+        "ct_break_minutes": 60, "ct_bonus_amount": 0, "ct_extra_pay_amount": 0,
+        "ct_housing_provided": false, "ct_housing_cost": 0, "ct_meal_provided": false, "ct_meal_cost": 0,
+        "ct_pay_cycle": "monthly", "ct_pay_timing": "익월", "ct_pay_day": 10, "ct_max_daily_work_hours": 10
+      }
+    },
+    "timesheet": {
+      "_ocr": {"confirmed_fields": ["ts_employee_name"]},
+      "fields": {"ts_employee_name": "SOK DARA", "ts_record_available": true},
+      "rows": [
+        {"ts_work_date": "2026-07-01", "ts_work_start_time": "09:00", "ts_work_end_time": "18:00", "ts_break_minutes": 60},
+        {"ts_work_date": "2026-07-02", "ts_work_start_time": "09:00", "ts_work_end_time": "18:00", "ts_break_minutes": 60}
+      ]
+    },
+    "payslip": {
+      "_ocr": {"confirmed_fields": ["ps_employee_name", "ps_pay_period_start", "ps_pay_period_end", "ps_gross_pay", "ps_total_deduction"]},
+      "fields": {
+        "ps_employee_name": "SOK DARA", "ps_employer_name": "행복농장", "ps_wage_type": "hourly",
+        "ps_pay_period_start": "2026-07-01", "ps_pay_period_end": "2026-07-02", "ps_payment_date": "2026-08-10",
+        "ps_ordinary_hourly_wage": 11000, "ps_paid_regular_hours": 16, "ps_paid_overtime_hours": 0, "ps_paid_holiday_hours": 0,
+        "ps_paid_work_days": 2, "ps_base_pay": 176000, "ps_bonus_amount": 0, "ps_other_allowance": 0,
+        "ps_weekly_allowance": 0, "ps_overtime_pay": 0, "ps_night_work_pay": 0, "ps_holiday_work_pay": 0,
+        "ps_housing_deduction": 0, "ps_meal_deduction": 0, "ps_national_pension": 0, "ps_health_insurance": 0,
+        "ps_long_term_care_insurance": 0, "ps_employment_insurance": 0, "ps_income_tax": 0, "ps_local_income_tax": 0, "ps_other_deduction": 0,
+        "ps_gross_pay": 176000, "ps_total_deduction": 0, "ps_net_pay": 176000
+      }
+    },
+    "bank": {
+      "fields": {"bk_account_holder": "SOK DARA", "bk_inquiry_start_date": "2026-08-01", "bk_inquiry_end_date": "2026-08-31"},
+      "rows": [{"bk_transaction_datetime": "2026-08-10T09:00:00", "bk_deposit_amount": 176000, "bk_transaction_content": "행복농장 급여", "user_selected_salary_transaction": true}]
+    }
+  }
+}
