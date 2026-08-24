@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import json
 import os
+import re
+import struct
 import sys
 import tempfile
 import traceback
 import uuid
+from io import BytesIO
 from email.parser import BytesParser
 from email.policy import default
 from http import HTTPStatus
@@ -19,15 +22,17 @@ from .pipeline import VitaminPipeline
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-WORKSPACE_ROOT = PROJECT_ROOT.parent
-UI_ROOT = WORKSPACE_ROOT / "ui-prototype"
+UI_ROOT = PROJECT_ROOT / "ui-prototype"
 OCR_ROOT = PROJECT_ROOT / "ocr_module"
 SCHEMA_PATH = PROJECT_ROOT / "references" / "R00-R11_최종_JSON_Schema_v6.json"
 OCR_OUTPUT_ROOT = PROJECT_ROOT / "outputs" / "ocr"
+DEMO_REVIEW_ROOT = PROJECT_ROOT / "examples" / "review_demo"
 # Paddle의 Windows C++ 추론 엔진은 한글 경로에서 모델 파일을 열지 못한다.
 # 영문으로만 구성된 Windows 임시 경로에 전용 캐시를 둔다.
 PADDLEX_CACHE_ROOT = Path(tempfile.gettempdir()) / "vitamin-paddlex-cache"
 ROLES = ("contract", "timesheet", "payslip", "bank_statement")
+OCR_ASSET_PATH = re.compile(r"/api/ocr-asset/(UI-[0-9a-f]{12})/(contract|timesheet|payslip|bank_statement)/(\d+)$")
+DEMO_ASSET_PATH = re.compile(r"/api/demo-asset/(contract|timesheet|payslip|bank_statement)/(\d+)$")
 
 _ocr_runner = None
 
@@ -49,6 +54,34 @@ def _load_ocr_boundary():
         device = os.getenv("VITAMIN_OCR_DEVICE", "cpu")
         _ocr_runner = OCRPipeline(device=device)
     return _ocr_runner, file_sha256, process_sample
+
+
+def _review_assets(sample_id: str) -> dict[str, list[dict[str, Any]]]:
+    assets = {}
+    for role in ROLES:
+        raw_path = OCR_OUTPUT_ROOT / sample_id / "raw" / role / "raw_result.json"
+        raw = json.loads(raw_path.read_text(encoding="utf-8"))
+        assets[role] = [
+            {
+                "page": int(page["page_index"]),
+                "width": int(page["width"]),
+                "height": int(page["height"]),
+                "image": f"/api/ocr-asset/{sample_id}/{role}/{int(page['page_index'])}",
+            }
+            for page in raw["pages"]
+        ]
+    return assets
+
+
+def _demo_review_assets() -> dict[str, list[dict[str, Any]]]:
+    assets = {}
+    for role in ROLES:
+        path = DEMO_REVIEW_ROOT / f"{role}_0.png"
+        with path.open("rb") as image:
+            image.seek(16)
+            width, height = struct.unpack(">II", image.read(8))
+        assets[role] = [{"page": 0, "width": width, "height": height, "image": f"/api/demo-asset/{role}/0"}]
+    return assets
 
 
 def run_ocr(files: dict[str, tuple[str, bytes]]) -> dict[str, Any]:
@@ -85,6 +118,7 @@ def run_ocr(files: dict[str, tuple[str, bytes]]) -> dict[str, Any]:
         "sample_id": sample_id,
         "canonical": json.loads(canonical_path.read_text(encoding="utf-8")),
         "provenance": json.loads(provenance_path.read_text(encoding="utf-8")),
+        "review_assets": _review_assets(sample_id),
         "report": report,
     }
 
@@ -109,6 +143,29 @@ class VitaminHandler(SimpleHTTPRequestHandler):
         self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(body)
+
+    def _send_png(self, path: Path):
+        if not path.is_file():
+            return self._send_json({"error": "문서 이미지를 찾을 수 없습니다."}, HTTPStatus.NOT_FOUND)
+        self._send_png_bytes(path.read_bytes())
+
+    def _send_png_bytes(self, body: bytes):
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "image/png")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "private, no-store")
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _send_review_png(self, path: Path, width: int, height: int):
+        if not path.is_file():
+            return self._send_json({"error": "문서 이미지를 찾을 수 없습니다."}, HTTPStatus.NOT_FOUND)
+        from PIL import Image
+
+        output = BytesIO()
+        with Image.open(path) as image:
+            image.crop((0, 0, width, height)).save(output, "PNG")
+        self._send_png_bytes(output.getvalue())
 
     def _read_json(self) -> dict[str, Any]:
         length = int(self.headers.get("Content-Length", "0"))
@@ -136,8 +193,25 @@ class VitaminHandler(SimpleHTTPRequestHandler):
                 "paddlex_cache": str(PADDLEX_CACHE_ROOT),
             })
         if self.path == "/api/demo":
-            payload = json.loads((PROJECT_ROOT / "examples" / "sample_canonical.json").read_text(encoding="utf-8"))
-            return self._send_json({"canonical": {"documents": payload["documents"]}})
+            canonical = json.loads((DEMO_REVIEW_ROOT / "canonical.json").read_text(encoding="utf-8"))
+            provenance = json.loads((DEMO_REVIEW_ROOT / "provenance.json").read_text(encoding="utf-8"))
+            return self._send_json({"canonical": canonical, "provenance": provenance, "review_assets": _demo_review_assets()})
+        demo_asset = DEMO_ASSET_PATH.fullmatch(self.path)
+        if demo_asset:
+            role, page_text = demo_asset.groups()
+            return self._send_png(DEMO_REVIEW_ROOT / f"{role}_{int(page_text)}.png")
+        asset = OCR_ASSET_PATH.fullmatch(self.path)
+        if asset:
+            sample_id, role, page_text = asset.groups()
+            page = int(page_text)
+            folder = OCR_OUTPUT_ROOT / sample_id / "paddle_viz" / role / f"page_{page + 1:03d}"
+            raw = json.loads((OCR_OUTPUT_ROOT / sample_id / "raw" / role / "raw_result.json").read_text(encoding="utf-8"))
+            page_info = next(item for item in raw["pages"] if int(item["page_index"]) == page)
+            return self._send_review_png(
+                folder / f"{role}_{page}_preprocessed_img.png",
+                int(page_info["width"]),
+                int(page_info["height"]),
+            )
         return super().do_GET()
 
     def do_POST(self):
