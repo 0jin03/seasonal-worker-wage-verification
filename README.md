@@ -81,3 +81,7 @@ KASI_HOLIDAY_API_KEY=발급받은_일반_인증키_Decoding
 약정 지급일이 주말·공휴일이면 **직전 영업일**을 정상 지급일로 사용합니다.
 
 API 키 누락·통신 실패·응답 오류는 파이프라인을 중단하지 않고 R09 `REVIEW`로 반환합니다. 월별 API 응답은 실행 중 메모리에 캐시됩니다.
+
+## OCR 검수·결과 UI 개선
+
+문서별 원본/bbox 검수 흐름과 R00~R11 결과 대시보드 변경사항은 [`UI_REVIEW_CHANGE_SUMMARY.md`](UI_REVIEW_CHANGE_SUMMARY.md)에서 확인할 수 있습니다.

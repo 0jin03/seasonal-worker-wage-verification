@@ -120,17 +120,22 @@
       </section>
 
       <section class="screen app-screen" data-screen="review">
-        <div class="prototype-note"><b>OCR 확인</b> 아래 값은 업로드한 PDF에서 추출했습니다. 노란색 항목만 원본을 보고 확인해주세요. 조건상 필요 없는 항목은 '해당 없음'으로 안내합니다.</div>
+        <div class="prototype-note"><b>OCR 확인</b> 문서의 번호 상자와 오른쪽 필드의 같은 번호를 비교해 OCR 추출 위치와 값을 확인해주세요.</div>
         <div class="page-heading">
-          <div><p class="eyebrow">2단계</p><h1>인식한 내용을 확인해주세요</h1><p>노란색 항목은 글자가 흐려 꼭 확인해야 합니다.</p></div>
+          <div><p class="eyebrow">2단계</p><h1>인식한 내용을 확인해주세요</h1><p id="review-document-heading">근로계약서에서 추출한 내용입니다.</p></div>
           <span class="warning-label" id="review-warning">사용자 확인 필요</span>
         </div>
+        <nav class="review-document-progress" id="review-document-progress" aria-label="문서 확인 순서"></nav>
         <div class="review-layout">
-          <aside class="document-preview" aria-label="OCR 근거 안내"><div class="paper"><p>OCR 추출 결과</p><span>읽기 쉬운 항목명으로 인식 결과를 보여드립니다.</span><hr><span><b>노란색</b>은 원본 확인이 필요하고, <b>해당 없음</b>은 입력하지 않아도 됩니다.</span></div><small>상세 인식 근거와 원문은 별도로 보관됩니다.</small></aside>
-          <div class="extracted-fields" id="review-fields"></div>
+          <aside class="document-preview" aria-label="OCR 추출 위치">
+            <div class="preview-heading"><div><span id="review-document-count">1 / 4</span><h2 id="review-document-title">근로계약서</h2></div><nav id="review-page-nav" aria-label="문서 페이지"></nav></div>
+            <div class="document-image-scroll"><div class="document-image-stage" id="review-image-stage"><div class="document-image-empty">문서 이미지 근거가 없습니다.</div></div></div>
+            <small>번호 상자를 누르면 오른쪽의 해당 필드로 이동합니다.</small>
+          </aside>
+          <section class="review-fields-panel" aria-labelledby="review-fields-title"><div class="review-fields-heading"><span>OCR 추출 결과</span><h2 id="review-fields-title">근로계약서 필드</h2><p>번호를 눌러 문서의 추출 위치를 확인할 수 있습니다.</p></div><div class="extracted-fields" id="review-fields"></div></section>
         </div>
-        <label class="confirm-check"><input id="review-confirmed" type="checkbox"> 원본 문서와 비교했고, 위 내용이 맞습니다.</label>
-        <div class="actions"><button class="demo" type="button" data-back="upload">이전</button><button class="primary" id="review-next" type="button" disabled>확인 완료</button></div>
+        <label class="confirm-check"><input id="review-confirmed" type="checkbox"> 현재 문서를 원본과 비교했고, 위 내용이 맞습니다.</label>
+        <div class="actions"><button class="demo" id="review-previous" type="button">이전</button><button class="primary" id="review-next" type="button" disabled>다음 문서</button></div>
       </section>
 
       <section class="screen app-screen" data-screen="transactions">
@@ -160,7 +165,7 @@
   <dialog id="employer-summary-dialog" class="result-dialog"><form method="dialog"><button class="dialog-close" aria-label="닫기">×</button><h2>사업주에게 보여줄 요약</h2><p>확인이 필요한 항목만 정리했습니다.</p><pre id="employer-summary-text"></pre><div class="dialog-actions"><button id="copy-employer-summary" type="button">내용 복사</button><button id="download-employer-summary" type="button">텍스트 파일 저장</button><button value="close">닫기</button></div></form></dialog>
   <dialog id="consultation-dialog" class="result-dialog"><form method="dialog"><button class="dialog-close" aria-label="닫기">×</button><h2>상담기관 안내</h2><div class="consult-card"><strong>고용노동부 고객상담센터</strong><p>임금과 근로조건 상담</p><a href="tel:1350">전화 1350</a><a href="https://www.moel.go.kr/" target="_blank" rel="noopener">공식 홈페이지 열기</a></div><div class="consult-card"><strong>다누리콜센터</strong><p>외국인 근로자를 위한 다국어 생활·노동 관련 안내</p><a href="tel:15771366">전화 1577-1366</a><a href="https://www.liveinkorea.kr/" target="_blank" rel="noopener">공식 홈페이지 열기</a></div><div class="dialog-actions"><button value="close">닫기</button></div></form></dialog>
   <footer>루이 프로젝트 · 이 결과는 법률 판단이 아닌 임금 확인을 돕기 위한 안내입니다.</footer>
-  <script src="i18n.js?v=20260823-3"></script>
-  <script src="app.js?v=20260823-3"></script>
+  <script src="i18n.js?v=20260824-1"></script>
+  <script src="app.js?v=20260824-1"></script>
 </body>
 </html>
