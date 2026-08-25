@@ -44,6 +44,8 @@ def build_legal_explanation(
     report["llm"] = {
         "configured": llm_configured,
         "model": "gpt-4.1-mini",
+        "temperature": explain.TEMPERATURE,
+        "prompt_version": explain.PROMPT_VERSION,
         "fallback": fallback,
         "language": language,
     }

@@ -16,8 +16,10 @@ import math
 import re
 from collections import Counter
 from dataclasses import dataclass
+from datetime import datetime
 from functools import cached_property
 from pathlib import Path
+from urllib.parse import quote
 
 from law import contract, notice
 from law.mapping import Law, spec
@@ -32,6 +34,7 @@ B = 0.75
 # '임금'·'근로' 같은 흔한 조각이 점수를 지배해 정작 특징적인 어절이 묻힌다.
 BIGRAM_PREFIX = "~"
 BIGRAM_WEIGHT = 0.3
+BM25_MIN_SCORE = 25.0
 
 WORD = re.compile(r"[가-힣]+|[a-zA-Z]+|\d+")
 HANGUL = re.compile(r"^[가-힣]+$")
@@ -65,6 +68,12 @@ class Citation:
     사유: str = ""
     적용조건: str = ""
     점수: float | None = None
+    수집일: str = ""
+
+    @property
+    def 출처(self) -> str:
+        """국가가 제공하는 법령 정보 페이지."""
+        return f"https://www.law.go.kr/법령/{quote(self.법령명)}"
 
     def to_dict(self) -> dict:
         data = {
@@ -74,6 +83,8 @@ class Citation:
             "법령명": self.법령명,
             "시행일자": self.시행일자,
             "역할": self.역할,
+            "출처": self.출처,
+            "수집일": self.수집일,
         }
         if self.사유:
             data["사유"] = self.사유
@@ -85,8 +96,9 @@ class Citation:
 
 
 class Corpus:
-    def __init__(self, records: list[dict]):
+    def __init__(self, records: list[dict], collected_at: str = ""):
         self.records = records
+        self.collected_at = collected_at
         self._by_key: dict[tuple, dict] = {}
         for record in records:
             key = (
@@ -105,7 +117,9 @@ class Corpus:
                 f"코퍼스가 없습니다: {path}\n먼저 실행하세요: python -m law.collect"
             )
         with path.open(encoding="utf-8") as handle:
-            return cls([json.loads(line) for line in handle if line.strip()])
+            records = [json.loads(line) for line in handle if line.strip()]
+        collected_at = datetime.fromtimestamp(path.stat().st_mtime).date().isoformat()
+        return cls(records, collected_at)
 
     # --- 1차 경로: 매핑 기반 조회 ---------------------------------------
 
@@ -137,6 +151,7 @@ class Corpus:
             역할=law.역할,
             사유=law.사유,
             적용조건=law.적용조건,
+            수집일=self.collected_at,
         )
 
     def resolve(self, rule_id: str) -> list[Citation]:
@@ -153,6 +168,23 @@ class Corpus:
                 )
             found.append(citation)
         return found
+
+    def resolve_safe(self, rule_id: str) -> tuple[list[Citation], list[str]]:
+        """운영 조회에서는 누락된 매핑을 표시하고 나머지 근거를 계속 제공한다."""
+        found: list[Citation] = []
+        missing: list[str] = []
+        for law in spec(rule_id).법령:
+            citation = self.lookup(law)
+            if citation is not None:
+                found.append(citation)
+                continue
+            location = f"{law.법령명} 제{law.조문번호}조"
+            if law.항번호:
+                location += f" 제{law.항번호}항"
+            if law.호번호:
+                location += f" 제{law.호번호}호"
+            missing.append(location)
+        return found, missing
 
     # --- 2차 경로: BM25 키워드 검색 --------------------------------------
 
@@ -211,6 +243,7 @@ class Corpus:
                 시행일자=docs[i]["시행일자"],
                 역할="검색",
                 점수=score,
+                수집일=self.collected_at,
             )
             for score, i in scores[:top_k]
         ]
@@ -253,7 +286,8 @@ def _reference(ref, 연도: int | str | None) -> dict:
     return item
 
 
-def evidence(corpus: Corpus, rule_id: str, 서식: str = "합성", 연도: int | str | None = None) -> dict:
+def evidence(corpus: Corpus, rule_id: str, 서식: str = "합성", 연도: int | str | None = None,
+             상황: str | None = None) -> dict:
     """한 규칙의 근거 일체.
 
     LLM 입력(4단계)과 출력 JSON(5단계)에 그대로 실을 수 있는 형태로 만든다.
@@ -263,7 +297,21 @@ def evidence(corpus: Corpus, rule_id: str, 서식: str = "합성", 연도: int |
     """
     rule_id = rule_id.upper()
     rule = spec(rule_id)
-    citations = corpus.resolve(rule_id)
+    citations, missing = corpus.resolve_safe(rule_id)
+
+    # 고정 매핑이 판정의 1차 근거이다. BM25는 같은 법령 안에서만
+    # 보조 조항을 찾으며, 고정 매핑 결과를 바꾸거나 대체하지 않는다.
+    query = f"{rule.검사내용} {상황 or ''}".strip()
+    mapped_ids = {c.doc_id for c in citations}
+    searched: list[Citation] = []
+    searched_ids: set[str] = set()
+    for law_name in dict.fromkeys(law.법령명 for law in rule.법령):
+        for candidate in corpus.search(query, top_k=5, 법령명=law_name):
+            if (candidate.점수 or 0) < BM25_MIN_SCORE:
+                continue
+            if candidate.doc_id not in mapped_ids and candidate.doc_id not in searched_ids:
+                searched.append(candidate)
+                searched_ids.add(candidate.doc_id)
 
     def pick(role: str) -> list[dict]:
         return [c.to_dict() for c in citations if c.역할 == role]
@@ -293,6 +341,9 @@ def evidence(corpus: Corpus, rule_id: str, 서식: str = "합성", 연도: int |
         "근거조항": pick("primary"),
         "참고조항": pick("supporting"),
         "조건부조항": pick("conditional"),
+        "검색조항": [c.to_dict() for c in searched],
+        "근거미발견": bool(missing),
+        "미발견근거": missing,
         "계약서근거": 계약서,
         "참고자료": 참고자료,
         "금지표현": list(rule.금지표현),

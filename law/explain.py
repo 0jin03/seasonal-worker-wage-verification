@@ -35,6 +35,7 @@ from law.prompt import (
     OUTPUT_SCHEMA,
     REPORT_MAP,
     SYSTEM,
+    PROMPT_VERSION,
     build_user_message,
 )
 from law.retrieval import Corpus
@@ -53,7 +54,7 @@ RETRY = 3
 RETRY_WAIT = 2.0
 
 # 사실을 옮겨 적는 작업이라 창의성 필요 없음 그냥 낮게 설정
-TEMPERATURE = 0.2
+TEMPERATURE = 0.0
 
 
 class ExplainError(RuntimeError):
@@ -227,26 +228,35 @@ def check_forbidden(section: dict, filled: dict) -> list[str]:
 def explain_section(report: dict, section: dict, system: str = SYSTEM) -> tuple[bool, str]:
     """한 규칙의 설명 6항목을 만들어 리포트에 반영한다. (성공여부, 사유)"""
     user = build_user_message(report, section)
-    try:
-        result = call_llm(system, user)
-    except ExplainError as exc:
-        return False, str(exc).split("\n")[0]
-
-    filled = {field: clean(result.get(field)) for field in FIELDS}
-    if not filled["쉬운설명"] or not filled["다음행동"]:
-        return False, "쉬운설명 또는 다음행동이 비어 있음"
-
-    leaked = check_forbidden(section, filled)
-    if leaked:
-        return False, f"금지표현 사용: {', '.join(leaked)}"
-
-    unknown = check_numbers(section, filled)
-    if unknown:
-        return False, f"입력에 없는 숫자: {', '.join(unknown[:3])}"
+    reason = "알 수 없는 응답 오류"
+    for _ in range(2):
+        try:
+            result = call_llm(system, user)
+            filled = {field: clean(result.get(field)) for field in FIELDS}
+            if not filled["쉬운설명"] or not filled["다음행동"]:
+                reason = "쉬운설명 또는 다음행동이 비어 있음"
+                continue
+            leaked = check_forbidden(section, filled)
+            if leaked:
+                reason = f"금지표현 사용: {', '.join(leaked)}"
+                continue
+            unknown = check_numbers(section, filled)
+            if unknown:
+                reason = f"입력에 없는 숫자: {', '.join(unknown[:3])}"
+                continue
+            break
+        except ExplainError as exc:
+            reason = str(exc).split("\n")[0]
+    else:
+        return False, reason
 
     # 리포트에 싣는 것은 결정적 값이다. 비교된값·관련공식근거는 대조용으로만 보관한다.
     for 리포트항목, 출력항목 in REPORT_MAP.items():
         section[리포트항목] = filled[출력항목]
+    if section.get("판정") == "NOT_CHECKABLE" and not section.get("확인사항"):
+        section["확인사항"] = [
+            "현재 자료만으로 확인하기 어려운 항목입니다. 누락된 정보나 추가 자료가 있는지 확인해 주세요."
+        ]
     section["대조"] = {f: filled[f] for f in CHECK_FIELDS}
     section["생성"] = "llm"
     return True, ""

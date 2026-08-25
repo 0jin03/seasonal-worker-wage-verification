@@ -223,7 +223,8 @@ def wage_check(finding: dict) -> str:
 
 
 def rule_section(rule_id: str, finding: dict, case: dict, corpus: Corpus) -> dict:
-    ev = evidence(corpus, rule_id, 연도=finding["comparisons"].get("calc_applicable_year"))
+    ev = evidence(corpus, rule_id, 연도=finding["comparisons"].get("calc_applicable_year"),
+                  상황=finding.get("reason"))
     rule = spec(rule_id)
     return {
         "rule_id": rule_id,
@@ -235,9 +236,15 @@ def rule_section(rule_id: str, finding: dict, case: dict, corpus: Corpus) -> dic
         "근거조항": ev["근거조항"],
         "참고조항": ev["참고조항"],
         "조건부조항": ev["조건부조항"],
+        "검색조항": ev["검색조항"],
+        "근거미발견": ev["근거미발견"],
+        "미발견근거": ev["미발견근거"],
         "계약서근거": ev["계약서근거"],
         "참고자료": ev["참고자료"],
         "해석": guidance.interpretation(ev["성격"], finding["status"]),
+        "확인사항": ([
+            "현재 자료만으로 확인하기 어려운 항목입니다. 누락된 정보나 추가 자료가 있는지 확인해 주세요."
+        ] if finding["status"] == "NOT_CHECKABLE" else []),
         "대응": guidance.actions(rule_id, finding["status"]),
         "질문": guidance.questions(rule_id, finding["status"]),
         "허용오차": [

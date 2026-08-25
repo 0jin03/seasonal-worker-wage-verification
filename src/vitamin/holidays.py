@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import urllib.parse
 import urllib.request
@@ -13,6 +14,7 @@ API_URL = (
     "SpcdeInfoService/getRestDeInfo"
 )
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+HOLIDAY_SNAPSHOT_PATH = PROJECT_ROOT / "references" / "public_holidays_2026.json"
 
 
 def env_value(name: str) -> str | None:
@@ -52,6 +54,18 @@ class PublicHolidayClient:
         self.timeout = timeout
         self._cache: dict[tuple[int, int], set[date]] = {}
 
+    def _snapshot(self, year: int, month: int) -> set[date] | None:
+        """API 장애 때만 사용하는, 공식 API에서 미리 수집한 연도별 스냅샷."""
+        if not HOLIDAY_SNAPSHOT_PATH.is_file():
+            return None
+        payload = json.loads(HOLIDAY_SNAPSHOT_PATH.read_text(encoding="utf-8"))
+        if int(payload.get("year", 0)) != year:
+            return None
+        return {
+            parsed for raw in payload.get("dates", [])
+            if (parsed := date.fromisoformat(raw)).month == month
+        }
+
     @property
     def configured(self) -> bool:
         return bool(self.service_key)
@@ -79,7 +93,11 @@ class PublicHolidayClient:
                 payload = response.read()
             root = ET.fromstring(payload)
         except Exception as exc:
-            raise HolidayAPIError(f"공휴일 API 호출 실패: {exc}") from exc
+            snapshot = self._snapshot(year, month)
+            if snapshot is None:
+                raise HolidayAPIError(f"공휴일 API 호출 실패: {exc}") from exc
+            self._cache[cache_key] = snapshot
+            return snapshot
 
         result_code = root.findtext(".//resultCode")
         if result_code != "00":

@@ -7,7 +7,7 @@ const sandbox = {};
 vm.runInNewContext(`
   const money = value => value == null ? '-' : Number(value).toLocaleString('ko-KR') + '원';
   ${helpers}
-  globalThis.resultView = { escapeHtml, ruleVisual, renderRuleCard, payrollFlow };
+  globalThis.resultView = { escapeHtml, ruleVisual, renderRuleCard, payrollFlow, legalGuidance };
 `, sandbox);
 
 const result = {
@@ -32,10 +32,26 @@ for (const status of ['PASS', 'MISMATCH', 'REVIEW', 'REVIEW_HIGH', 'NOT_CHECKABL
 if (!sandbox.resultView.ruleVisual('R09', {}, result).includes('확인할 수 없습니다')) throw new Error('null 안내 렌더링 실패');
 if (!sandbox.resultView.escapeHtml('<script>').includes('&lt;script&gt;')) throw new Error('HTML escaping 실패');
 if (!sandbox.resultView.payrollFlow(result).includes('1,000원')) throw new Error('급여 흐름 렌더링 실패');
+const legal = sandbox.resultView.legalGuidance({
+  '해석': ['설명'], '대응': [], '확인사항': [], '질문': [], '성격': '문서정합성',
+  '근거조항': [{ '인용': '근로기준법 제43조', '본문': '임금 전액 지급', '시행일자': '20251023', '수집일': '2026-08-20', '출처': 'https://www.law.go.kr/' }],
+  '참고조항': [], '조건부조항': [], '검색조항': [], '계약서근거': [], '참고자료': [], '근거미발견': false
+});
+if (!legal.includes('근로기준법 제43조') || legal.includes('<li></li>')) throw new Error('법령 근거 렌더링 실패');
 result.documents.bank_statement.transactions = Array.from({ length: 8 }, (_, index) => ({ bk_transaction_datetime: `2026-01-${index + 1}`, bk_transaction_record: index ? '급여' : '<b>급여</b>', bk_deposit_amount: 100 }));
 result.derived.R08 = { usr_salary_transaction_selected: Array(8).fill(true), calc_salary_deposit_total: 800 };
 const deposits = sandbox.resultView.ruleVisual('R08', result.derived.R08, result);
 if (!deposits.includes('외 2건') || !deposits.includes('&lt;b&gt;급여&lt;/b&gt;')) throw new Error('가변 거래행 렌더링 실패');
+result.documents.contract = { ct_housing_cost: 120000, ct_meal_cost: 80000 };
+const deductions = sandbox.resultView.ruleVisual('R04', { calc_expected_housing_deduction: null, calc_expected_meal_deduction: null, cmp_housing_deduction_gap: 80000, cmp_meal_deduction_gap: 0 }, result);
+if (!deductions.includes('120,000원') || !deductions.includes('80,000원')) throw new Error('R04 계약 금액 fallback 실패');
+result.derived.R07 = { calc_net_pay: 1733660 };
+result.documents.payslip.ps_net_pay = 1783660;
+result.documents.bank_statement.transactions = [{ bk_deposit_amount: 1733660, bk_transaction_record: '급여' }];
+const depositTarget = sandbox.resultView.ruleVisual('R08', { usr_salary_transaction_selected: [true], calc_salary_deposit_total: 1733660 }, result);
+if (!depositTarget.includes('1,733,660원') || depositTarget.includes('1,783,660원')) throw new Error('R08 재계산 실수령액 목표 표시 실패');
+const minimum = sandbox.resultView.ruleVisual('R11', { cond_any_below_minimum_wage: null, cmp_contract_minimum_wage_gap: 100, cmp_payslip_minimum_wage_gap: 100 }, result);
+if (!minimum.includes('아니오') || minimum.includes('확인되지 않음')) throw new Error('R11 최저임금 조건 fallback 실패');
 
 if (process.argv.includes('--live')) {
   const demo = await fetch('http://127.0.0.1:8000/api/demo').then(response => response.json());

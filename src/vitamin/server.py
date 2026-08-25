@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 import re
+import socket
 import struct
 import sys
 import tempfile
 import traceback
 import uuid
 from io import BytesIO
+from decimal import Decimal
 from email.parser import BytesParser
 from email.policy import default
 from http import HTTPStatus
@@ -37,8 +40,23 @@ DEMO_ASSET_PATH = re.compile(r"/api/demo-asset/(contract|timesheet|payslip|bank_
 _ocr_runner = None
 
 
+def _json_safe(value: Any) -> Any:
+    """Replace JSON-invalid numeric values produced by OCR/calculation boundaries."""
+    if isinstance(value, Decimal):
+        return int(value) if value == value.to_integral_value() else float(value)
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    if isinstance(value, dict):
+        return {key: _json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe(item) for item in value]
+    return value
+
+
 def _json_bytes(value: Any) -> bytes:
-    return json.dumps(value, ensure_ascii=False, indent=2, default=str).encode("utf-8")
+    return json.dumps(
+        _json_safe(value), ensure_ascii=False, indent=2, default=str, allow_nan=False
+    ).encode("utf-8")
 
 
 def _load_ocr_boundary():
@@ -121,6 +139,17 @@ def run_ocr(files: dict[str, tuple[str, bytes]]) -> dict[str, Any]:
         "review_assets": _review_assets(sample_id),
         "report": report,
     }
+
+
+class VitaminHTTPServer(ThreadingHTTPServer):
+    """Windows에서도 동일 포트의 중복 서버를 허용하지 않는다."""
+
+    allow_reuse_address = False
+
+    def server_bind(self) -> None:
+        if os.name == "nt" and hasattr(socket, "SO_EXCLUSIVEADDRUSE"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+        super().server_bind()
 
 
 class VitaminHandler(SimpleHTTPRequestHandler):
@@ -243,7 +272,15 @@ class VitaminHandler(SimpleHTTPRequestHandler):
 def main() -> None:
     host = os.getenv("VITAMIN_HOST", "127.0.0.1")
     port = int(os.getenv("VITAMIN_PORT", "8000"))
-    server = ThreadingHTTPServer((host, port), VitaminHandler)
+    try:
+        server = VitaminHTTPServer((host, port), VitaminHandler)
+    except OSError as exc:
+        if getattr(exc, "winerror", None) == 10048:
+            raise SystemExit(
+                f"이미 Vitamin 서버가 실행 중입니다: http://{host}:{port}\n"
+                "기존 서버 터미널 하나만 유지하고 이 터미널은 닫아 주세요."
+            ) from exc
+        raise
     print(f"Vitamin UI + API: http://{host}:{port}")
     try:
         server.serve_forever()

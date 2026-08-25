@@ -64,6 +64,8 @@ CONTRACT_CONTEXT: dict[str, tuple[str, ...]] = {
 DOCUMENT_CONTEXT: dict[str, tuple[str, ...]] = {
     "R00": ("ps_employer_name", "ps_employee_name", "bk_account_holder"),
     "R01": ("ps_ordinary_hourly_wage",),
+    "R03": ("ps_bonus_amount", "ps_other_allowance", "ps_overtime_pay",
+            "ps_night_work_pay", "ps_holiday_work_pay"),
     "R04": ("ps_housing_deduction", "ps_meal_deduction"),
     "R05": ("ps_gross_pay",),
     "R06": ("ps_total_deduction",),

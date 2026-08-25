@@ -17,7 +17,25 @@ LLM 이 만든 쪽은 숫자나 인용이 어긋나지 않았는지 대조하는
 
 from __future__ import annotations
 
-SYSTEM = """너는 외국인 계절근로자가 자신의 근로계약·근무·급여 자료를
+from pathlib import Path
+
+PROMPT_PATH = Path(__file__).with_name("prompts") / "worker_explanation_v1.yaml"
+
+
+def _load_prompt(path: Path = PROMPT_PATH) -> tuple[str, str]:
+    """의존성 없이 버전 관리되는 단순 YAML 프롬프트를 읽는다."""
+    lines = path.read_text(encoding="utf-8").splitlines()
+    version = next(line.split(":", 1)[1].strip() for line in lines if line.startswith("version:"))
+    start = next(i for i, line in enumerate(lines) if line.startswith("system:")) + 1
+    system = "\n".join(line[2:] if line.startswith("  ") else line for line in lines[start:]).strip()
+    if not version or not system:
+        raise ValueError(f"프롬프트 파일 형식이 올바르지 않습니다: {path}")
+    return version, system
+
+
+PROMPT_VERSION, SYSTEM = _load_prompt()
+
+LEGACY_SYSTEM = """너는 외국인 계절근로자가 자신의 근로계약·근무·급여 자료를
 쉽게 이해할 수 있도록 설명하는 AI임.
 
 R00~R11 규칙 엔진의 판정은 이미 완료된 상태임.
@@ -143,7 +161,7 @@ def _citations(section: dict) -> list[str]:
     설명이 근거와 어긋나지 않는다(원칙 3).
     """
     lines: list[str] = []
-    for key, mark in (("근거조항", "1차"), ("참고조항", "참고"), ("조건부조항", "조건부")):
+    for key, mark in (("근거조항", "1차"), ("참고조항", "참고"), ("조건부조항", "조건부"), ("검색조항", "BM25 보조검색")):
         for c in section.get(key) or []:
             body = c["본문"]
             body = body[:120] + "…" if len(body) > 120 else body
@@ -201,6 +219,14 @@ def build_user_message(report: dict, section: dict) -> str:
         out.append("  이것을 '법적으로 허용되는 범위'라고 설명하면 안 된다.")
 
     citations = _citations(section)
+    missing = bool(section.get("근거미발견"))
+    out.append("")
+    out.append("[근거 검색 상태]")
+    out.append(f"  근거미발견: {'true' if missing else 'false'}")
+    if missing:
+        out.append("  근거 조문을 찾지 못했습니다. 제공되지 않은 조문을 생성하지 말 것.")
+        for item in section.get("미발견근거") or []:
+            out.append(f"  미발견: {item}")
     out.append("")
     out.append("[관련 공식 근거]")
     if citations:

@@ -352,7 +352,15 @@ document.querySelector('#review-image-stage').addEventListener('click', event =>
   if (marker) activateReviewSource(marker.dataset.sourceNumber, true);
 });
 
-function money(value) { return Number(value || 0).toLocaleString('ko-KR') + '원'; }
+function finiteNumber(value) {
+  if (value === null || value === undefined || value === '') return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+function money(value) {
+  const parsed = finiteNumber(value);
+  return parsed === null ? '확인할 수 없음' : parsed.toLocaleString('ko-KR') + '원';
+}
 function renderTransactions() {
   const transactions = canonical.documents.bank_statement.transactions || [];
   const host = document.querySelector('#transaction-list');
@@ -408,13 +416,13 @@ const evidenceFields = {
   R00: ['cmp_worker_match', 'cmp_employer_match', 'cmp_period_match'],
   R01: ['calc_contract_hourly_wage', 'calc_payslip_hourly_wage', 'cmp_hourly_wage_gap', 'param_wage_tolerance'],
   R02: ['ts_period_actual_hours', 'ps_actual_hours_equiv', 'cmp_actual_hours_gap', 'cmp_tolerance_hours', 'ts_period_coverage'],
-  R03: ['cmp_bonus_gap', 'cmp_extra_pay_gap', 'cmp_overtime_pay_gap', 'cmp_unmatched_pay_items'],
+  R03: ['ct_bonus_amount', 'ps_bonus_amount', 'ct_extra_pay_amount', 'ps_other_allowance', 'ps_overtime_pay', 'ps_night_work_pay', 'ps_holiday_work_pay', 'cmp_bonus_gap', 'cmp_extra_pay_gap', 'cmp_overtime_pay_gap', 'cmp_unmatched_pay_items'],
   R04: ['calc_expected_housing_deduction', 'cmp_housing_deduction_gap', 'calc_expected_meal_deduction', 'cmp_meal_deduction_gap'],
   R05: ['calc_gross_pay', 'cmp_gross_pay_gap', 'param_gross_tolerance'],
   R06: ['calc_total_deduction', 'cmp_total_deduction_gap', 'cmp_tolerance_deduction_won'],
   R07: ['calc_net_pay', 'cmp_net_pay_gap', 'cmp_tolerance_net_pay_won'],
   R08: ['calc_salary_deposit_count', 'calc_salary_deposit_total', 'cmp_deposit_gap'],
-  R09: ['calc_scheduled_payment_date', 'calc_actual_payment_completion_date', 'cmp_payment_date_gap_days'],
+  R09: ['calc_scheduled_payment_date', 'calc_adjusted_scheduled_payment_date', 'calc_actual_payment_completion_date', 'cmp_payment_date_gap_days'],
   R10: ['ts_monthly_actual_hours', 'cmp_contract_actual_hours_gap', 'cond_daily_limit_exceeded', 'cond_change_reason_available', 'cond_worker_confirmed'],
   R11: ['ref_minimum_hourly_wage', 'cmp_contract_minimum_wage_gap', 'cmp_payslip_minimum_wage_gap', 'cond_any_below_minimum_wage']
 };
@@ -423,6 +431,9 @@ const evidenceLabels = {
   calc_contract_hourly_wage: '계약서 기준 시급', calc_payslip_hourly_wage: '명세서 적용 시급',
   cmp_hourly_wage_gap: '시급 차이', param_wage_tolerance: '허용 차이', ts_period_actual_hours: '근무기록 시간',
   ps_actual_hours_equiv: '명세서 지급시간', cmp_actual_hours_gap: '시간 차이', cmp_tolerance_hours: '허용 차이', ts_period_coverage: '근무기록 포함 비율',
+  ct_bonus_amount: '계약서 상여금', ps_bonus_amount: '명세서 상여금',
+  ct_extra_pay_amount: '계약서 기타 수당', ps_other_allowance: '명세서 기타 수당',
+  ps_overtime_pay: '명세서 연장근로수당', ps_night_work_pay: '명세서 야간근로수당', ps_holiday_work_pay: '명세서 휴일근로수당',
   cmp_bonus_gap: '상여금 차이', cmp_extra_pay_gap: '기타 수당 차이', cmp_overtime_pay_gap: '연장근로수당 차이',
   cmp_unmatched_pay_items: '계약 근거를 찾지 못한 지급항목', calc_expected_housing_deduction: '계약상 숙박비',
   cmp_housing_deduction_gap: '숙박비 공제 차이', calc_expected_meal_deduction: '계약상 식비',
@@ -431,7 +442,7 @@ const evidenceLabels = {
   cmp_tolerance_deduction_won: '허용 차이', calc_net_pay: '계산한 실수령액', cmp_net_pay_gap: '인쇄된 실수령액과 차이',
   cmp_tolerance_net_pay_won: '허용 차이', calc_salary_deposit_count: '선택한 입금 건수',
   calc_salary_deposit_total: '선택한 입금 합계', cmp_deposit_gap: '실수령액과 입금액 차이',
-  calc_scheduled_payment_date: '계약상 지급 예정일', calc_actual_payment_completion_date: '실제 전액 지급일',
+  calc_scheduled_payment_date: '계약서에 적힌 지급일', calc_adjusted_scheduled_payment_date: '주말·공휴일 조정 후 지급일', calc_actual_payment_completion_date: '실제 전액 지급일',
   cmp_payment_date_gap_days: '지급일 차이', ts_monthly_actual_hours: '월 실제 근로시간',
   cmp_contract_actual_hours_gap: '계약시간과 실제시간 차이', cond_daily_limit_exceeded: '1일 상한 초과',
   cond_change_reason_available: '근무시간 변경 사유 기록', cond_worker_confirmed: '근로자 확인',
@@ -455,12 +466,17 @@ function displayValue(value, kind = 'text') {
   return escapeHtml(value);
 }
 function evidenceValue(field, value) {
+  if (value === null || value === undefined || (typeof value === 'number' && !Number.isFinite(value))) return '확인할 수 없음';
   if (typeof value === 'boolean') {
     if (field.startsWith('cmp_') && field.endsWith('_match')) return value ? '일치' : '불일치';
     return value ? '예' : '아니오';
   }
   if (Array.isArray(value)) return value.length ? value.map(escapeHtml).join(', ') : '없음';
-  if (field === 'ts_period_coverage') return `${(Number(value) * 100).toFixed(1)}%`;
+  if (field === 'ts_period_coverage') {
+    const parsed = finiteNumber(value);
+    return parsed === null ? '확인할 수 없음' : `${(parsed * 100).toFixed(1)}%`;
+  }
+  if (field.includes('_date')) return escapeHtml(value);
   if (field.endsWith('_days')) return `${value}일`;
   if (field.includes('hours') || field.includes('_hours_')) return `${value}시간`;
   if (field.includes('count')) return `${value}건`;
@@ -468,7 +484,10 @@ function evidenceValue(field, value) {
   return escapeHtml(value);
 }
 function readableEvidence(id, derived) {
-  const rows = (evidenceFields[id] || []).filter(field => derived?.[field] !== null && derived?.[field] !== undefined);
+  const rows = (evidenceFields[id] || []).filter(field => {
+    const value = derived?.[field];
+    return value !== null && value !== undefined && !(typeof value === 'number' && !Number.isFinite(value));
+  });
   if (!rows.length) return '';
   return `<details class="rule-details"><summary>상세 계산 근거</summary><dl class="evidence-list">${rows.map(field => `<div><dt>${escapeHtml(evidenceLabels[field] || field)}</dt><dd>${evidenceValue(field, derived[field])}</dd></div>`).join('')}</dl></details>`;
 }
@@ -478,17 +497,23 @@ function legalGuidance(section) {
   const actions = (section['대응'] || []).map(line => `<li>${escapeHtml(line)}</li>`).join('');
   const checks = (section['확인사항'] || []).map(line => `<li>${escapeHtml(line)}</li>`).join('');
   const questions = (section['질문'] || []).map(line => `<li>${escapeHtml(line)}</li>`).join('');
-  const laws = [
-    ...(section['계약서근거'] || []).filter(item => item['역할'] === 'primary').map(item => item['인용']),
-    ...(section['근거조항'] || []).map(item => item['인용']),
-    ...(section['참고조항'] || []).map(item => item['인용']),
-    ...(section['참고자료'] || []).map(item => `${item['발행처']} ${item['명칭']}`)
+  const fixedLawItems = [
+    ...(section['근거조항'] || []), ...(section['참고조항'] || []),
+    ...(section['조건부조항'] || [])
   ];
-  return `<details class="rule-details legal-details"><summary>법령 및 대응 안내</summary><div class="legal-guidance"><h3>이 결과는 이런 뜻이에요</h3>${explanations}
+  const searchItems = section['검색조항'] || [];
+  const laws = [
+    ...(section['근거미발견'] ? ['<li><strong>근거 조문을 찾지 못했습니다.</strong><p>확인되지 않은 법령을 임의로 안내하지 않습니다.</p></li>'] : []),
+    ...(section['계약서근거'] || []).filter(item => item['역할'] === 'primary').map(item => `<li><strong>${escapeHtml(item['인용'])}</strong><p>${escapeHtml(item['확인내용'])}</p></li>`),
+    ...fixedLawItems.map(item => `<li><strong>${escapeHtml(item['인용'])}</strong>${item['시행일자'] ? `<small>시행일 ${escapeHtml(item['시행일자'])}</small>` : ''}${item['수집일'] ? `<small>자료 수집일 ${escapeHtml(item['수집일'])}</small>` : ''}<p>${escapeHtml(item['본문'] || '')}</p>${item['출처'] ? `<a href="${escapeHtml(item['출처'])}" target="_blank" rel="noopener noreferrer">국가법령정보센터에서 보기</a>` : ''}</li>`),
+    ...searchItems.map(item => `<li><strong>상황 키워드 보조검색 · ${escapeHtml(item['인용'])}</strong>${item['시행일자'] ? `<small>시행일 ${escapeHtml(item['시행일자'])}</small>` : ''}${item['수집일'] ? `<small>자료 수집일 ${escapeHtml(item['수집일'])}</small>` : ''}<p>${escapeHtml(item['본문'] || '')}</p>${item['출처'] ? `<a href="${escapeHtml(item['출처'])}" target="_blank" rel="noopener noreferrer">국가법령정보센터에서 보기</a>` : ''}</li>`),
+    ...(section['참고자료'] || []).map(item => `<li><strong>${escapeHtml(item['발행처'])} ${escapeHtml(item['명칭'])}</strong></li>`)
+  ];
+  return `<details class="rule-details legal-details"><summary>법령 및 대응 안내</summary><div class="legal-guidance"><p class="result-nature">판정 성격: <strong>${escapeHtml(section['성격'] || '확인')}</strong></p><h3>이 결과는 이런 뜻이에요</h3>${explanations}
     ${checks ? `<h4>추가로 확인할 내용</h4><ul>${checks}</ul>` : ''}
     ${questions ? `<h4>확인을 위한 질문</h4><ul>${questions}</ul>` : ''}
     ${actions ? `<h4>다음에 할 수 있는 일</h4><ol>${actions}</ol>` : ''}
-    ${laws.length ? `<details><summary>관련 공식 기준 확인하기</summary><ul>${laws.map(line => `<li>${escapeHtml(line)}</li>`).join('')}</ul></details>` : ''}</div></details>`;
+    ${laws.length ? `<details><summary>관련 공식 기준 확인하기</summary><ul>${laws.join('')}</ul></details>` : ''}</div></details>`;
 }
 
 function emptyVisual(message) {
@@ -531,7 +556,7 @@ function ruleVisual(id, derived = {}, result = {}) {
   if (id === 'R01') return comparisonVisual([
     { label: '계약서 환산 시급', value: derived.calc_contract_hourly_wage, kind: 'money' },
     { label: '명세서 적용 시급', value: derived.calc_payslip_hourly_wage, kind: 'money' }
-  ], derived.cmp_hourly_wage_gap, derived.param_wage_tolerance);
+  ], derived.cmp_hourly_wage_gap, derived.param_wage_tolerance ?? 10);
   if (id === 'R02') return `${comparisonVisual([
     { label: '근무기록 시간', value: derived.ts_period_actual_hours, kind: 'hours' },
     { label: '명세서 지급시간', value: derived.ps_actual_hours_equiv, kind: 'hours' }
@@ -545,8 +570,8 @@ function ruleVisual(id, derived = {}, result = {}) {
     return `<div class="inline-facts">${gaps.map(([label, value]) => fact(label, displayValue(value, 'money'))).join('')}</div>${unmatched.length ? `<h4 class="visual-subtitle">계약 근거를 찾지 못한 지급항목</h4>${listVisual(unmatched, '')}` : ''}`;
   }
   if (id === 'R04') return `<div class="deduction-grid">
-    <section><h4>숙박비</h4>${fact('계약상 금액', displayValue(derived.calc_expected_housing_deduction, 'money'))}${fact('공제 차이', displayValue(derived.cmp_housing_deduction_gap, 'money'))}</section>
-    <section><h4>식비</h4>${fact('계약상 금액', displayValue(derived.calc_expected_meal_deduction, 'money'))}${fact('공제 차이', displayValue(derived.cmp_meal_deduction_gap, 'money'))}</section>
+    <section><h4>숙박비</h4>${fact('계약상 금액', displayValue(derived.calc_expected_housing_deduction ?? documents.contract?.ct_housing_cost, 'money'))}${fact('공제 차이', displayValue(derived.cmp_housing_deduction_gap, 'money'))}</section>
+    <section><h4>식비</h4>${fact('계약상 금액', displayValue(derived.calc_expected_meal_deduction ?? documents.contract?.ct_meal_cost, 'money'))}${fact('공제 차이', displayValue(derived.cmp_meal_deduction_gap, 'money'))}</section>
   </div>`;
   if (id === 'R05') return comparisonVisual([
     { label: '항목 합산값', value: derived.calc_gross_pay, kind: 'money' },
@@ -564,7 +589,7 @@ function ruleVisual(id, derived = {}, result = {}) {
     const transactions = documents.bank_statement?.transactions || [];
     const selectedFlags = derived.usr_salary_transaction_selected || allDerived.R08?.usr_salary_transaction_selected || [];
     const selected = transactions.filter((_, index) => selectedFlags[index]);
-    const target = numberOrNull(documents.payslip?.ps_net_pay);
+    const target = numberOrNull(allDerived.R07?.calc_net_pay ?? documents.payslip?.ps_net_pay);
     const total = numberOrNull(derived.calc_salary_deposit_total);
     const progress = target && total !== null ? Math.min(100, Math.max(0, total / target * 100)) : 0;
     const rows = selected.slice(0, 6).map(transaction => {
@@ -589,11 +614,14 @@ function ruleVisual(id, derived = {}, result = {}) {
     ${booleanFact('변경 사유 기록', derived.cond_change_reason_available)}
     ${booleanFact('근로자 확인', derived.cond_worker_confirmed)}
   </div>`;
-  if (id === 'R11') return `${comparisonVisual([
+  if (id === 'R11') {
+    const belowMinimum = derived.cond_any_below_minimum_wage ?? [derived.cmp_contract_minimum_wage_gap, derived.cmp_payslip_minimum_wage_gap].some(value => numberOrNull(value) !== null && Number(value) < 0);
+    return `${comparisonVisual([
     { label: '기준 최저시급', value: derived.ref_minimum_hourly_wage, kind: 'money' },
     { label: '계약서 환산 시급', value: allDerived.R01?.calc_contract_hourly_wage, kind: 'money' },
     { label: '명세서 적용 시급', value: allDerived.R01?.calc_payslip_hourly_wage, kind: 'money' }
-  ])}<div class="inline-facts">${booleanFact('최저임금 미달', derived.cond_any_below_minimum_wage, false)}</div>`;
+  ])}<div class="inline-facts">${booleanFact('최저임금 미달', belowMinimum, false)}</div>`;
+  }
   return emptyVisual('별도 시각화 없이 상세 계산 근거에서 확인할 수 있습니다.');
 }
 
@@ -632,7 +660,6 @@ function renderRuleCard(id, value, result, legalSection) {
     <div class="rule-disclosures">${readableEvidence(id, result.derived?.[id])}${legalGuidance(legalSection)}</div>
   </article>`;
 }
-
 function employerSummary() {
   if (!latestReport) return '';
   const contract = latestReport.result.documents.contract || {};
