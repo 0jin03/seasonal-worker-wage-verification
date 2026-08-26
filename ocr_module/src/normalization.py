@@ -21,10 +21,14 @@ def korean_dates(value):
 
 
 def dotted_dates(value):
+    # PaddleOCR can confuse the small separator dots in printed dates with
+    # commas (for example ``2026.01,01``).  Treat the common date separator
+    # glyphs as equivalent while still requiring a full YYYY-MM-DD triple.
     return [
         f"{int(year):04d}-{int(month):02d}-{int(day):02d}"
         for year, month, day in re.findall(
-            r"(\d{4})\s*[.]\s*(\d{1,2})\s*[.]\s*(\d{1,2})\s*[.]?", value or ""
+            r"(\d{4})\s*[.,/-]\s*(\d{1,2})\s*[.,/-]\s*(\d{1,2})\s*[.,]?",
+            value or "",
         )
     ]
 
