@@ -316,7 +316,7 @@ OCR 성능 검증 환경에는 PaddleOCR 3.7.0, PaddleX 3.7.2, PaddlePaddle GPU 
 | 이름 | 담당 파트 | 핵심 작업 | 사용 기술 |
 | --- | --- | --- | --- |
 | **김영진** | 합성데이터 · 법령 RAG/LLM · Rule 연계 | 법령 API 기반 코퍼스·law 데이터 구축, 규칙-법령 검색 연계, GPT 기반 불일치 설명 구현, R02·R03 허용오차·필요 피처 정의 | Python · 법령 데이터 API · OpenAI GPT API · NLP |
-| **김은영** | 서비스 기획 · 데이터/피처 · 합성데이터 · RAG/LLM 콘텐츠 · 검증 | 서비스·데이터 구조 및 Rule 피처 정리, R01·R10·R11 기준 설계, R00~R11 단일 오류 합성 PDF·JSON 제작, 법령 매핑·Prompt 설계, 180세트 결과 검증 및 사업계획서 1~3장 작성 | JSON · RAG · Prompt Engineering · Synthetic Data · Feature Definition |
+| **김은영** | 서비스 기획 · 데이터/피처 · 합성데이터 · RAG/LLM 콘텐츠 · 검증 | 서비스·데이터 구조 및 Rule 피처 정리, R01·R10·R11 기준 설계, R00~R11 단일 오류 합성 PDF·JSON 제작, 법령 매핑·Prompt 설계, 180세트 결과 검증 | JSON · RAG · Prompt Engineering · Synthetic Data · Feature Definition |
 | **김채영** | OCR · 문서 파싱 | OCR 모델 비교·선정, PP-StructureV3 기반 4종 문서 OCR·Parser 개발, 항목 매칭·정규화 및 JSON Schema 변환·성능 검증 | Python · PaddleOCR · PP-StructureV3 · JSON Schema |
 | **양승모** | OCR · 데이터 구조화 | 4종 문서 OCR 텍스트 추출, 결과 후처리·주요 필드 정규화, 표준 JSON Schema 구조화 | Python · PaddleOCR · PaddlePaddle · JSON Schema |
 | **유성호** | Rule Engine · UI/Backend | R00~R11 검증 로직 및 상태·계산 근거 구조화, OCR 확인·급여 거래 선택·결과 UI 구현, Python API·다국어 화면·공휴일 검증을 전체 서비스 흐름으로 통합 | Python · JavaScript · HTML/CSS · JSON Schema · OpenAI API |
